@@ -3257,8 +3257,10 @@ void init_library(lisp* envp) {
     //DEFINE(fibo, (lambda (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
     DE((fibo (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
 
-    DEFINE(dropx, (lambda (n) (if (= n 0) 1 (* n (fac (- n 1))))));
-    DEFINE(drop1, (lambda (n) (if (= n 0) 1 (* n (fac (- n 1))))));
+    DEFINE(dropx, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
+    DEFINE(drop1, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
+
+    DEFINE(drop2, (lambda (xs) (cdr xs)));
 
 // POSSIBLE encodings to save memory:
     // symbol: fibo
