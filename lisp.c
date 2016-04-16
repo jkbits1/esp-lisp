@@ -3394,7 +3394,7 @@ static PRIM test(lisp* e) {
 //    treads("(A)");
 //    treads("(A B)");
 //    treads("(A B C)");
-//    printf("\n3=3: "); princ(eq(mkint(3), mkint(3)));
+    printf("\n3=3: "); princ(eq(mkint(3), mkint(3)));
 //    printf("\n3=4: "); princ(eq(mkint(3), mkint(4)));
 //    printf("\na=a: "); princ(eq(symbol("a"), symbol("a")));
 //    printf("\na=b: "); princ(eq(symbol("a"), symbol("b")));
@@ -3466,9 +3466,9 @@ static PRIM test(lisp* e) {
 //    DEFINE(f, (lambda (n) (set! n (+ n 1)) (set! n (+ n 1)) (set! n (+ n 1))));
 //    TEST((f 0), 3);
 
-    PRINT((define tailprogn (lambda (n) (progn 3 2 1 (if (= n 0) (quote ok) (tailprogn (- n 1)))))));
-    TEST(tailprogn, 3);
-    TEST((tailprogn 10000), ok);
+    //PRINT((define tailprogn (lambda (n) (progn 3 2 1 (if (= n 0) (quote ok) (tailprogn (- n 1)))))));
+//    TEST(tailprogn, 3);
+//    TEST((tailprogn 10000), ok);
 
     // cond
 //    TEST((cond), nil);
