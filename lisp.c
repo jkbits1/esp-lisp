@@ -3438,9 +3438,9 @@ static PRIM test(lisp* e) {
 //    TEST(((lambda (a) ((lambda (n) (+ n a)) 33)) 66), 99); // lexical scoping
 
     // recursion
-//    DEFINE(fac, (lambda (n) (if (= n 0) 1 (* n (fac (- n 1))))));
-//    TEST((fac 6), 720);
-//    TEST((fac 21), 952369152);
+    DEFINE(fac, (lambda (n) (if (= n 0) 1 (* n (fac (- n 1))))));
+    TEST((fac 6), 720);
+    TEST((fac 21), 952369152);
 
     // tail recursion optimization test (don't blow up stack!)
 //    DEFINE(bb, (lambda (b) (+ b 3)));
