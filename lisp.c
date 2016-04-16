@@ -3342,6 +3342,8 @@ void testss(lisp* envp , char* what, char* expect) {
 //   http://john.freml.in/teepeedee2-vs-picolisp
 //   http://picolisp.com/wiki/?ErsatzWebApp
 
+#define TEST_REMOVED
+
 static PRIM test(lisp* e) {
 
 // removing the body of this function gives: (- 42688 41152) 1536
