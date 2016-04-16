@@ -3368,17 +3368,17 @@ static PRIM test(lisp* e) {
     TEST(42, 42);
 
     // make sure have one failure
-    TEST(t, fail);
+    //TEST(t, fail);
 
     // equal
     //testee(list(symbol("eq"), mkint(42), mkint(42), END), t);
 
-    TEST((equal nil nil), t);
-    TEST((equal 42 42), t);
-    TEST((equal (list 1 2 3) (list 1 2 3)), t);
-    TEST((equal "foo" "bar"), nil);
-    TEST((equal "foo" "foo"), t);
-    TEST((equal equal equal), t);
+//    TEST((equal nil nil), t);
+//    TEST((equal 42 42), t);
+//    TEST((equal (list 1 2 3) (list 1 2 3)), t);
+//    TEST((equal "foo" "bar"), nil);
+//    TEST((equal "foo" "foo"), t);
+//    TEST((equal equal equal), t);
 
     // list & read function
     testee(envp, list(nil, mkstring("fihs"), mkint(1), symbol("fish"), mkint(2), mkint(3), mkint(4), nil, nil, nil, END),
@@ -3386,33 +3386,33 @@ static PRIM test(lisp* e) {
 
     // misc
     testss(envp, "123", "123");
-    TEST("()", "nil");
-    TEST("(1)", "(1)");
-    TEST("(1 2)", (1 2));
-    treads("(1 2 3)");
-    treads("((1) (2) (3))");
-    treads("(A)");
-    treads("(A B)");
-    treads("(A B C)");
-    printf("\n3=3: "); princ(eq(mkint(3), mkint(3)));
-    printf("\n3=4: "); princ(eq(mkint(3), mkint(4)));
-    printf("\na=a: "); princ(eq(symbol("a"), symbol("a")));
-    printf("\na=b: "); princ(eq(symbol("a"), symbol("b")));
-    printf("\na=a: "); princ(eq(symbol("a"), symbol("a")));
-    printf("\n");
+//    TEST("()", "nil");
+//    TEST("(1)", "(1)");
+//    TEST("(1 2)", (1 2));
+//    treads("(1 2 3)");
+//    treads("((1) (2) (3))");
+//    treads("(A)");
+//    treads("(A B)");
+//    treads("(A B C)");
+//    printf("\n3=3: "); princ(eq(mkint(3), mkint(3)));
+//    printf("\n3=4: "); princ(eq(mkint(3), mkint(4)));
+//    printf("\na=a: "); princ(eq(symbol("a"), symbol("a")));
+//    printf("\na=b: "); princ(eq(symbol("a"), symbol("b")));
+//    printf("\na=a: "); princ(eq(symbol("a"), symbol("a")));
+//    printf("\n");
 
-    treads("(lambda (n) if (eq n 0) (* n (fac (- n 1))))");
+//    treads("(lambda (n) if (eq n 0) (* n (fac (- n 1))))");
 
     // read
-    TEST((read "foo"), foo);
-    TEST((read "(+ 3 4)"), (+ 3 4));
-    TEST((number? (read "42")), t);
+//    TEST((read "foo"), foo);
+//    TEST((read "(+ 3 4)"), (+ 3 4));
+//    TEST((number? (read "42")), t);
     
     // set, setq, setqq
-    TEST((define a (+ 3 4)), 7);
+//    TEST((define a (+ 3 4)), 7);
     //TEST((setqq b a), a);
-    TEST((set! b (quote a)));
-    TEST(b, a);
+//    TEST((set! b (quote a)));
+//    TEST(b, a);
     //TEST((set b 3), 3);
     //TEST(a, 3);
     //TEST(b, a);
@@ -3422,9 +3422,9 @@ static PRIM test(lisp* e) {
     testee(envp, IF, IF);
     testee(envp, cons(IF, cons(mkint(7), cons(mkint(11), cons(mkint(22), nil)))), mkint(11));
     testee(envp, cons(IF, cons(nil, cons(mkint(11), cons(mkint(22), nil)))), mkint(22));
-    TEST((if 7 11 22), 11);
-    TEST((if nil 11 22), 22);
-    TEST((if nil 11 22 33), 22);
+//    TEST((if 7 11 22), 11);
+//    TEST((if nil 11 22), 22);
+//    TEST((if nil 11 22 33), 22);
 
     // thunk
     lisp th = mkthunk(mkint(14), NULL);
@@ -3432,67 +3432,67 @@ static PRIM test(lisp* e) {
     testee(envp, cons(th, nil), th); // (eval (thunk))
 
     // lambda
-    TEST((func? (lambda (n) 37)), t);
-    TEST(((lambda (n) 37) 99), 37);
-    TEST(((lambda (n) n) 99), 99);
-    TEST(((lambda (a) ((lambda (n) (+ n a)) 33)) 66), 99); // lexical scoping
+//    TEST((func? (lambda (n) 37)), t);
+//    TEST(((lambda (n) 37) 99), 37);
+//    TEST(((lambda (n) n) 99), 99);
+//    TEST(((lambda (a) ((lambda (n) (+ n a)) 33)) 66), 99); // lexical scoping
 
     // recursion
-    DEFINE(fac, (lambda (n) (if (= n 0) 1 (* n (fac (- n 1))))));
-    TEST((fac 6), 720);
-    TEST((fac 21), 952369152);
+//    DEFINE(fac, (lambda (n) (if (= n 0) 1 (* n (fac (- n 1))))));
+//    TEST((fac 6), 720);
+//    TEST((fac 21), 952369152);
 
     // tail recursion optimization test (don't blow up stack!)
-    DEFINE(bb, (lambda (b) (+ b 3)));
-    DEFINE(aa, (lambda (a) (bb a)));
-    TEST((aa 7), 10);
+//    DEFINE(bb, (lambda (b) (+ b 3)));
+//    DEFINE(aa, (lambda (a) (bb a)));
+//    TEST((aa 7), 10);
 
-    DEFINE(tail, (lambda (n s) (if (eq n 0) s (tail (- n 1) (+ s 1)))));
-    TEST(tail, xyz);
-    testss(envp, LOOPTAIL, LOOPS);
+//    DEFINE(tail, (lambda (n s) (if (eq n 0) s (tail (- n 1) (+ s 1)))));
+//    TEST(tail, xyz);
+//    testss(envp, LOOPTAIL, LOOPS);
 
     // progn, progn tail recursion
-    TEST((progn 1 2 3), 3);
-    TEST((set! a nil), nil);
-    TEST((progn (set! a (cons 1 a)) (set! a (cons 2 a)) (set! a (cons 3 a))),
-         (3 2 1));
+//    TEST((progn 1 2 3), 3);
+//    TEST((set! a nil), nil);
+//    TEST((progn (set! a (cons 1 a)) (set! a (cons 2 a)) (set! a (cons 3 a))),
+//         (3 2 1));
 
     // implicit progn in lambda
-    DEFINE(f, (lambda (n) (set! n (+ n 1)) (set! n (+ n 1)) (set! n (+ n 1))));
-    TEST((f 0), 3);
+//    DEFINE(f, (lambda (n) (set! n (+ n 1)) (set! n (+ n 1)) (set! n (+ n 1))));
+//    TEST((f 0), 3);
 
 //    PRINT((define tailprogn (lambda (n) (progn 3 2 1 (if (= n 0) (quote ok) (tailprogn (- n 1)))))));
 //    TEST(tailprogn, 3);
 //    TEST((tailprogn 10000), ok);
 
     // cond
-    TEST((cond), nil);
-    TEST((cond (7)), 7);
-    TEST((cond (1 2 3)), 3);
-    TEST((cond (nil 7)), nil);
-    TEST((cond (nil 7)(2 3 4)(7 99)), 4);
-    TEST((cond (nil 7)((eq 3 5) 9)((eq 5 5) 77)), 77);
+//    TEST((cond), nil);
+//    TEST((cond (7)), 7);
+//    TEST((cond (1 2 3)), 3);
+//    TEST((cond (nil 7)), nil);
+//    TEST((cond (nil 7)(2 3 4)(7 99)), 4);
+//    TEST((cond (nil 7)((eq 3 5) 9)((eq 5 5) 77)), 77);
 
-    TEST((and), nil);
-    TEST((and 1 2 3), 3);
-    TEST((and 1 nil 3), nil);
-    TEST((and 1 (eq 3 3) 7), 7);
-    TEST((and 1 (eq 3 4) 7), nil);
+//    TEST((and), nil);
+//    TEST((and 1 2 3), 3);
+//    TEST((and 1 nil 3), nil);
+//    TEST((and 1 (eq 3 3) 7), 7);
+//    TEST((and 1 (eq 3 4) 7), nil);
 
-    TEST((or), nil);
-    TEST((or 1 2 3), 1);
-    TEST((or nil 1 3), 1);
-    TEST((or (eq 3 3) 7), t);
-    TEST((or (eq 3 4) 7), 7);
+//    TEST((or), nil);
+//    TEST((or 1 2 3), 1);
+//    TEST((or nil 1 3), 1);
+//    TEST((or (eq 3 3) 7), t);
+//    TEST((or (eq 3 4) 7), 7);
 
     // mapcar
-    TEST((mapcar (lambda (x) (+ 5 x)) (list 1 2 3)), (6 7 8));
-    TEST((mapcar car (list (cons 1 2) (cons 3 4) (cons 5 6))), (1 3 5));
-    TEST((mapcar cdr (list (cons 1 2) (cons 3 4) (cons 5 6))), (2 4 6));
+//    TEST((mapcar (lambda (x) (+ 5 x)) (list 1 2 3)), (6 7 8));
+//    TEST((mapcar car (list (cons 1 2) (cons 3 4) (cons 5 6))), (1 3 5));
+//    TEST((mapcar cdr (list (cons 1 2) (cons 3 4) (cons 5 6))), (2 4 6));
 
-    TEST((set! a 2));
-    TEST((list 1 2 (let ((a (+ 1 a)) (b a)) (list a (+ b b))) 5 (+(+ a (+ a a))), (1 2 (3 4) 5 6)));
-    TEST(a, 2);
+//    TEST((set! a 2));
+//    TEST((list 1 2 (let ((a (+ 1 a)) (b a)) (list a (+ b b))) 5 (+(+ a (+ a a))), (1 2 (3 4) 5 6)));
+//    TEST(a, 2);
 
 #else
     printf("%%Tests have been commented out.\n");
