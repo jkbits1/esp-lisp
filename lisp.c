@@ -3443,7 +3443,9 @@ static PRIM test(lisp* e) {
     TEST((fac 21), 952369152);
 
     DEFINE(drop1, (lambda (n) (if (= n 0) 1 (* n (fac (- n 1))))));
-    princ((fac 7));
+//    #define TEST(what, expect) testss(envp, #what, #expect)
+
+//    princ((fac 7));
 
     // tail recursion optimization test (don't blow up stack!)
 //    DEFINE(bb, (lambda (b) (+ b 3)));
@@ -3464,9 +3466,9 @@ static PRIM test(lisp* e) {
 //    DEFINE(f, (lambda (n) (set! n (+ n 1)) (set! n (+ n 1)) (set! n (+ n 1))));
 //    TEST((f 0), 3);
 
-//    PRINT((define tailprogn (lambda (n) (progn 3 2 1 (if (= n 0) (quote ok) (tailprogn (- n 1)))))));
-//    TEST(tailprogn, 3);
-//    TEST((tailprogn 10000), ok);
+    PRINT((define tailprogn (lambda (n) (progn 3 2 1 (if (= n 0) (quote ok) (tailprogn (- n 1)))))));
+    TEST(tailprogn, 3);
+    TEST((tailprogn 10000), ok);
 
     // cond
 //    TEST((cond), nil);
