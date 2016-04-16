@@ -3442,6 +3442,9 @@ static PRIM test(lisp* e) {
     TEST((fac 6), 720);
     TEST((fac 21), 952369152);
 
+    DEFINE(drop1, (lambda (n) (if (= n 0) 1 (* n (fac (- n 1))))));
+    princ((fac 7));
+
     // tail recursion optimization test (don't blow up stack!)
 //    DEFINE(bb, (lambda (b) (+ b 3)));
 //    DEFINE(aa, (lambda (a) (bb a)));
