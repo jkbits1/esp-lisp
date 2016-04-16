@@ -3361,9 +3361,9 @@ static PRIM test(lisp* e) {
 
     terpri();
 
-    TEST(nil, nil);
-    TEST(nil, (car (quote (nil . nil)))); // lol (was an issue)
-    TEST(nil, (cdr (quote (nil . nil)))); // lol
+//    TEST(nil, nil);
+//    TEST(nil, (car (quote (nil . nil)))); // lol (was an issue)
+//    TEST(nil, (cdr (quote (nil . nil)))); // lol
 
     TEST(42, 42);
 
@@ -3381,11 +3381,11 @@ static PRIM test(lisp* e) {
 //    TEST((equal equal equal), t);
 
     // list & read function
-    testee(envp, list(nil, mkstring("fihs"), mkint(1), symbol("fish"), mkint(2), mkint(3), mkint(4), nil, nil, nil, END),
-           reads("(nil fihs 1 fish 2 3 4 nil nil nil)"));
+//    testee(envp, list(nil, mkstring("fihs"), mkint(1), symbol("fish"), mkint(2), mkint(3), mkint(4), nil, nil, nil, END),
+//           reads("(nil fihs 1 fish 2 3 4 nil nil nil)"));
 
     // misc
-    testss(envp, "123", "123");
+//    testss(envp, "123", "123");
 //    TEST("()", "nil");
 //    TEST("(1)", "(1)");
 //    TEST("(1 2)", (1 2));
@@ -3418,18 +3418,18 @@ static PRIM test(lisp* e) {
     //TEST(b, a);
        
     // if
-    lisp IF = mkprim("if", -3, if_);
-    testee(envp, IF, IF);
-    testee(envp, cons(IF, cons(mkint(7), cons(mkint(11), cons(mkint(22), nil)))), mkint(11));
-    testee(envp, cons(IF, cons(nil, cons(mkint(11), cons(mkint(22), nil)))), mkint(22));
+//    lisp IF = mkprim("if", -3, if_);
+//    testee(envp, IF, IF);
+//    testee(envp, cons(IF, cons(mkint(7), cons(mkint(11), cons(mkint(22), nil)))), mkint(11));
+//    testee(envp, cons(IF, cons(nil, cons(mkint(11), cons(mkint(22), nil)))), mkint(22));
 //    TEST((if 7 11 22), 11);
 //    TEST((if nil 11 22), 22);
 //    TEST((if nil 11 22 33), 22);
 
     // thunk
-    lisp th = mkthunk(mkint(14), NULL);
-    testee(envp, th, th); // eval(thunk)
-    testee(envp, cons(th, nil), th); // (eval (thunk))
+//    lisp th = mkthunk(mkint(14), NULL);
+//    testee(envp, th, th); // eval(thunk)
+//    testee(envp, cons(th, nil), th); // (eval (thunk))
 
     // lambda
 //    TEST((func? (lambda (n) 37)), t);
