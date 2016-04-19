@@ -3262,6 +3262,14 @@ void init_library(lisp* envp) {
 
     DEFINE(drop2, (lambda (xs) (cdr xs)));
 
+    DEFINE(pinOn,  (lambda (n) (out n 1)));
+    DEFINE(pinOff, (lambda (n) (out n 0)));
+
+    // pins
+    // d2 - set with gpio 4
+    // led - set with gpio 2
+
+
 // POSSIBLE encodings to save memory:
     // symbol: fibo
     // "fibo" 
