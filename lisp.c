@@ -3265,6 +3265,11 @@ void init_library(lisp* envp) {
     DEFINE(pinOn,  (lambda (n) (out n 1)));
     DEFINE(pinOff, (lambda (n) (out n 0)));
 
+    DEFINE(pin2Off, (lambda (n)
+                      (out 2 0)
+                    )
+          );
+
     // pins
     // d2 - set with gpio 4
     // led - set with gpio 2
