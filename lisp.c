@@ -3254,21 +3254,31 @@ PRIM fibb(lisp n) { return mkint(fib(getint(n))); }
 
 // lisp implemented library functions hardcoded
 void init_library(lisp* envp) {
-    //DEFINE(fibo, (lambda (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
-    DE((fibo (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
+  //DEFINE(fibo, (lambda (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
+  DE((fibo (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
 
-    DEFINE(dropx, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
-    DEFINE(drop1, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
+  DEFINE(dropx, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
+  DEFINE(drop1, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
 
-    DEFINE(drop2, (lambda (xs) (cdr xs)));
+  DEFINE(drop2, (lambda (xs) (cdr xs)));
 
-    DEFINE(pinOn,  (lambda (n) (out n 1)));
-    DEFINE(pinOff, (lambda (n) (out n 0)));
+  DEFINE(pinOn,  (lambda (n) (out n 1)));
+  DEFINE(pinOff, (lambda (n) (out n 0)));
 
-    DEFINE(pin2Off, (lambda (n)
-                      (out 2 0)
-                    )
-          );
+  DEFINE(pin2Off, (lambda (n)
+                    (out 2 0)
+                  )
+        );
+
+  DEFINE (take, (lambda (x xs)
+                  (if (= n 0)
+                    ()
+                    xs
+                  )
+  ));
+
+
+
 
     // pins
     // d2 - set with gpio 4
