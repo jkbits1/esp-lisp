@@ -3273,7 +3273,7 @@ void init_library(lisp* envp) {
   DEFINE (take, (lambda (x xs)
                   (if (= x 0)
                     xs
-                    (drop2 xs)
+                    (take (- x 1) (cdr xs))
                   )
   ));
 
