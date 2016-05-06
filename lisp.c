@@ -3277,7 +3277,27 @@ void init_library(lisp* envp) {
                   )
   ));
 
+// need a take hlpr fn for recursion
+  // like reduce?
+    DEFINE (take, (lambda (x xs)
+                  (if (= x 0)
+                    ()
+                    (cdr xs))
+                )
+         )
 
+  //define some lists to work with
+  DEFINE (xs, '(a b c))
+  DEFINE (ys, '(1 2 3))
+
+  // need a helper fn for recursion
+  // like reduce?
+  DEFINE (append, (lambda (xs ys)
+                    ()
+                  )
+         )
+
+// take head of xs, cons to append of tail xs and ys, recurse ...
 
 
     // pins
