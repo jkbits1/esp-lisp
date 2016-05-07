@@ -3280,10 +3280,11 @@ void init_library(lisp* envp) {
 // need a take hlpr fn for recursion
   // like reduce?
     DEFINE (take, (lambda (x xs)
-                  (if (= x 0)
-                    ()
-                    cons (car xs) (take (x-1) (cdr xs)))
-                )
+                    (if (= x 0)
+                      ()
+                      cons (car xs) (take (- x 1) (cdr xs))
+                    )
+                  )
          );
 
 
