@@ -3284,18 +3284,19 @@ void init_library(lisp* envp) {
                     ()
                     (cdr xs))
                 )
-         )
+         );
+
 
   //define some lists to work with
-  DEFINE (xs, '(a b c))
-  DEFINE (ys, '(1 2 3))
+  DEFINE (xs, (quote(a b c)));
+  DEFINE (ys, (quote(1 2 3)));
 
   // need a helper fn for recursion
   // like reduce?
   DEFINE (append, (lambda (xs ys)
                     ()
                   )
-         )
+         );
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
