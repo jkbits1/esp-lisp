@@ -3284,14 +3284,12 @@ void init_library(lisp* envp) {
                   )
   ));
 
-// need a take hlpr fn for recursion
-  // like reduce?
-    DEFINE (take, (lambda (x xs)
-                    (if (= x 0)
-                      ()
-                      cons (car xs) (take (- x 1) (cdr xs))
-                    )
+  DEFINE (take, (lambda (x xs)
+                  (if (= x 0)
+                    ()
+                    (cons (car xs) (take (- x 1) (cdr xs)))
                   )
+                )
          );
 
 
@@ -3302,9 +3300,20 @@ void init_library(lisp* envp) {
   // need a helper fn for recursion
   // like reduce?
   DEFINE (append, (lambda (xs ys)
-                    ()
+                    (if (= (car xs) nil)
+                      ys
+                      (cons (car xs) (append (cdr xs) ys) )
+                    )
                   )
          );
+         
+  DEFINE (rotate, (lambda (xs)
+                    (if (= (car xs) nil)
+                      ()
+                      (append (drop 1 xs) (take 1 xs))
+                    )
+                  )    
+  );         
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
