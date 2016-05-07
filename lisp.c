@@ -2272,6 +2272,7 @@ prin1(r);
     lisp bind = assoc(nm, *envp);
     lisp rest = bind ? cdr(bind) : nil;
 prin1(rest);
+printf("\n");
     // TOOD: insert sort should be easy, only problem is the first
     // so, we could prefix by atom QUEUE.
     _setqq(envp, nm, cons(r, rest));
@@ -2302,10 +2303,15 @@ PRIM atrun(lisp* envp) {
     lisp bind = assoc(nm, *envp);
     lisp lst = cdr(bind);
     lisp prev = bind;
+//prin1(prev);
+//printf("\n");
     // TODO: sort? now we're checking all tasks all the time.
     // for now don't care as we do it as idle.
     while (lst) {
-        int c = clock_ms();
+        
+       int c = clock_ms();
+printf("c - %d", c);
+
         lisp entry = car(lst);
         int when = getint(car(entry));
         if (when && when < c) {
