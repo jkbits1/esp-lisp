@@ -2260,11 +2260,18 @@ PRIM load(lisp* envp, lisp name) {
 
 PRIM at(lisp* envp, lisp spec, lisp f) {
     int c = clock_ms();
+//print(c);
+
+printf("\n clock %d", c);
     int w = getint(spec);
+printf("\n w %d", w);
+prin1(f);
     lisp r = cons(mkint(c + abs(w)), cons(spec, evalGC(f, envp)));
     lisp nm = symbol("*at*");
+prin1(r);
     lisp bind = assoc(nm, *envp);
     lisp rest = bind ? cdr(bind) : nil;
+prin1(rest);
     // TOOD: insert sort should be easy, only problem is the first
     // so, we could prefix by atom QUEUE.
     _setqq(envp, nm, cons(r, rest));
@@ -2304,11 +2311,11 @@ PRIM atrun(lisp* envp) {
         if (when && when < c) {
             int spec = getint(car(cdr(entry)));
             lisp exp = cdr(cdr(entry));
-            //printf("[ @%d :: ", when, c); princ(exp); printf(" ");
+            printf("[ @%d :: ", when, c); princ(exp); printf(" ");
             //lisp ret =
             apply(exp, nil);
             // TODO: add a way by special return value to unschedule itself if its a repeating task
-            //printf(" => "); princ(ret); printf(" ]\n");
+        //    printf(" => "); princ(ret); printf(" ]\n");
             if (spec > 0)
                 setcdr(prev, cdr(lst)); // remove
             else
@@ -2316,7 +2323,7 @@ PRIM atrun(lisp* envp) {
         }
         prev = lst;
         lst = cdr(lst);
-        //if (!lst) terpri();
+        if (!lst) terpri();
     }
     return bind;
 }
