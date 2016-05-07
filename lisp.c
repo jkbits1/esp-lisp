@@ -1173,11 +1173,20 @@ PRIM equal(lisp a, lisp b) {
 }
 
 inline lisp getBind(lisp* envp, lisp name, int create) {
-    //printf("GETBIND: envp=%u global_envp=%u ", (unsigned int)envp, (unsigned int)global_envp); princ(name); terpri();
-    if (create && envp == global_envp) return hashsym(name, NULL, 0, create);
-    if (create) return nil;
+    printf("GETBIND: envp=%u global_envp=%u ", (unsigned int)envp, (unsigned int)global_envp); princ(name); terpri();
+    if (create && envp == global_envp) {
+      printf("hashsym\n");
+      return hashsym(name, NULL, 0, create);
+    }
+    if (create) {
+      printf("no create\n");
+      return nil;
+    }
 
     lisp bind = assoc(name, *envp);
+printf("gb bind - ");
+prin1(bind);
+printf("\n");
     if (bind) return bind;
 
     // check "global"
@@ -1195,11 +1204,16 @@ inline lisp _setqqbind(lisp* envp, lisp name, lisp v, int create) {
         *envp = cons(bind, *envp);
     }
     setcdr(bind, v);
+printf("\n qq bind - ");
+prin1(bind);
+printf("\n");
     return bind;
 }
 
 inline PRIM _setqq(lisp* envp, lisp name, lisp v) {
-    _setqqbind(envp, name, nil, 0);
+//    _setqqbind(envp, name, nil, 0);
+//    _setqqbind(envp, name, v, 0);
+    _setqqbind(envp, name, v, 1);
     return v;
 }
 // next line only needed because C99 can't get pointer to inlined function?
@@ -2259,23 +2273,40 @@ PRIM load(lisp* envp, lisp name) {
 }
 
 PRIM at(lisp* envp, lisp spec, lisp f) {
+printf("\n envp - ");
+prin1(*envp);
+printf("\n");
+
     int c = clock_ms();
+
 //print(c);
 
 printf("\n clock %d", c);
     int w = getint(spec);
 printf("\n w %d", w);
+printf("\n f - ");
 prin1(f);
+printf("\n");
     lisp r = cons(mkint(c + abs(w)), cons(spec, evalGC(f, envp)));
     lisp nm = symbol("*at*");
+printf("\n nm - ");
+prin1(nm);
+printf("\n r -");
 prin1(r);
+
     lisp bind = assoc(nm, *envp);
+printf("\n bind - ");
+prin1(bind);
+printf("\n rest - ");
     lisp rest = bind ? cdr(bind) : nil;
 prin1(rest);
 printf("\n");
     // TOOD: insert sort should be easy, only problem is the first
     // so, we could prefix by atom QUEUE.
     _setqq(envp, nm, cons(r, rest));
+printf("new envp - ");
+prin1(*envp);
+printf("\n");
     return r;
 }
 
