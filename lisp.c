@@ -2372,7 +2372,7 @@ PRIM atrun(lisp* envp) {
         if (when && when < c) {
             int spec = getint(car(cdr(entry)));
             lisp exp = cdr(cdr(entry));
-            printf("[ @%d :: ", when, c); princ(exp); printf(" ");
+            // printf("[ @%d :: ", when, c); princ(exp); printf(" ");
             //lisp ret =
             apply(exp, nil);
             // TODO: add a way by special return value to unschedule itself if its a repeating task
