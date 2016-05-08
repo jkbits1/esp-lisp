@@ -895,9 +895,9 @@ PRIM assoc(lisp name, lisp env) {
         lisp bind = car(env);
         // only works for symbol
         if (car(bind)==name) {
-          printf("\n name - ");
-          prin1(name);
-          printf("\n");
+          //printf("\n name - ");
+          //prin1(name);
+          //printf("\n");
           return bind; 
         }
         // TODO: this is required for for example integer if BIGINT
