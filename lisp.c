@@ -894,7 +894,12 @@ PRIM assoc(lisp name, lisp env) {
     while (env) {
         lisp bind = car(env);
         // only works for symbol
-        if (car(bind)==name) return bind; 
+        if (car(bind)==name) {
+          printf("\n name - ");
+          prin1(name);
+          printf("\n");
+          return bind; 
+        }
         // TODO: this is required for for example integer if BIGINT
         // if (eq(car(bind), name)) return bind;
         env = cdr(env);
@@ -912,7 +917,7 @@ PRIM evallist(lisp e, lisp* envp) {
 static PRIM noEval(lisp x, lisp* envp) { return x; }
 
 PRIM primapply(lisp ff, lisp args, lisp* envp, lisp all, int noeval) {
-    //printf("PRIMAPPLY "); princ(ff); princ(args); terpri();
+    printf("PRIMAPPLY "); princ(ff); princ(args); terpri();
     int n = GETPRIMNUM(ff);
     lisp (*e)(lisp x, lisp* envp) = (noeval && n > 0) ? noEval : evalGC;
     int an = abs(n);
@@ -1202,6 +1207,9 @@ inline lisp _setqqbind(lisp* envp, lisp name, lisp v, int create) {
     if (!bind) {
         bind = cons(name, nil);
         *envp = cons(bind, *envp);
+        printf("adding to envp");
+        princ(*envp);
+        printf("\n");
     }
     setcdr(bind, v);
 printf("\n qq bind - ");
@@ -1211,9 +1219,25 @@ printf("\n");
 }
 
 inline PRIM _setqq(lisp* envp, lisp name, lisp v) {
+  printf("\n setqq - name");
+  princ(name);
+  princ(v);
 //    _setqqbind(envp, name, nil, 0);
 //    _setqqbind(envp, name, v, 0);
     _setqqbind(envp, name, v, 1);
+
+printf("\n setqq test - ");
+lisp bind = assoc(name, *envp);
+prin1(bind);
+printf("\n");
+
+
+if (!bind) {
+  bind = cons(name, nil);
+  *envp = cons(bind, *envp);
+  setcdr(bind, v);
+}
+
     return v;
 }
 // next line only needed because C99 can't get pointer to inlined function?
@@ -2297,7 +2321,7 @@ prin1(r);
     lisp bind = assoc(nm, *envp);
 printf("\n bind - ");
 prin1(bind);
-printf("\n rest - ");
+printf("\n rest xxx - ");
     lisp rest = bind ? cdr(bind) : nil;
 prin1(rest);
 printf("\n");
@@ -2341,7 +2365,7 @@ PRIM atrun(lisp* envp) {
     while (lst) {
         
        int c = clock_ms();
-printf("c - %d", c);
+//printf("c - %d", c);
 
         lisp entry = car(lst);
         int when = getint(car(entry));
