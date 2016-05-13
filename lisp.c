@@ -1222,9 +1222,9 @@ inline PRIM _setqq(lisp* envp, lisp name, lisp v) {
   printf("\n setqq - name");
   princ(name);
   princ(v);
-//    _setqqbind(envp, name, nil, 0);
+    _setqqbind(envp, name, nil, 0);
 //    _setqqbind(envp, name, v, 0);
-    _setqqbind(envp, name, v, 1);
+//    _setqqbind(envp, name, v, 1);
 
 printf("\n setqq test - ");
 lisp bind = assoc(name, *envp);
@@ -3226,7 +3226,14 @@ int kbhit() {
 }
 
 int mygetchar() {
-    while (!kbhit()) idle(lisp_ticks++); 
+
+    int i = 0;
+
+    while (!kbhit()) {
+      idle(lisp_ticks++); 
+      i++;
+    }
+    
     int c = thechar;
     thechar = 0;
     return c;
