@@ -2377,10 +2377,37 @@ PRIM atrun(lisp* envp) {
             apply(exp, nil);
             // TODO: add a way by special return value to unschedule itself if its a repeating task
         //    printf(" => "); princ(ret); printf(" ]\n");
-            if (spec > 0)
+        
+            printf("\n atrun lst - ");
+            prin1(lst);
+            printf("\n");
+
+            printf("\n atrun entry - ");
+            prin1(entry);
+            printf("\n");
+
+            printf("\n atrun exp - ");
+            prin1(exp);
+            printf("\n");
+       
+            printf("\n atrun prev - ");
+            prin1(prev);
+            printf("\n");
+                
+            if (spec > 0) {
                 setcdr(prev, cdr(lst)); // remove
-            else
+                
+                printf("\n atrun prev2 - ");
+                prin1(prev);
+                printf("\n");
+            }
+            else {
                 setcar(entry, mkint(c + abs(spec)));
+                
+                printf("\n atrun entry2 - ");
+                prin1(entry);
+                printf("\n");
+            }
         }
         prev = lst;
         lst = cdr(lst);
