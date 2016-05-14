@@ -2384,7 +2384,15 @@ PRIM atrun(lisp* envp) {
         }
         prev = lst;
         lst = cdr(lst);
-        if (!lst) terpri();
+
+        if (!lst) {
+          //terpri();
+          
+//          printf(".");
+          // var just for test breakpoints
+          int i = 0;
+          i = 2;
+        }
     }
     return bind;
 }
