@@ -1234,8 +1234,17 @@ printf("\n");
 
 if (!bind) {
   bind = cons(name, nil);
+
+  printf("\n setqq custom 1 - ");
+  prin1(bind);
+  printf("\n");
+
   *envp = cons(bind, *envp);
   setcdr(bind, v);
+
+  printf("\n setqq custom 2 - ");
+  prin1(bind);
+  printf("\n");
 }
 
     return v;
