@@ -3276,6 +3276,65 @@ PRIM fibb(lisp n) { return mkint(fib(getint(n))); }
 void init_library(lisp* envp) {
     //DEFINE(fibo, (lambda (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
     DE((fibo (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
+  DEFINE(dropx, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
+  DEFINE(drop1, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
+
+  DEFINE(drop2, (lambda (xs) (cdr xs)));
+
+  DEFINE(pinOn,  (lambda (n) (out n 1)));
+  DEFINE(pinOff, (lambda (n) (out n 0)));
+
+  DEFINE(pin2Off, (lambda (n)
+                    (out 2 0)
+                  )
+        );
+
+  DEFINE (drop, (lambda (x xs)
+                  (if (= x 0)
+                    xs
+                    (drop (- x 1) (cdr xs))
+                  )
+  ));
+
+  DEFINE (take, (lambda (x xs)
+                  (if (= x 0)
+                    ()
+                    (cons (car xs) (take (- x 1) (cdr xs)))
+                  )
+                )
+         );
+
+
+  //define some lists to work with
+  DEFINE (xs, (quote(a b c)));
+  DEFINE (ys, (quote(1 2 3)));
+
+  // need a helper fn for recursion
+  // like reduce?
+  DEFINE (append, (lambda (xs ys)
+                    (if (= (car xs) nil)
+                      ys
+                      (cons (car xs) (append (cdr xs) ys) )
+                    )
+                  )
+         );
+         
+  DEFINE (rotate, (lambda (xs)
+                    (if (= (car xs) nil)
+                      ()
+                      (append (drop 1 xs) (take 1 xs))
+                    )
+                  )    
+  );         
+
+// take head of xs, cons to append of tail xs and ys, recurse ...
+
+
+    // pins
+    // d2 - set with gpio 4
+    // led - set with gpio 2
+
+    
 // POSSIBLE encodings to save memory:
     // symbol: fibo
     // "fibo" 
