@@ -41,6 +41,15 @@
   typedef void * xQueueHandle;
 
   typedef unsigned   uint32_t;
+  typedef uint32_t portTickType;
+
+  #ifndef configTICK_RATE_HZ
+    #define configTICK_RATE_HZ			( ( portTickType ) 100 )
+  #endif
+
+  #define portMAX_DELAY ( portTickType ) 0xffffffff
+  #define portTICK_RATE_MS			( ( portTickType ) 1000 / configTICK_RATE_HZ )
+
 #endif
 
 // code from interrupt example
