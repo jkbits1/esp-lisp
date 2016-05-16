@@ -33,6 +33,8 @@ int startTask, afterInit;
 // code from interrupt example
 const int gpio = 4;
 const int active = 0; // active == 0 for active low
+const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG;
+
 void buttonIntTask(void *pvParameters)
 {
     printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
@@ -49,6 +51,15 @@ void buttonIntTask(void *pvParameters)
             last = button_ts;
         }
     }
+}
+
+static xQueueHandle tsqueue;
+
+void interrupt_init(void)
+//void user_init(void)
+{
+  tsqueue = xQueueCreate(1, sizeof(uint32_t));
+  xTaskCreate(buttonIntTask, (signed char *)"buttonIntTask", 256, &tsqueue, 2, NULL);
 }
 
 void lispTask(void *pvParameters)
