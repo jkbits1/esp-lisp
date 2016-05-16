@@ -789,7 +789,7 @@ PRIM in(lisp pin) {
 PRIM interrupt(lisp pin) {
 //    gpio_enable(getint(pin), GPIO_INPUT);
 //    return mkint(gpio_read(getint(pin)));
-//    interrupt_init();
+    interrupt_init();
     return mkint(4);
 }
 
