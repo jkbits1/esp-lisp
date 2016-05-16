@@ -37,6 +37,10 @@
       GPIO_INTTYPE_LEVEL_LOW  = 4,
       GPIO_INTTYPE_LEVEL_HIGH = 5,
   } gpio_inttype_t;
+
+  typedef void * xQueueHandle;
+
+  typedef unsigned   uint32_t;
 #endif
 
 // code from interrupt example
