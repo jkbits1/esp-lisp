@@ -1,34 +1,28 @@
 #include <string.h>
-#include <stdio.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <netdb.h>
 
-#ifndef UNIX
- #include "FreeRTOS.h"
-  #include "task.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
-  #include "espressif/esp_common.h"
-  #include "espressif/sdk_private.h"
-  #include "FreeRTOS.h"
-  #include "task.h"
-  #include "queue.h"
+#include "espressif/esp_common.h"
+#include "espressif/sdk_private.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
 
   // for interrupt handling
-  #include "esp8266.h"
+  //#include "esp8266.h"
 
   #include "ssid_config.h"
 
-  #include "lwip/err.h"
-  #include "lwip/sockets.h"
-  #include "lwip/sys.h"
-  #include "lwip/netdb.h"
-  #include "lwip/dns.h"
-#endif
+#include "lwip/err.h"
+#include "lwip/sockets.h"
+#include "lwip/sys.h"
+#include "lwip/netdb.h"
+#include "lwip/dns.h"
 
-#ifdef UNIX
-  #include <sys/socket.h>
-#endif
+#include <esp/uart.h>
+
+#include "lisp.h"
 
 #include "compat.h"
 
