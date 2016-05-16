@@ -81,6 +81,9 @@
 #include <stdio.h>
 #include <errno.h>
 
+// added for interrupt handling
+#include "queue.h"
+
 #ifndef UNIX
   #include "FreeRTOS.h"
 
@@ -789,7 +792,7 @@ PRIM interrupt(lisp pin) {
 
 // code from interrupt example
 const int gpio = 4;
-const int active = 0; // active == 0 for active low 
+const int active = 0; // active == 0 for active low
 
 void buttonIntTask(void *pvParameters)
 {
