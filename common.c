@@ -1,5 +1,3 @@
-#include <string.h>
-#include <stdio.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <netdb.h>
@@ -13,6 +11,9 @@
   #include "FreeRTOS.h"
   #include "task.h"
   #include "queue.h"
+
+  // for interrupt handling
+  #include "esp8266.h"
 
   #include "ssid_config.h"
 
@@ -314,6 +315,29 @@ int wget(wget_data* data, char* url, char* server) {
     close(s);
 
     return 0;
+}
+
+// code from interrupt example
+const int gpio = 4;
+const int active = 0; // active == 0 for active low
+const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG;
+
+void buttonIntTask(void *pvParameters)
+{
+    printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
+    xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
+    gpio_set_interrupt(gpio, int_type);
+
+    uint32_t last = 0;
+    while(1) {
+        uint32_t button_ts;
+        xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
+        button_ts *= portTICK_RATE_MS;
+        if(last < button_ts-200) {
+            printf("Button interrupt fired at %dms\r\n", button_ts);
+            last = button_ts;
+        }
+    }
 }
 
 static xQueueHandle tsqueue;
