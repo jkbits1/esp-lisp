@@ -20,6 +20,39 @@ void gpio_enable(int pin, int state) {}
 void gpio_write(int pin, int value) {}
 int gpio_read(int pin) { return 0; }
 
+typedef signed char __int8_t ;
+typedef unsigned char __uint8_t ;
+#define ___int8_t_defined 1
+
+#ifdef ___int8_t_defined
+typedef __int8_t int8_t ;
+typedef __uint8_t uint8_t ;
+#define __int8_t_defined 1
+#endif
+
+typedef signed int __int32_t;
+typedef unsigned int __uint32_t;
+#define ___int32_t_defined 1
+
+#ifdef ___int32_t_defined
+typedef __int32_t int32_t ;
+typedef __uint32_t uint32_t ;
+#define __int32_t_defined 1
+#endif
+
+typedef enum {
+    GPIO_INTTYPE_NONE       = 0,
+    GPIO_INTTYPE_EDGE_POS   = 1,
+    GPIO_INTTYPE_EDGE_NEG   = 2,
+    GPIO_INTTYPE_EDGE_ANY   = 3,
+    GPIO_INTTYPE_LEVEL_LOW  = 4,
+    GPIO_INTTYPE_LEVEL_HIGH = 5,
+} gpio_inttype_t;
+
+void gpio_set_interrupt(const uint8_t gpio_num, const gpio_inttype_t int_type)
+{
+}
+
 unsigned int lastClock = 0;
 int lastMem = 0;
 
