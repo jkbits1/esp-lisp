@@ -51,6 +51,15 @@ void buttonIntTask(void *pvParameters)
     }
 }
 
+static xQueueHandle tsqueue;
+
+//void user_init(void)
+void interrupt_init(void)
+{
+  tsqueue = xQueueCreate(1, sizeof(uint32_t));
+  xTaskCreate(buttonIntTask, (signed char *)"buttonIntTask", 256, &tsqueue, 2, NULL);
+}
+
 void lispTask(void *pvParameters)
 {
     startTask = xPortGetFreeHeapSize();
