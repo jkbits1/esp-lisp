@@ -33,6 +33,8 @@ int startTask, afterInit;
 // code from interrupt example
 const int gpio = 4;
 const int active = 0; // active == 0 for active low
+const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG;
+
 void buttonIntTask(void *pvParameters)
 {
     printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);

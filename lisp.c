@@ -82,7 +82,7 @@
 #include <errno.h>
 
 // added for interrupt handling
-#include "queue.h"
+// #include "queue.h"
 
 #ifndef UNIX
   #include "FreeRTOS.h"
@@ -784,11 +784,14 @@ PRIM in(lisp pin) {
     return mkint(gpio_read(getint(pin)));
 }
 
+// void interrupt_init(void);
 // new primitive for interrupt handling - dummy code
-//PRIM interrupt(lisp pin) {
+PRIM interrupt(lisp pin) {
 //    gpio_enable(getint(pin), GPIO_INPUT);
 //    return mkint(gpio_read(getint(pin)));
-//}
+//    interrupt_init();
+    return mkint(4);
+}
 
 
 //    gpio_set_interrupt(gpio, int_type);
