@@ -23,6 +23,17 @@
 
 #include "compat.h"
 
+#ifdef UNIX
+  typedef enum {
+      GPIO_INTTYPE_NONE       = 0,
+      GPIO_INTTYPE_EDGE_POS   = 1,
+      GPIO_INTTYPE_EDGE_NEG   = 2,
+      GPIO_INTTYPE_EDGE_ANY   = 3,
+      GPIO_INTTYPE_LEVEL_LOW  = 4,
+      GPIO_INTTYPE_LEVEL_HIGH = 5,
+  } gpio_inttype_t;
+#endif
+
 // code from interrupt example
 const int gpio = 4;
 const int active = 0; // active == 0 for active low
