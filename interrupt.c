@@ -41,6 +41,12 @@
   typedef void * xQueueHandle;
 
   typedef unsigned   uint32_t;
+#ifdef ___int8_t_defined
+typedef __int8_t int8_t ;
+typedef __uint8_t uint8_t ;
+#define __int8_t_defined 1
+#endif
+
   typedef uint32_t portTickType;
 
   #ifndef configTICK_RATE_HZ
