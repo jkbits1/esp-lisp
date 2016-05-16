@@ -63,6 +63,15 @@ const int gpio = 4;
 const int active = 0; // active == 0 for active low
 const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG;
 
+#define portBASE_TYPE           long
+//typedef portBASE_TYPE (*pdTASK_HOOK_CODE)( void * );
+#define pdFALSE		( ( portBASE_TYPE ) 0 )
+
+#define xQueueReceive( xQueue, pvBuffer, xTicksToWait ) xQueueGenericReceive( ( xQueue ), ( pvBuffer ), ( xTicksToWait ), pdFALSE )
+
+// signed portBASE_TYPE xQueueGenericReceive( xQueueHandle xQueue, const void * const pvBuffer, portTickType xTicksToWait, portBASE_TYPE xJustPeeking ) {}
+
+
 void buttonIntTask(void *pvParameters)
 {
     printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
