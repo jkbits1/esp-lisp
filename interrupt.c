@@ -1,5 +1,6 @@
 #include <string.h>
 
+#ifndef UNIX
 #include "FreeRTOS.h"
 #include "task.h"
 
@@ -21,6 +22,7 @@
 #include "lwip/dns.h"
 
 #include <esp/uart.h>
+#endif
 
 #include "lisp.h"
 
