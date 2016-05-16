@@ -788,6 +788,9 @@ PRIM interrupt(lisp pin) {
 }
 
 // code from interrupt example
+const int gpio = 4;
+const int active = 0; // active == 0 for active low 
+
 void buttonIntTask(void *pvParameters)
 {
     printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
