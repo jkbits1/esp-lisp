@@ -14,6 +14,9 @@
   #include "task.h"
   #include "queue.h"
 
+  // for interrupt handling
+  #include "esp8266.h"
+
   #include "ssid_config.h"
 
   #include "lwip/err.h"
