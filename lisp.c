@@ -785,32 +785,10 @@ PRIM in(lisp pin) {
 }
 
 // new primitive for interrupt handling - dummy code
-PRIM interrupt(lisp pin) {
-    gpio_enable(getint(pin), GPIO_INPUT);
-    return mkint(gpio_read(getint(pin)));
-}
-
-// code from interrupt example
-const int gpio = 4;
-const int active = 0; // active == 0 for active low
-
-void buttonIntTask(void *pvParameters)
-{
-    printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
-    xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
-    gpio_set_interrupt(gpio, int_type);
-
-    uint32_t last = 0;
-    while(1) {
-        uint32_t button_ts;
-        xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
-        button_ts *= portTICK_RATE_MS;
-        if(last < button_ts-200) {
-            printf("Button interrupt fired at %dms\r\n", button_ts);
-            last = button_ts;
-        }
-    }
-}
+//PRIM interrupt(lisp pin) {
+//    gpio_enable(getint(pin), GPIO_INPUT);
+//    return mkint(gpio_read(getint(pin)));
+//}
 
 
 //    gpio_set_interrupt(gpio, int_type);
