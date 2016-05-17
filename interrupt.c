@@ -1,6 +1,5 @@
 #include <string.h>
 
-#ifndef UNIX
 #include "FreeRTOS.h"
 #include "task.h"
 
@@ -13,7 +12,7 @@
   // for interrupt handling
   //#include "esp8266.h"
 
-  #include "ssid_config.h"
+#include "ssid_config.h"
 
 #include "lwip/err.h"
 #include "lwip/sockets.h"
@@ -23,9 +22,8 @@
 
 #include <esp/uart.h>
 
-  // needed for interrupt code in rtos
-  #include <stdint.h>
-#endif
+// needed for interrupt code in rtos
+#include <stdint.h>
 
 #include "lisp.h"
 
