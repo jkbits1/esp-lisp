@@ -2972,6 +2972,7 @@ lisp lisp_init() {
     DEFPRIM(web, -2, web);
     DEFPRIM(out, 2, out);
     DEFPRIM(in, 1, in);
+    DEFPRIM(interrupt, 1, interrupt);
 
     // system stuff
     DEFPRIM(gc, -1, gc);
