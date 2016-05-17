@@ -31,16 +31,16 @@
 
 
 //#ifdef UNIX
-  typedef enum {
-      GPIO_INTTYPE_NONE       = 0,
-      GPIO_INTTYPE_EDGE_POS   = 1,
-      GPIO_INTTYPE_EDGE_NEG   = 2,
-      GPIO_INTTYPE_EDGE_ANY   = 3,
-      GPIO_INTTYPE_LEVEL_LOW  = 4,
-      GPIO_INTTYPE_LEVEL_HIGH = 5,
-  } gpio_inttype_t;
+//  typedef enum {
+//      GPIO_INTTYPE_NONE       = 0,
+//      GPIO_INTTYPE_EDGE_POS   = 1,
+//      GPIO_INTTYPE_EDGE_NEG   = 2,
+//      GPIO_INTTYPE_EDGE_ANY   = 3,
+//      GPIO_INTTYPE_LEVEL_LOW  = 4,
+//      GPIO_INTTYPE_LEVEL_HIGH = 5,
+//  } gpio_inttype_t;
 
-  typedef void * xQueueHandle;
+//  typedef void * xQueueHandle;
 
 //typedef unsigned   uint32_t;
 //#ifdef ___int8_t_defined
@@ -49,14 +49,14 @@
 //#define __int8_t_defined 1
 //#endif
 
-typedef uint32_t portTickType;
-
-  #ifndef configTICK_RATE_HZ
-    #define configTICK_RATE_HZ			( ( portTickType ) 100 )
-  #endif
-
-  #define portMAX_DELAY ( portTickType ) 0xffffffff
-  #define portTICK_RATE_MS			( ( portTickType ) 1000 / configTICK_RATE_HZ )
+//typedef uint32_t portTickType;
+//
+//  #ifndef configTICK_RATE_HZ
+//    #define configTICK_RATE_HZ			( ( portTickType ) 100 )
+//  #endif
+//
+//  #define portMAX_DELAY ( portTickType ) 0xffffffff
+//  #define portTICK_RATE_MS			( ( portTickType ) 1000 / configTICK_RATE_HZ )
 
 //#endif
 
