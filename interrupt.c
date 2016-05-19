@@ -61,9 +61,9 @@
 //#endif
 
 // code from interrupt example
-const int gpio = 4;
+int gpio = 4;
 const int active = 0; // active == 0 for active low
-const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG;
+const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW; // GPIO_INTTYPE_EDGE_NEG;
 
 //#define portBASE_TYPE           long
 //typedef portBASE_TYPE (*pdTASK_HOOK_CODE)( void * );
@@ -81,10 +81,17 @@ void buttonIntTask(void *pvParameters)
     gpio_set_interrupt(gpio, int_type);
 
     uint32_t last = 0;
+    int count = 0;
     while(1) {
         uint32_t button_ts;
         xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
         button_ts *= portTICK_RATE_MS;
+
+        count = count + 1;
+        if (count >= 1) {
+//          printf("still waiting - %d", button_ts);
+          count = 0;
+        }
         if(last < button_ts-200) {
             printf("Button interrupt fired at %dms\r\n", button_ts);
             last = button_ts;
@@ -95,10 +102,11 @@ void buttonIntTask(void *pvParameters)
 static xQueueHandle tsqueue;
 
 //void user_init(void)
-void interrupt_init(void)
+void interrupt_init(int pin)
 {
+  gpio = pin;
+
   tsqueue = xQueueCreate(1, sizeof(uint32_t));
   xTaskCreate(buttonIntTask, (signed char *)"buttonIntTask", 256, &tsqueue, 2, NULL);
 }
-
 

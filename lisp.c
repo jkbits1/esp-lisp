@@ -789,7 +789,7 @@ PRIM in(lisp pin) {
 PRIM interrupt(lisp pin) {
 //    gpio_enable(getint(pin), GPIO_INPUT);
 //    return mkint(gpio_read(getint(pin)));
-    interrupt_init();
+    interrupt_init(getint(pin));
     return mkint(4);
 }
 
@@ -3340,6 +3340,21 @@ void init_library(lisp* envp) {
                     )
                   )    
   );         
+
+
+//  check if pin4 is 1 - if so put light on
+//        if pin4 is 0   put light off
+
+  DEFINE (flkr, (lambda ()
+                     (cond
+                       ((eq (in 2) 0) (quote(1 2 3)))
+                       ((eq (in 2) 1) (quote(a b c)))
+                       (t             (quote(x)))   
+                     )
+                   )
+         );
+
+// (at -5000 (lambda () (princ (flkr))))
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
