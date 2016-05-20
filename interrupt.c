@@ -61,9 +61,10 @@
 //#endif
 
 // code from interrupt example
-int gpio = 4;
+int gpio = 0; // 4;
 const int active = 0; // active == 0 for active low
 const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW; // GPIO_INTTYPE_EDGE_NEG;
+#define GPIO_HANDLER gpio00_interrupt_handler
 
 //#define portBASE_TYPE           long
 //typedef portBASE_TYPE (*pdTASK_HOOK_CODE)( void * );
@@ -101,12 +102,21 @@ void buttonIntTask(void *pvParameters)
 
 static xQueueHandle tsqueue;
 
+void GPIO_HANDLER(void)
+{
+  uint32_t now = xTaskGetTickCountFromISR();
+  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+}
+
 //void user_init(void)
-void interrupt_init(int pin)
+void interrupt_init(int pin, int changeType)
 {
   gpio = pin;
 
-  tsqueue = xQueueCreate(1, sizeof(uint32_t));
+  uart_set_baud(0, 115200);
+  gpio_enable(gpio, GPIO_INPUT);
+
+  tsqueue = xQueueCreate(2, sizeof(uint32_t));
   xTaskCreate(buttonIntTask, (signed char *)"buttonIntTask", 256, &tsqueue, 2, NULL);
 }
 

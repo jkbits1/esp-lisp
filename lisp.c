@@ -786,10 +786,10 @@ PRIM in(lisp pin) {
 
 // void interrupt_init(void);
 // new primitive for interrupt handling - dummy code
-PRIM interrupt(lisp pin) {
+PRIM interrupt(lisp pin, lisp changeType) {
 //    gpio_enable(getint(pin), GPIO_INPUT);
 //    return mkint(gpio_read(getint(pin)));
-    interrupt_init(getint(pin));
+    interrupt_init(getint(pin), getint(changeType));
     return mkint(4);
 }
 
