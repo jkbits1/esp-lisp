@@ -3356,7 +3356,7 @@ void init_library(lisp* envp) {
                   )
          );
          
-  DEFINE (rotate, (lambda (xs n)
+  DEFINE (rotate, (lambda (n xs)
                     (if (= (car xs) nil)
                       ()
                       (append (drop n xs) (take n xs))
@@ -3385,6 +3385,8 @@ void init_library(lisp* envp) {
 
   //(define zs '(0 1 2 30 4 5 6 7 8 9))
   //(at -10000 (lambda () (princ (take buttonClickCount zs))))
+
+  //(at -10000 (lambda () (princ (rotate buttonClickCount zs))))
 
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
