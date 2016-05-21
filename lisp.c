@@ -3139,7 +3139,7 @@ PRIM idle(int lticks) {
 
     // if flag for interrupt event is set, update env symbol value
     if (buttonCountChanged != 0) {
-    	// printf("click event, updating symbol");
+    	 printf("click event, updating symbol");
 
     	updateButtonClickCount(global_envp);
 
