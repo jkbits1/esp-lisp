@@ -74,6 +74,11 @@ const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW
 
 // signed portBASE_TYPE xQueueGenericReceive( xQueueHandle xQueue, const void * const pvBuffer, portTickType xTicksToWait, portBASE_TYPE xJustPeeking ) {}
 
+// NOTE: need to support multiple buttons -
+// does this need multiple fns for more vars?
+
+// add button press count
+int buttonPressCount = 0;
 
 void buttonIntTask(void *pvParameters)
 {
@@ -82,17 +87,18 @@ void buttonIntTask(void *pvParameters)
     gpio_set_interrupt(gpio, int_type);
 
     uint32_t last = 0;
-    int count = 0;
     while(1) {
         uint32_t button_ts;
         xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
         button_ts *= portTICK_RATE_MS;
 
-        count = count + 1;
-        if (count >= 1) {
+        buttonPressCount = buttonPressCount + 1;
+
+        if (buttonPressCount >= 1) {
 //          printf("still waiting - %d", button_ts);
-          count = 0;
+        	buttonPressCount = 0;
         }
+
         if(last < button_ts-200) {
             printf("Button interrupt fired at %dms\r\n", button_ts);
             last = button_ts;

@@ -793,6 +793,14 @@ PRIM interrupt(lisp pin, lisp changeType) {
     return mkint(4);
 }
 
+check for button click value and
+
+extern int buttonPressCount;
+
+PRIM updateButtonClickSymbol() {
+	return 0;
+}
+
 
 //    gpio_set_interrupt(gpio, int_type);
 
@@ -3357,6 +3365,10 @@ void init_library(lisp* envp) {
 // (at -5000 (lambda () (princ (flkr))))
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
+
+
+  check for button click value and
+  display line1 using button click value as rotate
 
 
     // pins
