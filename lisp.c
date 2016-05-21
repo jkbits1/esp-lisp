@@ -804,6 +804,13 @@ PRIM updateButtonClickSymbol() {
 
 //    gpio_set_interrupt(gpio, int_type);
 
+PRIM _setb(lisp* envp, lisp name, lisp v);
+
+PRIM updateButtonClickCount(lisp* envp) {
+  _setb(envp, symbol("buttonClickCount"), mkint(1));
+  return 0;
+}
+
 // wget functions...
 // echo '
 // (wget "yesco.org" "http://yesco.org/index.html" (lambda (t a v) (princ t) (cond (a (princ " ") (princ a) (princ "=") (princ v)(terpri)))))
@@ -879,7 +886,6 @@ static void response(int req, char* method, char* path) {
 // (web 8080 (lambda (r w s m p) (princ w) (princ " ") (princ s) (princ " ") (princ m) (princ " ") (princ p) (terpri) "FISH-42"))
 // ' | ./run
 
-PRIM _setb(lisp* envp, lisp name, lisp v);
 
 int web_socket = 0;
 
@@ -2981,6 +2987,7 @@ lisp lisp_init() {
     DEFPRIM(out, 2, out);
     DEFPRIM(in, 1, in);
     DEFPRIM(interrupt, 1, interrupt);
+    DEFPRIM(updateClicks, -7, updateButtonClickCount);
 
     // system stuff
     DEFPRIM(gc, -1, gc);
@@ -3366,6 +3373,7 @@ void init_library(lisp* envp) {
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
+  DEFINE(buttonClickCount, 0);
 
   check for button click value and
   display line1 using button click value as rotate
