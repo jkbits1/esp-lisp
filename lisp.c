@@ -786,7 +786,7 @@ PRIM in(lisp pin) {
 
 PRIM interrupt(lisp pin, lisp changeType) {
 	interrupt_init(getint(pin), getint(changeType));
-    return mkint(4);
+    return pin;
 }
 
 extern int buttonCountChanged;
@@ -3401,6 +3401,17 @@ void init_library(lisp* envp) {
   //(at -5000 (lambda () (princ (rotate buttonClickCount zs))))
   //(at -5000 (lambda () ((princ (rotate buttonClickCount zs)) (terpri))))
 
+  DEFINE (rots,
+		  	  (lambda ()
+		  	    (at -5000 (lambda ()
+		  	    			(
+		  	    			  (princ (rotate buttonClickCount zs))
+							  (terpri)
+							)
+		  	    		  )
+		  	    )
+		  	  )
+	     );
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
