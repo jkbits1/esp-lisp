@@ -808,6 +808,12 @@ PRIM resetButtonClickCount(lisp* envp) {
   return count;
 }
 
+PRIM intChange(lisp* envp, lisp v) {
+	_setb(envp, symbol("intEvent"), v);
+
+	return v;
+}
+
 // wget functions...
 // echo '
 // (wget "yesco.org" "http://yesco.org/index.html" (lambda (t a v) (princ t) (cond (a (princ " ") (princ a) (princ "=") (princ v)(terpri)))))
@@ -2986,6 +2992,8 @@ lisp lisp_init() {
     DEFPRIM(interrupt, 1, interrupt);
     DEFPRIM(updateClicks, -7, updateButtonClickCount);
     DEFPRIM(resetClicks, -7, resetButtonClickCount);
+    DEFPRIM(intChange, -2, intChange);
+
 
     // system stuff
     DEFPRIM(gc, -1, gc);
@@ -3134,6 +3142,10 @@ PRIM idle(int lticks) {
     	// printf("click event, updating symbol");
 
     	updateButtonClickCount(global_envp);
+
+    	lisp val = mkint(buttonCountChanged);
+    	intChange(global_envp, val);
+
   		buttonCountChanged = 0;
     }
 
@@ -3393,6 +3405,7 @@ void init_library(lisp* envp) {
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
   DEFINE(buttonClickCount, 0);
+  DEFINE(intEvent, nil);
 
   //check for button click value and
 //  display line1 using button click value as rotate
