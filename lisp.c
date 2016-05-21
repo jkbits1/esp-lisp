@@ -808,6 +808,11 @@ PRIM _setb(lisp* envp, lisp name, lisp v);
 
 PRIM updateButtonClickCount(lisp* envp) {
   _setb(envp, symbol("buttonClickCount"), mkint(buttonPressCount));
+  return buttonPressCount;
+}
+
+PRIM resetButtonClickCount(lisp* envp) {
+  _setb(envp, symbol("buttonClickCount"), mkint(0));
   return 0;
 }
 
@@ -2988,6 +2993,7 @@ lisp lisp_init() {
     DEFPRIM(in, 1, in);
     DEFPRIM(interrupt, 1, interrupt);
     DEFPRIM(updateClicks, -7, updateButtonClickCount);
+    DEFPRIM(resetClicks, -7, resetButtonClickCount);
 
     // system stuff
     DEFPRIM(gc, -1, gc);
@@ -3338,6 +3344,8 @@ void init_library(lisp* envp) {
   DEFINE (xs, (quote(a b c)));
   DEFINE (ys, (quote(1 2 3)));
 
+  DEFINE (line1, (quote(1 2 3)));
+
   // need a helper fn for recursion
   // like reduce?
   DEFINE (append, (lambda (xs ys)
@@ -3348,10 +3356,10 @@ void init_library(lisp* envp) {
                   )
          );
          
-  DEFINE (rotate, (lambda (xs)
+  DEFINE (rotate, (lambda (xs n)
                     (if (= (car xs) nil)
                       ()
-                      (append (drop 1 xs) (take 1 xs))
+                      (append (drop n xs) (take n xs))
                     )
                   )    
   );         
@@ -3369,7 +3377,15 @@ void init_library(lisp* envp) {
                    )
          );
 
+  // (interrupt 0 2)
 // (at -5000 (lambda () (princ (flkr))))
+// (at -5000 (lambda () (updateClicks)))
+
+//  (at -7000 (lambda () (princ buttonClickCount)))
+
+  //(define zs '(0 1 2 30 4 5 6 7 8 9))
+  //(at -10000 (lambda () (princ (take buttonClickCount zs))))
+
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
