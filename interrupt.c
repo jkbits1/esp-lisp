@@ -77,6 +77,8 @@ const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW
 // NOTE: need to support multiple buttons -
 // does this need multiple fns for more vars?
 
+// flag for count change is set here, and reset when lisp env var is updated
+int buttonCountChanged = 0;
 // add button press count
 int buttonPressCount = 0;
 
@@ -92,6 +94,7 @@ void buttonIntTask(void *pvParameters)
         xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
         button_ts *= portTICK_RATE_MS;
 
+        buttonCountChanged = 1;
         buttonPressCount = buttonPressCount + 1;
 
         //if (buttonPressCount >= 1) {

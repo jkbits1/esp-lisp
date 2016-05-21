@@ -784,36 +784,28 @@ PRIM in(lisp pin) {
     return mkint(gpio_read(getint(pin)));
 }
 
-// void interrupt_init(void);
-// new primitive for interrupt handling - dummy code
 PRIM interrupt(lisp pin, lisp changeType) {
-//    gpio_enable(getint(pin), GPIO_INPUT);
-//    return mkint(gpio_read(getint(pin)));
-    interrupt_init(getint(pin), getint(changeType));
+	interrupt_init(getint(pin), getint(changeType));
     return mkint(4);
 }
 
-//check for button click value and
-
+extern int buttonCountChanged = 0;
 extern int buttonPressCount;
-
-//PRIM updateButtonClickSymbol() {
-//	return 0;
-//}
-
-
-//    gpio_set_interrupt(gpio, int_type);
 
 PRIM _setb(lisp* envp, lisp name, lisp v);
 
 PRIM updateButtonClickCount(lisp* envp) {
-  _setb(envp, symbol("buttonClickCount"), mkint(buttonPressCount));
-  return mkint(buttonPressCount);
+  lisp count = mkint(buttonPressCount);
+
+  _setb(envp, symbol("buttonClickCount"), count);
+  return count;
 }
 
 PRIM resetButtonClickCount(lisp* envp) {
-  _setb(envp, symbol("buttonClickCount"), mkint(0));
-  return mkint(0);
+  lisp count = mkint(0);
+
+  _setb(envp, symbol("buttonClickCount"), count);
+  return count;
 }
 
 // wget functions...
@@ -3136,6 +3128,14 @@ PRIM idle(int lticks) {
     // polling tasks, invoking callbacks
     web_one();
     atrun(global_envp);
+
+    // if flag for interrupt event is set, update env symbol value
+    if (buttonCountChanged != 0) {
+    	printf("click event, updating symbol");
+
+    	updateButtonClickCount(global_envp);
+  		buttonCountChanged = 0;
+    }
 
     // gc
     maybeGC(); // TODO: backoff, can't do all the time???
