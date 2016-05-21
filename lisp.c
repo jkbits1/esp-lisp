@@ -3383,10 +3383,11 @@ void init_library(lisp* envp) {
 
 //  (at -7000 (lambda () (princ buttonClickCount)))
 
-  DEFINE (zs, quote(0 1 2 30 4 5 6 7 8 9));
+  DEFINE (zs, quote(0 1 2 3 4 5 6 7 8 9));
   //(at -10000 (lambda () (princ (take buttonClickCount zs))))
 
-  //(at -10000 (lambda () (princ (rotate buttonClickCount zs))))
+  //(at -5000 (lambda () (princ (rotate buttonClickCount zs))))
+  //(at -5000 (lambda () ((princ (rotate buttonClickCount zs)) (terpri))))
 
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
