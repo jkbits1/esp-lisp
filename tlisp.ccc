@@ -21,6 +21,8 @@ void gpio_write(int pin, int value) {}
 int  gpio_read(int pin) { return 0; }
 void interrupt_init(int pin, int changesType) {}
 
+int buttonPressCount = 0;
+
 unsigned int lastClock = 0;
 int lastMem = 0;
 

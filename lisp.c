@@ -793,13 +793,13 @@ PRIM interrupt(lisp pin, lisp changeType) {
     return mkint(4);
 }
 
-check for button click value and
+//check for button click value and
 
 extern int buttonPressCount;
 
-PRIM updateButtonClickSymbol() {
-	return 0;
-}
+//PRIM updateButtonClickSymbol() {
+//	return 0;
+//}
 
 
 //    gpio_set_interrupt(gpio, int_type);
@@ -807,7 +807,7 @@ PRIM updateButtonClickSymbol() {
 PRIM _setb(lisp* envp, lisp name, lisp v);
 
 PRIM updateButtonClickCount(lisp* envp) {
-  _setb(envp, symbol("buttonClickCount"), mkint(1));
+  _setb(envp, symbol("buttonClickCount"), mkint(buttonPressCount));
   return 0;
 }
 
@@ -3375,8 +3375,8 @@ void init_library(lisp* envp) {
 
   DEFINE(buttonClickCount, 0);
 
-  check for button click value and
-  display line1 using button click value as rotate
+  //check for button click value and
+//  display line1 using button click value as rotate
 
 
     // pins

@@ -94,10 +94,10 @@ void buttonIntTask(void *pvParameters)
 
         buttonPressCount = buttonPressCount + 1;
 
-        if (buttonPressCount >= 1) {
+        //if (buttonPressCount >= 1) {
 //          printf("still waiting - %d", button_ts);
-        	buttonPressCount = 0;
-        }
+        //	buttonPressCount = 0;
+        //}
 
         if(last < button_ts-200) {
             printf("Button interrupt fired at %dms\r\n", button_ts);
