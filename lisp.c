@@ -789,7 +789,7 @@ PRIM interrupt(lisp pin, lisp changeType) {
     return mkint(4);
 }
 
-extern int buttonCountChanged = 0;
+extern int buttonCountChanged;
 extern int buttonPressCount;
 
 PRIM _setb(lisp* envp, lisp name, lisp v);
@@ -3131,7 +3131,7 @@ PRIM idle(int lticks) {
 
     // if flag for interrupt event is set, update env symbol value
     if (buttonCountChanged != 0) {
-    	printf("click event, updating symbol");
+    	// printf("click event, updating symbol");
 
     	updateButtonClickCount(global_envp);
   		buttonCountChanged = 0;
@@ -3383,7 +3383,7 @@ void init_library(lisp* envp) {
 
 //  (at -7000 (lambda () (princ buttonClickCount)))
 
-  DEFINE (zs, quote(0 1 2 30 4 5 6 7 8 9));
+  DEFINE (zs, (quote(0 1 2 3 4 5 6 7 8 9)));
   //(at -10000 (lambda () (princ (take buttonClickCount zs))))
 
   //(at -10000 (lambda () (princ (rotate buttonClickCount zs))))
