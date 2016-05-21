@@ -808,12 +808,12 @@ PRIM _setb(lisp* envp, lisp name, lisp v);
 
 PRIM updateButtonClickCount(lisp* envp) {
   _setb(envp, symbol("buttonClickCount"), mkint(buttonPressCount));
-  return buttonPressCount;
+  return mkint(buttonPressCount);
 }
 
 PRIM resetButtonClickCount(lisp* envp) {
   _setb(envp, symbol("buttonClickCount"), mkint(0));
-  return 0;
+  return mkint(0);
 }
 
 // wget functions...
@@ -3383,7 +3383,7 @@ void init_library(lisp* envp) {
 
 //  (at -7000 (lambda () (princ buttonClickCount)))
 
-  //(define zs '(0 1 2 30 4 5 6 7 8 9))
+  (define zs '(0 1 2 30 4 5 6 7 8 9))
   //(at -10000 (lambda () (princ (take buttonClickCount zs))))
 
   //(at -10000 (lambda () (princ (rotate buttonClickCount zs))))
