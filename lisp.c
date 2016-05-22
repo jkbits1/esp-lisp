@@ -3399,19 +3399,33 @@ void init_library(lisp* envp) {
   //(at -10000 (lambda () (princ (take buttonClickCount zs))))
 
   //(at -5000 (lambda () (princ (rotate buttonClickCount zs))))
-  //(at -5000 (lambda () ((princ (rotate buttonClickCount zs)) (terpri))))
+  DEFINE (rot1,
+
+	  (at -5000 (lambda () ((
+			  	  	  	  	  // princ
+							  pp (rotate buttonClickCount zs)
+							)
+			  //(terpri)
+			  	  	  	   )
+				)
+	  )
+  );
 
   DEFINE (rots,
 		  	  (lambda ()
 		  	    (at -5000 (lambda ()
 		  	    			(
 		  	    			  (princ (rotate buttonClickCount zs))
-							  (terpri)
+							  //(terpri)
 							)
 		  	    		  )
 		  	    )
 		  	  )
 	     );
+
+
+  // prints multiple items (or not!)
+  // (mapcar eval '((princ "2") (terpri)))
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
