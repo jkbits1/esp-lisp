@@ -3399,29 +3399,29 @@ void init_library(lisp* envp) {
   //(at -10000 (lambda () (princ (take buttonClickCount zs))))
 
   //(at -5000 (lambda () (princ (rotate buttonClickCount zs))))
-  DEFINE (rot1,
+//  DEFINE (rot1,
+//
+//	  (at -5000 (lambda () ((
+//			  	  	  	  	  // princ
+//							  pp (rotate buttonClickCount zs)
+//							)
+//			  //(terpri)
+//			  	  	  	   )
+//				)
+//	  )
+//  );
 
-	  (at -5000 (lambda () ((
-			  	  	  	  	  // princ
-							  pp (rotate buttonClickCount zs)
-							)
-			  //(terpri)
-			  	  	  	   )
-				)
-	  )
-  );
-
-  DEFINE (rots,
-		  	  (lambda ()
-		  	    (at -5000 (lambda ()
-		  	    			(
-		  	    			  (princ (rotate buttonClickCount zs))
-							  //(terpri)
-							)
-		  	    		  )
-		  	    )
-		  	  )
-	     );
+//  DEFINE (rots,
+//		  	  (lambda ()
+//		  	    (at -5000 (lambda ()
+//		  	    			(
+//		  	    			  (princ (rotate buttonClickCount zs))
+//							  //(terpri)
+//							)
+//		  	    		  )
+//		  	    )
+//		  	  )
+//	     );
 
 
   // prints multiple items (or not!)
