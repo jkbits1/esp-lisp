@@ -189,9 +189,11 @@ void interrupt_init(int pin, int changeType)
 
   if (gpio == 0) {
 	  pFnName = (signed char *)"int00Task";
+	  intFn   = int00;
   }
   else {
 	  pFnName = (signed char *)"int04Task";
+	  intFn   = int04;
   }
 
   xTaskCreate(intFn, pFnName, 256, &tsqueue, 2, NULL);
