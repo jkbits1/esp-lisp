@@ -64,13 +64,17 @@
 int gpio = 0; // 4;
 const int active = 0; // active == 0 for active low
 const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW; // GPIO_INTTYPE_EDGE_NEG;
-#define GPIO_HANDLER gpio00_interrupt_handler
+//#define GPIO_HANDLER gpio00_interrupt_handler
 //#define GPIO_HANDLER gpio02_interrupt_handler
 //#define GPIO_HANDLER gpio04_interrupt_handler
 
 //#define GPIO_HANDLER gpio_interrupt_handler
 
 //#define gpio00_interrupt_handler gpio_interrupt_handler
+
+#define GPIO_HANDLER_00 gpio00_interrupt_handler
+#define GPIO_HANDLER_04 gpio04_interrupt_handler
+
 
 //#define portBASE_TYPE           long
 //typedef portBASE_TYPE (*pdTASK_HOOK_CODE)( void * );
@@ -122,6 +126,19 @@ void GPIO_HANDLER(void)
   uint32_t now = xTaskGetTickCountFromISR();
   xQueueSendToBackFromISR(tsqueue, &now, NULL);
 }
+
+void GPIO_HANDLER_00(void)
+{
+  uint32_t now = xTaskGetTickCountFromISR();
+  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+}
+
+void GPIO_HANDLER_04(void)
+{
+  uint32_t now = xTaskGetTickCountFromISR();
+  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+}
+
 
 //void user_init(void)
 void interrupt_init(int pin, int changeType)
