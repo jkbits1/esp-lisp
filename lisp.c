@@ -3399,6 +3399,8 @@ void init_library(lisp* envp) {
   //(at -10000 (lambda () (princ (take buttonClickCount zs))))
 
   //(at -5000 (lambda () (princ (rotate buttonClickCount zs))))
+
+  // (at 5000 (lambda () (pp (rotate buttonClickCount zs))))
 //  DEFINE (rot1,
 //
 //	  (at -5000 (lambda () ((
@@ -3427,6 +3429,8 @@ void init_library(lisp* envp) {
   // prints multiple items (or not!)
   // (mapcar eval '((princ "2") (terpri)))
 
+  //(at 5000 (lambda () (pp (rotate buttonClickCount zs))))
+
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
   DEFINE(buttonClickCount, 0);
@@ -3434,6 +3438,25 @@ void init_library(lisp* envp) {
 
   //check for button click value and
 //  display line1 using button click value as rotate
+
+  //(cond ((not(eq intEvent 0)) (rotate buttonClickCount zs)))
+
+  // NOTE need to merge two fns below
+  // on timer, show rotate if button clicked
+//  (at -10000 (lambda () (cond ((not(eq intEvent 0)) (pp (rotate buttonClickCount zs))))))
+
+  // show rotate then turn off change flag
+  //(cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange 0)))
+
+// NOTE revised as intEvent starts at nil, not zero
+  // works
+    //(at -10000 (lambda () (cond ((not(eq intEvent nil)) (cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange nil)))))))
+
+
+
+
+  //traffic light, repeat pattern
+
 
 
     // pins
