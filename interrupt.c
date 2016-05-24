@@ -149,24 +149,25 @@ void int04Task(void *pvParameters)
     }
 }
 
-static xQueueHandle tsqueue;
+static xQueueHandle tsqueue00;
+static xQueueHandle tsqueue04;
 
-void GPIO_HANDLER(void)
-{
-  uint32_t now = xTaskGetTickCountFromISR();
-  xQueueSendToBackFromISR(tsqueue, &now, NULL);
-}
+//void GPIO_HANDLER(void)
+//{
+//  uint32_t now = xTaskGetTickCountFromISR();
+//  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+//}
 
 void GPIO_HANDLER_00(void)
 {
   uint32_t now = xTaskGetTickCountFromISR();
-  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+  xQueueSendToBackFromISR(tsqueue00, &now, NULL);
 }
 
 void GPIO_HANDLER_04(void)
 {
   uint32_t now = xTaskGetTickCountFromISR();
-  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+  xQueueSendToBackFromISR(tsqueue04, &now, NULL);
 }
 
 
@@ -187,17 +188,20 @@ void interrupt_init(int pin, int changeType)
 
   int priority = 2;
 
-  tsqueue = xQueueCreate(2, sizeof(uint32_t));
+  xQueueHandle tsqueue = xQueueCreate(2, sizeof(uint32_t));
 
   if (gpio == 0) {
-	  pFnName = (signed char *)"int00Task";
-	  intFn   = int00;
+	  pFnName 	= (signed char *)"int00Task";
+	  intFn   	= int00;
 
-          priority = 1;
+      priority 	= 1;
+      tsqueue00	= tsqueue;
   }
   else {
-	  pFnName = (signed char *)"int04Task";
-	  intFn   = int04;
+	  pFnName 	= (signed char *)"int04Task";
+	  intFn   	= int04;
+
+      tsqueue04	= tsqueue;
   }
 
   xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
