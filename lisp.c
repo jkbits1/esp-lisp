@@ -3436,6 +3436,9 @@ void init_library(lisp* envp) {
   DEFINE(buttonClickCount, 0);
   DEFINE(intEvent, nil);
 
+  DEFINE("*buttonClick0*", 0);
+  DEFINE("*buttonClick4*", 0);
+
   //check for button click value and
 //  display line1 using button click value as rotate
 
