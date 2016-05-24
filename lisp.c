@@ -3481,7 +3481,7 @@ void init_library(lisp* envp) {
   DEFINE(buildLoop,
 		  (lambda (xs xxs n)
 			(cond ((eq n 0) (cons xs xxs))
-				  (t 		(cons (rotate n xs) (buildLoop line1 xxs (- n 1)) ))
+				  (t 		(cons (rotate n xs) (buildLoop xs xxs (- n 1)) ))
 			)
 		  )
 		);
