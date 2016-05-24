@@ -75,6 +75,8 @@ const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW
 #define GPIO_HANDLER_00 gpio00_interrupt_handler
 #define GPIO_HANDLER_04 gpio04_interrupt_handler
 
+typedef void (*pdTASK_CODE)( void * );
+
 
 //#define portBASE_TYPE           long
 //typedef portBASE_TYPE (*pdTASK_HOOK_CODE)( void * );
@@ -178,6 +180,13 @@ void interrupt_init(int pin, int changeType)
 
   signed char *pFnName = NULL;
 
+  pdTASK_CODE intFn = NULL;
+
+  pdTASK_CODE int00 = int00Task;
+  pdTASK_CODE int04 = int04Task;
+
+  tsqueue = xQueueCreate(2, sizeof(uint32_t));
+
   if (gpio == 0) {
 	  pFnName = (signed char *)"int00Task";
   }
@@ -185,7 +194,6 @@ void interrupt_init(int pin, int changeType)
 	  pFnName = (signed char *)"int04Task";
   }
 
-  tsqueue = xQueueCreate(2, sizeof(uint32_t));
-  xTaskCreate(buttonIntTask, pFnName, 256, &tsqueue, 2, NULL);
+  xTaskCreate(intFn, pFnName, 256, &tsqueue, 2, NULL);
 }
 
