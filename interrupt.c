@@ -185,17 +185,21 @@ void interrupt_init(int pin, int changeType)
   pdTASK_CODE int00 = int00Task;
   pdTASK_CODE int04 = int04Task;
 
+  int priority = 2;
+
   tsqueue = xQueueCreate(2, sizeof(uint32_t));
 
   if (gpio == 0) {
 	  pFnName = (signed char *)"int00Task";
 	  intFn   = int00;
+
+          priority = 1;
   }
   else {
 	  pFnName = (signed char *)"int04Task";
 	  intFn   = int04;
   }
 
-  xTaskCreate(intFn, pFnName, 256, &tsqueue, 2, NULL);
+  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
 }
 
