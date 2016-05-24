@@ -3452,8 +3452,46 @@ void init_library(lisp* envp) {
   // works
     //(at -10000 (lambda () (cond ((not(eq intEvent nil)) (cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange nil)))))))
 
+  // works, uses list to initiate multiple events sequentially
+  // (rather than always true conditional above
+  DEFINE(rotateOnClick,
+		  (lambda ()
+			(cond ((not(eq intEvent nil)) (list (pp (rotate buttonClickCount zs))
+					                            (intChange nil)
+					                      )
+				  )
+			)
+	      )
+	    );
+
+  // (at -10000 (lambda () (cond ((not(eq intEvent nil)) (list (pp (rotate buttonClickCount zs)) (intChange nil))))))
+
+  // (at -1000 rotClick)
 
 
+//  (cons line1 ((rotate buttonClickCount line1)))
+  // creates - (don't know if 2 3 1 is a list)
+//		((1 2 3) 2 3 1)
+
+//  (list line1  (rotate buttonClickCount line1))
+//		  creates
+//		((1 2 3) (2 3 1))
+
+  // create loop - works
+  DEFINE(buildLoop,
+		  (lambda (xs xxs n)
+			(cond ((eq n 0) (cons xs xxs))
+				  (t 		(cons (rotate n xs) (buildLoop line1 xxs (- n 1)) ))
+			)
+		  )
+		);
+
+  // works
+//  (define buildLoop (lambda (xs xxs n) (cond ((eq n 0) (cons xs xxs)) (t (cons (rotate n xs) (buildLoop line1 xxs (- n 1)) )))))
+
+
+//		(buildLoop line1 () 0)
+  //(buildLoop line1 () ( - (length line1) 1))
 
   //traffic light, repeat pattern
 
