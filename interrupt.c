@@ -202,6 +202,10 @@ void interrupt_init(int pin, int changeType)
 	  intFn   	= int04;
 
       tsqueue04	= tsqueue;
+
+      xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
+
+      return;
   }
 
   xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
