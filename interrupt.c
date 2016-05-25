@@ -72,7 +72,7 @@ const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW
 
 //#define gpio00_interrupt_handler gpio_interrupt_handler
 
-#define GPIO_HANDLER_00 gpio00_interrupt_handler
+//#define GPIO_HANDLER_00 gpio00_interrupt_handler
 #define GPIO_HANDLER_04 gpio04_interrupt_handler
 
 typedef void (*pdTASK_CODE)( void * );
@@ -149,8 +149,8 @@ void int04Task(void *pvParameters)
     }
 }
 
-static xQueueHandle tsqueue00;
-static xQueueHandle tsqueue04;
+//static xQueueHandle tsqueue00;
+//static xQueueHandle tsqueue04;
 
 //void GPIO_HANDLER(void)
 //{
@@ -158,16 +158,17 @@ static xQueueHandle tsqueue04;
 //  xQueueSendToBackFromISR(tsqueue, &now, NULL);
 //}
 
-void GPIO_HANDLER_00(void)
-{
-  uint32_t now = xTaskGetTickCountFromISR();
-  xQueueSendToBackFromISR(tsqueue00, &now, NULL);
-}
+//void GPIO_HANDLER_00(void)
+//{
+//  uint32_t now = xTaskGetTickCountFromISR();
+//  xQueueSendToBackFromISR(tsqueue00, &now, NULL);
+//}
 
 void GPIO_HANDLER_04(void)
 {
   uint32_t now = xTaskGetTickCountFromISR();
-  xQueueSendToBackFromISR(tsqueue04, &now, NULL);
+  //xQueueSendToBackFromISR(tsqueue04, &now, NULL);
+  xQueueSendToBackFromISR(tsqueue, &now, NULL);
 }
 
 
@@ -188,16 +189,18 @@ void interrupt_init(int pin, int changeType)
 
   int priority = 2;
 
-  xQueueHandle tsqueue = xQueueCreate(2, sizeof(uint32_t));
+//  xQueueHandle tsqueue = NULL;
 
-  if (gpio == 0) {
-	  pFnName 	= (signed char *)"int00Task";
-	  intFn   	= int00;
+  tsqueue = xQueueCreate(2, sizeof(uint32_t));
 
-      priority 	= 1;
-      tsqueue00	= tsqueue;
-  }
-  else {
+//  if (gpio == 0) {
+//	  pFnName 	= (signed char *)"int00Task";
+//	  intFn   	= int00;
+//
+//      priority 	= 1;
+//      tsqueue00	= tsqueue;
+//  }
+//  else {
 	  pFnName 	= (signed char *)"int04Task";
 	  intFn   	= int04;
 
@@ -206,8 +209,8 @@ void interrupt_init(int pin, int changeType)
       xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
 
       return;
-  }
+//  }
 
-  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
+//  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
 }
 
