@@ -97,7 +97,7 @@ int buttonPressCount = 0;
 //void buttonIntTask(void *pvParameters)
 void int00Task(void *pvParameters)
 {
-//    printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
+    printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
     xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
     gpio_set_interrupt(gpio, int_type);
 
@@ -124,7 +124,7 @@ void int00Task(void *pvParameters)
 
 void int04Task(void *pvParameters)
 {
-//    printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
+    printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
     xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
     gpio_set_interrupt(gpio, int_type);
 
