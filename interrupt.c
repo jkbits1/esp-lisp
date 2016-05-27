@@ -166,21 +166,21 @@ void GPIO_HANDLER_00(void)
 {
 printf("00 handler");
   uint32_t now = xTaskGetTickCountFromISR();
-  xQueueSendToBackFromISR(tsqueue00, &now, NULL);
+  xQueueSendToBackFromISR(tsqueue, &now, NULL);
 }
 
 void GPIO_HANDLER_02(void)
 {
 printf("02 handler");
   uint32_t now = xTaskGetTickCountFromISR();
-  xQueueSendToBackFromISR(tsqueue00, &now, NULL);
+  xQueueSendToBackFromISR(tsqueue, &now, NULL);
 }
 
 void GPIO_HANDLER_04(void)
 {
 	printf("04 handler");
  uint32_t now = xTaskGetTickCountFromISR();
-   xQueueSendToBackFromISR(tsqueue04, &now, NULL);
+   xQueueSendToBackFromISR(tsqueue, &now, NULL);
   // xQueueSendToBackFromISR(tsqueue, &now, NULL);
 }
 
