@@ -72,9 +72,9 @@ const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW
 
 //#define gpio00_interrupt_handler gpio_interrupt_handler
 
- #define GPIO_HANDLER_00 gpio00_interrupt_handler
- #define GPIO_HANDLER_02 gpio02_interrupt_handler
- #define GPIO_HANDLER_04 gpio04_interrupt_handler
+// #define GPIO_HANDLER_00 gpio00_interrupt_handler
+// #define GPIO_HANDLER_02 gpio02_interrupt_handler
+// #define GPIO_HANDLER_04 gpio04_interrupt_handler
 
 typedef void (*pdTASK_CODE)( void * );
 
@@ -153,36 +153,36 @@ void int04Task(void *pvParameters)
 }
 
 static xQueueHandle tsqueue = NULL;
-static xQueueHandle tsqueue00 = NULL;
-static xQueueHandle tsqueue04 = NULL;
+//static xQueueHandle tsqueue00 = NULL;
+//static xQueueHandle tsqueue04 = NULL;
 
-void GPIO_HANDLER(void)
-{
-  uint32_t now = xTaskGetTickCountFromISR();
-  xQueueSendToBackFromISR(tsqueue, &now, NULL);
-}
-
-void GPIO_HANDLER_00(void)
-{
-printf("00 handler");
-  uint32_t now = xTaskGetTickCountFromISR();
-  xQueueSendToBackFromISR(tsqueue, &now, NULL);
-}
-
-void GPIO_HANDLER_02(void)
-{
-printf("02 handler");
-  uint32_t now = xTaskGetTickCountFromISR();
-  xQueueSendToBackFromISR(tsqueue, &now, NULL);
-}
-
-void GPIO_HANDLER_04(void)
-{
-	printf("04 handler");
- uint32_t now = xTaskGetTickCountFromISR();
-   xQueueSendToBackFromISR(tsqueue, &now, NULL);
-  // xQueueSendToBackFromISR(tsqueue, &now, NULL);
-}
+//void GPIO_HANDLER(void)
+//{
+//  uint32_t now = xTaskGetTickCountFromISR();
+//  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+//}
+//
+//void GPIO_HANDLER_00(void)
+//{
+//printf("00 handler");
+//  uint32_t now = xTaskGetTickCountFromISR();
+//  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+//}
+//
+//void GPIO_HANDLER_02(void)
+//{
+//printf("02 handler");
+//  uint32_t now = xTaskGetTickCountFromISR();
+//  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+//}
+//
+//void GPIO_HANDLER_04(void)
+//{
+//	printf("04 handler");
+// uint32_t now = xTaskGetTickCountFromISR();
+//   xQueueSendToBackFromISR(tsqueue, &now, NULL);
+//  // xQueueSendToBackFromISR(tsqueue, &now, NULL);
+//}
 
 int setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority) {
 	  xTaskHandle xHandle = NULL;
@@ -210,8 +210,8 @@ void interrupt_init(int pin, int changeType)
 
   pdTASK_CODE intFn = NULL;
 
-  pdTASK_CODE int00 = int00Task;
-  pdTASK_CODE int04 = int04Task;
+//  pdTASK_CODE int00 = int00Task;
+//  pdTASK_CODE int04 = int04Task;
 
   int priority = 2;
 
@@ -238,7 +238,9 @@ void interrupt_init(int pin, int changeType)
       //xTaskCreate(int00Task, (signed char *)"int00Task", 256, &tsqueue, priority, &xHandle); //NULL);
       //long q = xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, &xHandle);
 
-      retVal = setUpInterruptTask (intFn, pFnName, priority);
+      //retVal = setUpInterruptTask (intFn, pFnName, priority);
+      retVal = setUpInterruptTask (int00Task, (signed char *)"int00Task", priority);
+
 
 //  }
 //  else {
@@ -257,7 +259,7 @@ void interrupt_init(int pin, int changeType)
 //printf("creating task \r\n");
 //  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
 
-	retVal = setUpInterruptTask (intFn, pFnName, priority);
+	//retVal = setUpInterruptTask (intFn, pFnName, priority);
 
   // just for a breakpoint
   priority = 2;
