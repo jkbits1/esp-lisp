@@ -222,6 +222,8 @@ int clock_ms() {
 // issue:
 //   https://github.com/SuperHouse/esp-open-rtos/issues/75
 
+    void interrupt_init(int pin, int changeType);
+
 void user_init(void) {
     lastTick = xTaskGetTickCount();
     startMem = lastMem = xPortGetFreeHeapSize();
@@ -238,6 +240,9 @@ void user_init(void) {
     // 1024 --> (fibo 13)
     // 2048 --> (fibo 30) ???
     xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 2, NULL);
+
+    interrupt_init(0, 2);
+
 }
 
 int process_file(char* filename, process_input process) {
