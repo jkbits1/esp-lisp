@@ -64,7 +64,7 @@
 int gpio = 0; // 4;
 const int active = 0; // active == 0 for active low
 const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW; // GPIO_INTTYPE_EDGE_NEG;
-//#define GPIO_HANDLER gpio00_interrupt_handler
+// #define GPIO_HANDLER gpio00_interrupt_handler
 //#define GPIO_HANDLER gpio02_interrupt_handler
 //#define GPIO_HANDLER gpio04_interrupt_handler
 
@@ -72,8 +72,9 @@ const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW
 
 //#define gpio00_interrupt_handler gpio_interrupt_handler
 
-//#define GPIO_HANDLER_00 gpio00_interrupt_handler
-#define GPIO_HANDLER_04 gpio04_interrupt_handler
+ #define GPIO_HANDLER_00 gpio00_interrupt_handler
+ //#define GPIO_HANDLER_00 gpio02_interrupt_handler
+ #define GPIO_HANDLER_04 gpio04_interrupt_handler
 
 typedef void (*pdTASK_CODE)( void * );
 
@@ -149,26 +150,28 @@ void int04Task(void *pvParameters)
     }
 }
 
-//static xQueueHandle tsqueue00;
-//static xQueueHandle tsqueue04;
+static xQueueHandle tsqueue = NULL;
+static xQueueHandle tsqueue00 = NULL;
+static xQueueHandle tsqueue04 = NULL;
 
-//void GPIO_HANDLER(void)
-//{
-//  uint32_t now = xTaskGetTickCountFromISR();
-//  xQueueSendToBackFromISR(tsqueue, &now, NULL);
-//}
+void GPIO_HANDLER(void)
+{
+  uint32_t now = xTaskGetTickCountFromISR();
+  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+}
 
-//void GPIO_HANDLER_00(void)
-//{
-//  uint32_t now = xTaskGetTickCountFromISR();
-//  xQueueSendToBackFromISR(tsqueue00, &now, NULL);
-//}
+void GPIO_HANDLER_00(void)
+{
+printf("00 handler");
+  uint32_t now = xTaskGetTickCountFromISR();
+  xQueueSendToBackFromISR(tsqueue00, &now, NULL);
+}
 
 void GPIO_HANDLER_04(void)
 {
-  uint32_t now = xTaskGetTickCountFromISR();
-  //xQueueSendToBackFromISR(tsqueue04, &now, NULL);
-  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+ uint32_t now = xTaskGetTickCountFromISR();
+   xQueueSendToBackFromISR(tsqueue04, &now, NULL);
+  // xQueueSendToBackFromISR(tsqueue, &now, NULL);
 }
 
 
@@ -191,26 +194,54 @@ void interrupt_init(int pin, int changeType)
 
 //  xQueueHandle tsqueue = NULL;
 
-  tsqueue = xQueueCreate(2, sizeof(uint32_t));
+  xTaskHandle xHandle = NULL;
 
-//  if (gpio == 0) {
-//	  pFnName 	= (signed char *)"int00Task";
-//	  intFn   	= int00;
-//
-//      priority 	= 1;
-//      tsqueue00	= tsqueue;
-//  }
-//  else {
+  if (tsqueue == NULL ) {
+  //tsqueue = xQueueCreate(2, sizeof(uint32_t));
+  tsqueue = xQueueCreate(20, sizeof(uint32_t));
+}
+
+  if (gpio == 0) {
+
+  printf("setting up for int 0, tsQueue - %ld", tsqueue);
+
+	  pFnName 	= (signed char *)"int00Task";
+	  intFn   	= int00;
+
+     priority 	= changeType; // 1;
+      tsqueue00	= tsqueue;
+
+      xTaskCreate(int00Task, (signed char *)"int00Task", 256, &tsqueue, priority, &xHandle); //NULL);
+      //long q = xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, &xHandle);
+
+
+// printf("q - %ld", q);
+ printf("handle - %ld", xHandle);
+      return;
+  }
+  else {
 	  pFnName 	= (signed char *)"int04Task";
 	  intFn   	= int04;
 
       tsqueue04	= tsqueue;
 
-      xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
+//      xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue04, 2, NULL);
+//        xTaskCreate(intFn, pFnName, 256, &tsqueue04, 2, NULL);
+//      xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
 
-      return;
-//  }
+//      return;
+  }
 
-//  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
+printf("creating task \r\n");
+  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
+}
+
+static inline void gpio_set_interrupt2(const uint8_t gpio_num, const gpio_inttype_t int_type)
+{
+    GPIO.CONF[gpio_num] = SET_FIELD(GPIO.CONF[gpio_num], GPIO_CONF_INTTYPE, int_type);
+    if(int_type != GPIO_INTTYPE_NONE) {
+        _xt_isr_attach(INUM_GPIO, gpio_interrupt_handler);
+        _xt_isr_unmask(1<<INUM_GPIO);
+    }
 }
 
