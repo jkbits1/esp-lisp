@@ -125,6 +125,35 @@ void int00Task(void *pvParameters)
     }
 }
 
+void int02Task(void *pvParameters)
+{
+    printf("Waiting for button press interrupt on gpio 2 \r\n");
+    xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
+    //gpio_set_interrupt(gpio, int_type);
+    //gpio_set_interrupt(0, int_type);
+    //gpio_set_interrupt(2, int_type);
+
+    uint32_t last = 0;
+    while(1) {
+        uint32_t button_ts;
+        xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
+        button_ts *= portTICK_RATE_MS;
+
+        buttonCountChanged = 1;
+        buttonPressCount = buttonPressCount + 1;
+
+        //if (buttonPressCount >= 1) {
+//          printf("still waiting - %d", button_ts);
+        //	buttonPressCount = 0;
+        //}
+
+        if(last < button_ts-200) {
+            printf("interrupt 0 fired at %dms\r\n", button_ts);
+            last = button_ts;
+        }
+    }
+}
+
 void int04Task(void *pvParameters)
 {
     printf("Waiting for button press interrupt on gpio 4\r\n");
@@ -234,6 +263,8 @@ void interrupt_init(int pin, int changeType)
 
      priority 	= changeType; // 1;
       //tsqueue00	= tsqueue;
+
+     xTaskCreate(int02Task, (signed char *)"int02Task", 256, &tsqueue, priority, &xHandle); //NULL);
 
       //xTaskCreate(int00Task, (signed char *)"int00Task", 256, &tsqueue, priority, &xHandle); //NULL);
       //long q = xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, &xHandle);
