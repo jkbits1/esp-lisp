@@ -224,6 +224,63 @@ int clock_ms() {
 
     void interrupt_init(int pin, int changeType);
 
+    void int02Taska(void *pvParameters)
+    {
+        printf("Waiting for button press interrupt on gpio 2 \r\n");
+//        xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
+        //gpio_set_interrupt(gpio, int_type);
+        //gpio_set_interrupt(0, int_type);
+        //gpio_set_interrupt(2, int_type);
+
+        uint32_t last = 0;
+        while(1) {
+            uint32_t button_ts;
+//            xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
+//            button_ts *= portTICK_RATE_MS;
+
+            //buttonCountChanged = 1;
+            //buttonPressCount = buttonPressCount + 1;
+
+            //if (buttonPressCount >= 1) {
+    //          printf("still waiting - %d", button_ts);
+            //	buttonPressCount = 0;
+            //}
+
+//            if(last < button_ts-200) {
+//      //          printf("interrupt 0 fired at %dms\r\n", button_ts);
+//                last = button_ts;
+//            }
+        }
+    }
+
+    void int04Taska(void *pvParameters)
+    {
+        printf("Waiting for button press interrupt on gpio 4\r\n");
+//        xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
+      //  gpio_set_interrupt(4, int_type);
+
+        uint32_t last = 0;
+        while(1) {
+            uint32_t button_ts;
+//            xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
+//            button_ts *= portTICK_RATE_MS;
+//
+//            buttonCountChanged = 1;
+//            buttonPressCount = buttonPressCount + 1;
+
+            //if (buttonPressCount >= 1) {
+    //          printf("still waiting - %d", button_ts);
+            //	buttonPressCount = 0;
+            //}
+
+            if(last < button_ts-200) {
+        //        printf("interrupt 4 fired at %dms\r\n", button_ts);
+                last = button_ts;
+            }
+        }
+    }
+
+
 void user_init(void) {
     lastTick = xTaskGetTickCount();
     startMem = lastMem = xPortGetFreeHeapSize();
@@ -239,7 +296,10 @@ void user_init(void) {
     // for now run in a task, in order to allocate a bigger stack
     // 1024 --> (fibo 13)
     // 2048 --> (fibo 30) ???
-    xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 2, NULL);
+    xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 3, NULL);
+    //xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 2, NULL);
+    xTaskCreate(&int02Taska, (signed char *)"int02Taska", 256, NULL, 1, NULL);
+    xTaskCreate(&int04Taska, (signed char *)"int04Taska", 256, NULL, 2, NULL);
 
     interrupt_init(0, 2);
 
