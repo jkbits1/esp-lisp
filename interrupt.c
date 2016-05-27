@@ -174,6 +174,15 @@ void GPIO_HANDLER_04(void)
   // xQueueSendToBackFromISR(tsqueue, &now, NULL);
 }
 
+int setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority) {
+	  xTaskHandle xHandle = NULL;
+
+	printf("creating task \r\n");
+	  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, &xHandle);
+
+	// printf("q - %ld", q);
+	 printf("handle - %ld", xHandle);
+}
 
 //void user_init(void)
 void interrupt_init(int pin, int changeType)
@@ -194,14 +203,15 @@ void interrupt_init(int pin, int changeType)
 
 //  xQueueHandle tsqueue = NULL;
 
-  xTaskHandle xHandle = NULL;
+  int retVal = 0;
+
 
   if (tsqueue == NULL ) {
-  //tsqueue = xQueueCreate(2, sizeof(uint32_t));
-  tsqueue = xQueueCreate(20, sizeof(uint32_t));
-}
+	  //tsqueue = xQueueCreate(2, sizeof(uint32_t));
+	  tsqueue = xQueueCreate(20, sizeof(uint32_t));
+  }
 
-  if (gpio == 0) {
+//  if (gpio == 0) {
 
   printf("setting up for int 0, tsQueue - %ld", tsqueue);
 
@@ -214,12 +224,10 @@ void interrupt_init(int pin, int changeType)
       xTaskCreate(int00Task, (signed char *)"int00Task", 256, &tsqueue, priority, &xHandle); //NULL);
       //long q = xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, &xHandle);
 
+      retVal = setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority);
 
-// printf("q - %ld", q);
- printf("handle - %ld", xHandle);
-      return;
-  }
-  else {
+//  }
+//  else {
 	  pFnName 	= (signed char *)"int04Task";
 	  intFn   	= int04;
 
@@ -230,10 +238,15 @@ void interrupt_init(int pin, int changeType)
 //      xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
 
 //      return;
-  }
+//  }
 
-printf("creating task \r\n");
-  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
+//printf("creating task \r\n");
+//  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
+
+	retVal = setUpInterruptTask (intFn, pFnName, priority);
+
+  // just for a breakpoint
+  priority = 2;
 }
 
 static inline void gpio_set_interrupt2(const uint8_t gpio_num, const gpio_inttype_t int_type)
