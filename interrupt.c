@@ -240,7 +240,7 @@ void interrupt_init(int pin, int changeType)
   pdTASK_CODE intFn = NULL;
 
 //  pdTASK_CODE int00 = int00Task;
-//  pdTASK_CODE int04 = int04Task;
+  pdTASK_CODE int04 = int04Task;
 
   int priority = 2;
 
@@ -264,7 +264,7 @@ void interrupt_init(int pin, int changeType)
      priority 	= changeType; // 1;
       //tsqueue00	= tsqueue;
 
-     xTaskCreate(int02Task, (signed char *)"int02Task", 256, &tsqueue, priority, &xHandle); //NULL);
+  //   xTaskCreate(int02Task, (signed char *)"int02Task", 256, &tsqueue, priority, NULL);
 
       //xTaskCreate(int00Task, (signed char *)"int00Task", 256, &tsqueue, priority, &xHandle); //NULL);
       //long q = xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, &xHandle);
@@ -275,12 +275,14 @@ void interrupt_init(int pin, int changeType)
 
 //  }
 //  else {
-//	  pFnName 	= (signed char *)"int04Task";
-//	  intFn   	= int04;
+	  pFnName 	= (signed char *)"int04Task";
+	  intFn   	= int04;
 
- //     tsqueue04	= tsqueue;
+//     tsqueue04	= tsqueue;
 
-      xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
+      xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
+//      xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, NULL);
+//      xTaskCreate(int02Task, (signed char *)"int02Task", 256, &tsqueue, 3, NULL);
 //        xTaskCreate(intFn, pFnName, 256, &tsqueue04, 2, NULL);
 //      xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
 
@@ -290,7 +292,7 @@ void interrupt_init(int pin, int changeType)
 //printf("creating task \r\n");
 //  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
 
-	//retVal = setUpInterruptTask (intFn, pFnName, priority);
+//retVal = setUpInterruptTask (intFn, pFnName, priority);
 
   // just for a breakpoint
   priority = 2;
