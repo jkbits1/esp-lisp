@@ -73,7 +73,7 @@ const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW
 //#define gpio00_interrupt_handler gpio_interrupt_handler
 
  #define GPIO_HANDLER_00 gpio00_interrupt_handler
- //#define GPIO_HANDLER_00 gpio02_interrupt_handler
+ #define GPIO_HANDLER_02 gpio02_interrupt_handler
  #define GPIO_HANDLER_04 gpio04_interrupt_handler
 
 typedef void (*pdTASK_CODE)( void * );
@@ -98,9 +98,11 @@ int buttonPressCount = 0;
 //void buttonIntTask(void *pvParameters)
 void int00Task(void *pvParameters)
 {
-    printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
+    printf("Waiting for button press interrupt on gpio 0 \r\n");
     xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
-    gpio_set_interrupt(gpio, int_type);
+    //gpio_set_interrupt(gpio, int_type);
+    //gpio_set_interrupt(0, int_type);
+    gpio_set_interrupt(2, int_type);
 
     uint32_t last = 0;
     while(1) {
@@ -125,9 +127,9 @@ void int00Task(void *pvParameters)
 
 void int04Task(void *pvParameters)
 {
-    printf("Waiting for button press interrupt on gpio %d...\r\n", gpio);
+    printf("Waiting for button press interrupt on gpio 4\r\n");
     xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
-    gpio_set_interrupt(gpio, int_type);
+    gpio_set_interrupt(4, int_type);
 
     uint32_t last = 0;
     while(1) {
@@ -178,10 +180,11 @@ int setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority) {
 	  xTaskHandle xHandle = NULL;
 
 	printf("creating task \r\n");
-	  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, &xHandle);
+int retVal =	  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, &xHandle);
 
 	// printf("q - %ld", q);
 	 printf("handle - %ld", xHandle);
+return retVal;
 }
 
 //void user_init(void)
@@ -190,7 +193,10 @@ void interrupt_init(int pin, int changeType)
   gpio = pin;
 
   uart_set_baud(0, 115200);
-  gpio_enable(gpio, GPIO_INPUT);
+  //gpio_enable(gpio, GPIO_INPUT);
+  //gpio_enable(0, GPIO_INPUT);
+  gpio_enable(2, GPIO_INPUT);
+  gpio_enable(4, GPIO_INPUT);
 
   signed char *pFnName = NULL;
 
@@ -221,10 +227,10 @@ void interrupt_init(int pin, int changeType)
      priority 	= changeType; // 1;
       tsqueue00	= tsqueue;
 
-      xTaskCreate(int00Task, (signed char *)"int00Task", 256, &tsqueue, priority, &xHandle); //NULL);
+      //xTaskCreate(int00Task, (signed char *)"int00Task", 256, &tsqueue, priority, &xHandle); //NULL);
       //long q = xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, &xHandle);
 
-      retVal = setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority);
+      retVal = setUpInterruptTask (intFn, pFnName, priority);
 
 //  }
 //  else {
