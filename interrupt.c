@@ -221,8 +221,8 @@ void interrupt_init(int pin, int changeType)
 
 
   if (tsqueue == NULL ) {
-	  //tsqueue = xQueueCreate(2, sizeof(uint32_t));
-	  tsqueue = xQueueCreate(20, sizeof(uint32_t));
+	  tsqueue = xQueueCreate(2, sizeof(uint32_t));
+	  //tsqueue = xQueueCreate(20, sizeof(uint32_t));
   }
 
 //  if (gpio == 0) {
@@ -230,16 +230,16 @@ void interrupt_init(int pin, int changeType)
   printf("setting up for int, tsQueue - %ld", tsqueue);
 
 	  pFnName 	= (signed char *)"int00Task";
-	  intFn   	= int00;
+//	  intFn   	= int00;
 
      priority 	= changeType; // 1;
-      tsqueue00	= tsqueue;
+      //tsqueue00	= tsqueue;
 
       //xTaskCreate(int00Task, (signed char *)"int00Task", 256, &tsqueue, priority, &xHandle); //NULL);
       //long q = xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, &xHandle);
 
       //retVal = setUpInterruptTask (intFn, pFnName, priority);
-      retVal = setUpInterruptTask (int00Task, (signed char *)"int00Task", priority);
+      //retVal = setUpInterruptTask (int00Task, (signed char *)"int00Task", priority);
 
 
 //  }
@@ -249,7 +249,7 @@ void interrupt_init(int pin, int changeType)
 
  //     tsqueue04	= tsqueue;
 
-//      xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue04, 2, NULL);
+      xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
 //        xTaskCreate(intFn, pFnName, 256, &tsqueue04, 2, NULL);
 //      xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
 
