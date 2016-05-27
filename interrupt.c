@@ -242,10 +242,10 @@ void interrupt_init(int pin, int changeType)
 
 //  }
 //  else {
-	  pFnName 	= (signed char *)"int04Task";
-	  intFn   	= int04;
+//	  pFnName 	= (signed char *)"int04Task";
+//	  intFn   	= int04;
 
-      tsqueue04	= tsqueue;
+ //     tsqueue04	= tsqueue;
 
 //      xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue04, 2, NULL);
 //        xTaskCreate(intFn, pFnName, 256, &tsqueue04, 2, NULL);
@@ -257,7 +257,7 @@ void interrupt_init(int pin, int changeType)
 //printf("creating task \r\n");
 //  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
 
-	retVal = setUpInterruptTask (intFn, pFnName, priority);
+//	retVal = setUpInterruptTask (intFn, pFnName, priority);
 
   // just for a breakpoint
   priority = 2;
