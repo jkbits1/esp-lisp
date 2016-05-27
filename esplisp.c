@@ -241,7 +241,7 @@ void user_init(void) {
     // 2048 --> (fibo 30) ???
     xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 2, NULL);
 
-    interrupt_init(0, 2);
+//    interrupt_init(0, 2);
 
 }
 

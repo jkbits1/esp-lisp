@@ -102,7 +102,7 @@ void int00Task(void *pvParameters)
     xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
     //gpio_set_interrupt(gpio, int_type);
     //gpio_set_interrupt(0, int_type);
-    gpio_set_interrupt(2, int_type);
+    //gpio_set_interrupt(2, int_type);
 
     uint32_t last = 0;
     while(1) {
@@ -129,7 +129,7 @@ void int04Task(void *pvParameters)
 {
     printf("Waiting for button press interrupt on gpio 4\r\n");
     xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
-    gpio_set_interrupt(4, int_type);
+  //  gpio_set_interrupt(4, int_type);
 
     uint32_t last = 0;
     while(1) {
@@ -203,8 +203,8 @@ void interrupt_init(int pin, int changeType)
   uart_set_baud(0, 115200);
   //gpio_enable(gpio, GPIO_INPUT);
   //gpio_enable(0, GPIO_INPUT);
-  gpio_enable(2, GPIO_INPUT);
-  gpio_enable(4, GPIO_INPUT);
+//  gpio_enable(2, GPIO_INPUT);
+//  gpio_enable(4, GPIO_INPUT);
 
   signed char *pFnName = NULL;
 
