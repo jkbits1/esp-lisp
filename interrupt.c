@@ -30,36 +30,6 @@
 #include "compat.h"
 
 
-//#ifdef UNIX
-//  typedef enum {
-//      GPIO_INTTYPE_NONE       = 0,
-//      GPIO_INTTYPE_EDGE_POS   = 1,
-//      GPIO_INTTYPE_EDGE_NEG   = 2,
-//      GPIO_INTTYPE_EDGE_ANY   = 3,
-//      GPIO_INTTYPE_LEVEL_LOW  = 4,
-//      GPIO_INTTYPE_LEVEL_HIGH = 5,
-//  } gpio_inttype_t;
-
-//  typedef void * xQueueHandle;
-
-//typedef unsigned   uint32_t;
-//#ifdef ___int8_t_defined
-//typedef __int8_t int8_t ;
-//typedef __uint8_t uint8_t ;
-//#define __int8_t_defined 1
-//#endif
-
-//typedef uint32_t portTickType;
-//
-//  #ifndef configTICK_RATE_HZ
-//    #define configTICK_RATE_HZ			( ( portTickType ) 100 )
-//  #endif
-//
-//  #define portMAX_DELAY ( portTickType ) 0xffffffff
-//  #define portTICK_RATE_MS			( ( portTickType ) 1000 / configTICK_RATE_HZ )
-
-//#endif
-
 // code from interrupt example
 int gpio = 0; // 4;
 const int active = 0; // active == 0 for active low
@@ -77,15 +47,6 @@ const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW
 // #define GPIO_HANDLER_04 gpio04_interrupt_handler
 
 typedef void (*pdTASK_CODE)( void * );
-
-
-//#define portBASE_TYPE           long
-//typedef portBASE_TYPE (*pdTASK_HOOK_CODE)( void * );
-//#define pdFALSE		( ( portBASE_TYPE ) 0 )
-
-// #define xQueueReceive( xQueue, pvBuffer, xTicksToWait ) xQueueGenericReceive( ( xQueue ), ( pvBuffer ), ( xTicksToWait ), pdFALSE )
-
-// signed portBASE_TYPE xQueueGenericReceive( xQueueHandle xQueue, const void * const pvBuffer, portTickType xTicksToWait, portBASE_TYPE xJustPeeking ) {}
 
 // NOTE: need to support multiple buttons -
 // does this need multiple fns for more vars?
@@ -119,7 +80,7 @@ void int00Task(void *pvParameters)
         //}
 
         if(last < button_ts-200) {
-            printf("interrupt 0 fired at %dms\r\n", button_ts);
+//            printf("interrupt 0 fired at %dms\r\n", button_ts);
             last = button_ts;
         }
     }
@@ -148,7 +109,7 @@ void int02Task(void *pvParameters)
         //}
 
         if(last < button_ts-200) {
-            printf("interrupt 0 fired at %dms\r\n", button_ts);
+  //          printf("interrupt 0 fired at %dms\r\n", button_ts);
             last = button_ts;
         }
     }
@@ -175,15 +136,13 @@ void int04Task(void *pvParameters)
         //}
 
         if(last < button_ts-200) {
-            printf("interrupt 4 fired at %dms\r\n", button_ts);
+    //        printf("interrupt 4 fired at %dms\r\n", button_ts);
             last = button_ts;
         }
     }
 }
 
 static xQueueHandle tsqueue = NULL;
-//static xQueueHandle tsqueue00 = NULL;
-//static xQueueHandle tsqueue04 = NULL;
 
 //void GPIO_HANDLER(void)
 //{
@@ -213,18 +172,17 @@ static xQueueHandle tsqueue = NULL;
 //  // xQueueSendToBackFromISR(tsqueue, &now, NULL);
 //}
 
-int setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority) {
-	  xTaskHandle xHandle = NULL;
+//int setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority) {
+//	  xTaskHandle xHandle = NULL;
+//
+//	printf("creating task %s \r\n", pFnName);
+//int retVal =	  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, &xHandle);
+//
+//	// printf("q - %ld", q);
+//	 printf("handle - %ld", xHandle);
+//return retVal;
+//}
 
-	printf("creating task %s \r\n", pFnName);
-int retVal =	  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, &xHandle);
-
-	// printf("q - %ld", q);
-	 printf("handle - %ld", xHandle);
-return retVal;
-}
-
-//void user_init(void)
 void interrupt_init(int pin, int changeType)
 {
   gpio = pin;
@@ -237,65 +195,14 @@ void interrupt_init(int pin, int changeType)
 
   signed char *pFnName = NULL;
 
-  pdTASK_CODE intFn = NULL;
-
-//  pdTASK_CODE int00 = int00Task;
-  pdTASK_CODE int04 = int04Task;
-
-  int priority = 2;
-
-//  xQueueHandle tsqueue = NULL;
-
   int retVal = 0;
-
 
   if (tsqueue == NULL ) {
 	  tsqueue = xQueueCreate(2, sizeof(uint32_t));
-	  //tsqueue = xQueueCreate(20, sizeof(uint32_t));
   }
 
-//  if (gpio == 0) {
-
-  printf("setting up for int, tsQueue - %ld", tsqueue);
-
-	  pFnName 	= (signed char *)"int00Task";
-//	  intFn   	= int00;
-
-     priority 	= changeType; // 1;
-      //tsqueue00	= tsqueue;
-
-  //   xTaskCreate(int02Task, (signed char *)"int02Task", 256, &tsqueue, priority, NULL);
-
-      //xTaskCreate(int00Task, (signed char *)"int00Task", 256, &tsqueue, priority, &xHandle); //NULL);
-      //long q = xTaskCreate(int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, &xHandle);
-
-      //retVal = setUpInterruptTask (intFn, pFnName, priority);
-      //retVal = setUpInterruptTask (int00Task, (signed char *)"int00Task", priority);
-
-
-//  }
-//  else {
-	  pFnName 	= (signed char *)"int04Task";
-	  intFn   	= int04;
-
-//     tsqueue04	= tsqueue;
-
-      xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
-//      xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, NULL);
-//      xTaskCreate(int02Task, (signed char *)"int02Task", 256, &tsqueue, 3, NULL);
-//        xTaskCreate(intFn, pFnName, 256, &tsqueue04, 2, NULL);
-//      xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
-
-//      return;
-//  }
-
-//printf("creating task \r\n");
-//  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, NULL);
-
-//retVal = setUpInterruptTask (intFn, pFnName, priority);
-
-  // just for a breakpoint
-  priority = 2;
+  xTaskCreate(&int02Task, (signed char *)"int02Task", 256, &tsqueue, 1, NULL);
+  xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
 }
 
 static inline void gpio_set_interrupt2(const uint8_t gpio_num, const gpio_inttype_t int_type)
