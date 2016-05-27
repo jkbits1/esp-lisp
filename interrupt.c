@@ -169,8 +169,16 @@ printf("00 handler");
   xQueueSendToBackFromISR(tsqueue00, &now, NULL);
 }
 
+void GPIO_HANDLER_02(void)
+{
+printf("02 handler");
+  uint32_t now = xTaskGetTickCountFromISR();
+  xQueueSendToBackFromISR(tsqueue00, &now, NULL);
+}
+
 void GPIO_HANDLER_04(void)
 {
+	printf("04 handler");
  uint32_t now = xTaskGetTickCountFromISR();
    xQueueSendToBackFromISR(tsqueue04, &now, NULL);
   // xQueueSendToBackFromISR(tsqueue, &now, NULL);
@@ -179,7 +187,7 @@ void GPIO_HANDLER_04(void)
 int setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority) {
 	  xTaskHandle xHandle = NULL;
 
-	printf("creating task \r\n");
+	printf("creating task %s \r\n", pFnName);
 int retVal =	  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, &xHandle);
 
 	// printf("q - %ld", q);
@@ -219,7 +227,7 @@ void interrupt_init(int pin, int changeType)
 
 //  if (gpio == 0) {
 
-  printf("setting up for int 0, tsQueue - %ld", tsqueue);
+  printf("setting up for int, tsQueue - %ld", tsqueue);
 
 	  pFnName 	= (signed char *)"int00Task";
 	  intFn   	= int00;
