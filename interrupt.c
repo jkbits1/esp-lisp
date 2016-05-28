@@ -116,6 +116,10 @@ int buttonPressCount = 0;
 //    }
 //}
 
+struct ButtonMessage {           
+        uint32_t now;            
+        uint32_t buttonNumber;   
+};                               
 void int04Task(void *pvParameters)
 {
     printf("Waiting for button press interrupt on gpio 4\r\n");
@@ -128,16 +132,16 @@ void int04Task(void *pvParameters)
     while(1) {
         uint32_t button_ts;
 
-    	ButtonMessage btnMsg;
+    	struct ButtonMessage btnMsg;
 
-    	btnMsg.now 			= now;
-    	btnMsg.buttonNumber   = 0;
+    	//btnMsg.now 			= now;
+    	// btnMsg.buttonNumber   = 0;
 
 printf("x");
         //xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
         xQueueReceive(*tsqueue, &btnMsg, portMAX_DELAY);
 
-        button_ts = btnMsg00.now;
+        button_ts = btnMsg.now;
         button_ts *= portTICK_RATE_MS;
 
 //        buttonCountChanged = 1;
@@ -170,7 +174,7 @@ void GPIO_HANDLER_00(void)
 	printf("00 handler");
 	  uint32_t now = xTaskGetTickCountFromISR();
 
-	ButtonMessage btnMsg00;
+	struct ButtonMessage btnMsg00;
 
 	btnMsg00.now 			= now;
 	btnMsg00.buttonNumber   = 0;
@@ -184,7 +188,7 @@ void GPIO_HANDLER_02(void)
 printf("02 handler");
   uint32_t now = xTaskGetTickCountFromISR();
 
-	ButtonMessage btnMsg02;
+	struct ButtonMessage btnMsg02;
 
 	btnMsg02.now 			= now;
 	btnMsg02.buttonNumber   = 2;
@@ -199,7 +203,7 @@ void GPIO_HANDLER_04(void)
 	printf("04 handler");
  uint32_t now = xTaskGetTickCountFromISR();
 
- 	 ButtonMessage btnMsg04;
+ 	 struct ButtonMessage btnMsg04;
 
 	btnMsg04.now 			= now;
 	btnMsg04.buttonNumber   = 4;
@@ -220,10 +224,10 @@ void GPIO_HANDLER_04(void)
 //return retVal;
 //}
 
-struct ButtonMessage {
-	uint32_t now;
-	uint32_t buttonNumber;
-};
+//struct ButtonMessage {
+//	uint32_t now;
+//	uint32_t buttonNumber;
+//};
 
 // multiple tasks seem to cause an error
 // will multiplex clicks through a single task
@@ -248,7 +252,7 @@ printf("pin %d chgType %d", pin, changeType);
   if (tsqueue == NULL ) {
 	  tsqueue = xQueueCreate(2,
 			  //sizeof(uint32_t)
-			  sizeof(ButtonMessage)
+			  sizeof(struct ButtonMessage)
 			  );
   }
 
