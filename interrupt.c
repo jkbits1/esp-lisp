@@ -52,16 +52,26 @@ typedef void (*pdTASK_CODE)( void * );
 // does this need multiple fns for more vars?
 
 // flag for count change is set here, and reset when lisp env var is updated
+int button00CountChanged = 0;
+// add button press count
+int button00PressCount = 0;
+
+// flag for count change is set here, and reset when lisp env var is updated
+int button02CountChanged = 0;
+// add button press count
+int button02PressCount = 0;
+
+// flag for count change is set here, and reset when lisp env var is updated
 int button04CountChanged = 0;
 // add button press count
 int button04PressCount = 0;
-
-//void buttonIntTask(void *pvParameters)
 
 struct ButtonMessage {           
         uint32_t now;            
         uint32_t buttonNumber;   
 };                               
+
+//void buttonIntTask(void *pvParameters)
 void int04Task(void *pvParameters)
 {
     printf("Waiting for button press interrupt on gpio 4\r\n");
@@ -76,9 +86,6 @@ void int04Task(void *pvParameters)
 
     	struct ButtonMessage btnMsg;
 
-    	//btnMsg.now 			= now;
-    	// btnMsg.buttonNumber   = 0;
-
 //printf("x");
         //xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
         xQueueReceive(*tsqueue, &btnMsg, portMAX_DELAY);
@@ -86,17 +93,27 @@ void int04Task(void *pvParameters)
         button_ts = btnMsg.now;
         button_ts *= portTICK_RATE_MS;
 
-        button04CountChanged = 1;
-        button04PressCount = button04PressCount + 1;
-
         //if (button04PressCount >= 1) {
 //          printf("still waiting - %d", button_ts);
         //	button04PressCount = 0;
         //}
 
         if(last < button_ts-200) {
-            printf("interrupt 4 fired at %dms\r\n", button_ts);
+            printf("interrupt %d fired at %dms\r\n", btnMsg.buttonNumber, button_ts);
             last = button_ts;
+
+            if (btnMsg.buttonNumber == 0) {
+            	button00CountChanged = 1;
+            	button00PressCount = button00PressCount + 1;
+            }
+            if (btnMsg.buttonNumber == 2) {
+            	button02CountChanged = 1;
+            	button02PressCount = button02PressCount + 1;
+            }
+            if (btnMsg.buttonNumber == 4) {
+            	button04CountChanged = 1;
+            	button04PressCount = button04PressCount + 1;
+            }
         }
     }
 }
@@ -114,7 +131,7 @@ void GPIO_HANDLER(void)
 void GPIO_HANDLER_00(void)
 {
 	printf("00 handler");
-	  uint32_t now = xTaskGetTickCountFromISR();
+	uint32_t now = xTaskGetTickCountFromISR();
 
 	struct ButtonMessage btnMsg00;
 
@@ -136,14 +153,13 @@ printf("02 handler");
 	btnMsg02.buttonNumber   = 2;
 
   //xQueueSendToBackFromISR(tsqueue02, &now, NULL);
-  // xQueueSendToBackFromISR(tsqueue, &now, NULL);
   xQueueSendToBackFromISR(tsqueue, &btnMsg02, NULL);
 }
 
 void GPIO_HANDLER_04(void)
 {
 	printf("04 handler");
- uint32_t now = xTaskGetTickCountFromISR();
+	uint32_t now = xTaskGetTickCountFromISR();
 
  	 struct ButtonMessage btnMsg04;
 
@@ -151,7 +167,6 @@ void GPIO_HANDLER_04(void)
 	btnMsg04.buttonNumber   = 4;
 
    //xQueueSendToBackFromISR(tsqueue04, &now, NULL);
-   //xQueueSendToBackFromISR(tsqueue, &now, NULL);
    xQueueSendToBackFromISR(tsqueue, &btnMsg04, NULL);
 }
 //

@@ -794,17 +794,39 @@ extern int button04PressCount;
 
 PRIM _setb(lisp* envp, lisp name, lisp v);
 
-PRIM updateButtonClickCount(lisp* envp) {
-  lisp count = mkint(button04PressCount);
+PRIM updateButtonClickCount(lisp* envp, lisp pin) {
+  int pinNum = getint(pin);
+  lisp count;
 
-  _setb(envp, symbol("*button04ClickCount*"), count);
+  if (pinNum == 4) {
+	  count = mkint(button04PressCount);
+	  _setb(envp, symbol("*button04ClickCount*"), count);
+  }
+  else if (pinNum == 2) {
+	  count = mkint(button02PressCount);
+	  _setb(envp, symbol("*button02ClickCount*"), count);
+  }
+  else {
+	  count = mkint(button00PressCount);
+	  _setb(envp, symbol("*button00ClickCount*"), count);
+  }
+
   return count;
 }
 
-PRIM resetButtonClickCount(lisp* envp) {
+PRIM resetButtonClickCount(lisp* envp, lisp pin) {
+  int  pinNum = getint(pin);
   lisp count = mkint(0);
 
-  _setb(envp, symbol("*button04ClickCount*"), count);
+  if (pinNum == 4) {
+	  _setb(envp, symbol("*button04ClickCount*"), count);
+  }
+  else if (pinNum == 2) {
+	  _setb(envp, symbol("*button02ClickCount*"), count);
+  }
+  else {
+	  _setb(envp, symbol("*button00ClickCount*"), count);
+  }
   return count;
 }
 
@@ -3129,6 +3151,34 @@ void maybeGC() {
 
 PRIM atrun(lisp* envp);
 
+void checkButtonClick(int *buttonCountChanged) {
+
+	updateButtonClickCount(global_envp, mkint(4));
+
+	lisp val = mkint(*button04CountChanged);
+	intChange(global_envp, val);
+
+	*button04CountChanged = 0;
+}
+
+void checkButtonClickCounts() {
+    if (button04CountChanged != 0) {
+		 printf("click 04 event");
+
+		 checkButtonClick(&button04CountChanged);
+    }
+    else if (button02CountChanged != 0) {
+		 printf("click 02 event");
+
+		 checkButtonClick(&button02CountChanged);
+	}
+    else {
+		 printf("click 00 event");
+
+		 checkButtonClick(&button00CountChanged);
+	}
+}
+
 PRIM idle(int lticks) {
     // 1 000 000 == 1s for x61 laptop
     //if (lticks % 1000000 == 0) { putchar('^'); fflush(stdout); }
@@ -3138,16 +3188,7 @@ PRIM idle(int lticks) {
     atrun(global_envp);
 
     // if flag for interrupt event is set, update env symbol value
-    if (button04CountChanged != 0) {
-    	 printf("click event, updating symbol");
-
-    	updateButtonClickCount(global_envp);
-
-    	lisp val = mkint(button04CountChanged);
-    	intChange(global_envp, val);
-
-  		button04CountChanged = 0;
-    }
+    checkButtonClickCounts();
 
     // gc
     maybeGC(); // TODO: backoff, can't do all the time???
