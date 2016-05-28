@@ -254,10 +254,14 @@ int clock_ms() {
     }
 
 //    int gpio = 0; // 4;
-    extern const int active = 0; // active == 0 for active low
-    extern const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW; // GPIO_INTTYPE_EDGE_NEG;
+    extern int active ; // active == 0 for active low
+    extern gpio_inttype_t int_type ; // GPIO_INTTYPE_LEVEL_LOW; // GPIO_INTTYPE_EDGE_NEG;
 
     static xQueueHandle tsqueue;
+
+#define GPIO_HANDLER_00 gpio00_interrupt_handler
+ #define GPIO_HANDLER_02 gpio02_interrupt_handler
+ #define GPIO_HANDLER_04 gpio04_interrupt_handler
 
     void GPIO_HANDLER_00(void)
     {
