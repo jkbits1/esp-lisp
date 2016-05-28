@@ -3155,9 +3155,9 @@ void maybeGC() {
 
 PRIM atrun(lisp* envp);
 
-void checkButtonClick(int *buttonCountChanged) {
+void checkButtonClick(int buttonNum, int *buttonCountChanged) {
 
-	updateButtonClickCount(global_envp, mkint(4));
+	updateButtonClickCount(global_envp, mkint(buttonNum));
 
 	lisp val = mkint(*buttonCountChanged);
 	intChange(global_envp, val);
@@ -3169,17 +3169,17 @@ void checkButtonClickCounts() {
     if (button04CountChanged != 0) {
 		 printf("click 04 event");
 
-		 checkButtonClick(&button04CountChanged);
+		 checkButtonClick(4, &button04CountChanged);
     }
     else if (button02CountChanged != 0) {
 		 printf("click 02 event");
 
-		 checkButtonClick(&button02CountChanged);
+		 checkButtonClick(2, &button02CountChanged);
 	}
     else if (button00CountChanged != 0) {
 		 printf("click 00 event");
 
-		 checkButtonClick(&button00CountChanged);
+		 checkButtonClick(0, &button00CountChanged);
 	}
 }
 
