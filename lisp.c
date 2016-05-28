@@ -2989,7 +2989,7 @@ lisp lisp_init() {
     DEFPRIM(web, -2, web);
     DEFPRIM(out, 2, out);
     DEFPRIM(in, 1, in);
-    DEFPRIM(interrupt, 1, interrupt);
+    DEFPRIM(interrupt, 2, interrupt);
     DEFPRIM(updateClicks, -7, updateButtonClickCount);
     DEFPRIM(resetClicks, -7, resetButtonClickCount);
     DEFPRIM(intChange, -2, intChange);

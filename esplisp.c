@@ -332,14 +332,15 @@ void user_init(void) {
     // this doesn't have enough stack!
     //lispTask(NULL); return;
 
- if (tsqueue == NULL ) {
-          tsqueue = xQueueCreate(2, sizeof(uint32_t));
-  }
+ //if (tsqueue == NULL ) {
+  //        tsqueue = xQueueCreate(2, sizeof(uint32_t));
+  //}
 
     // for now run in a task, in order to allocate a bigger stack
     // 1024 --> (fibo 13)
     // 2048 --> (fibo 30) ???
     xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 3, NULL);
+//    xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 5, NULL);
     //xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 2, NULL);
     //xTaskCreate(&int02Taska, (signed char *)"int02Taska", 256, &tsqueue, 1, NULL);
 //    xTaskCreate(&int04Taska, (signed char *)"int04Taska", 256, &tsqueue, 2, NULL);

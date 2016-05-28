@@ -92,7 +92,7 @@ void int02Task(void *pvParameters)
     xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
     //gpio_set_interrupt(gpio, int_type);
     //gpio_set_interrupt(0, int_type);
-    //gpio_set_interrupt(2, int_type);
+    gpio_set_interrupt(2, int_type);
 
     uint32_t last = 0;
     while(1) {
@@ -119,7 +119,7 @@ void int04Task(void *pvParameters)
 {
     printf("Waiting for button press interrupt on gpio 4\r\n");
     xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
-  //  gpio_set_interrupt(4, int_type);
+    gpio_set_interrupt(4, int_type);
 
     uint32_t last = 0;
     while(1) {
@@ -185,6 +185,8 @@ void GPIO_HANDLER_04(void)
 
 void interrupt_init(int pin, int changeType)
 {
+printf("pin %d chgType %d", pin, changeType);
+
   gpio = pin;
 
   uart_set_baud(0, 115200);
@@ -202,7 +204,17 @@ void interrupt_init(int pin, int changeType)
   }
 
 //  xTaskCreate(&int02Task, (signed char *)"int02Task", 256, &tsqueue, 1, NULL);
-  xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
+  //xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
+
+  unsigned long priority = (unsigned long) changeType;
+printf("p - %lu", priority);
+
+  if (pin == 4) {
+  xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, NULL);
+}
+else {
+  xTaskCreate(&int02Task, (signed char *)"int02Task", 256, &tsqueue, priority , NULL);
+  }
 }
 
 static inline void gpio_set_interrupt2(const uint8_t gpio_num, const gpio_inttype_t int_type)
