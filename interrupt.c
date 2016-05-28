@@ -144,33 +144,33 @@ void int04Task(void *pvParameters)
 
 static xQueueHandle tsqueue = NULL;
 
-//void GPIO_HANDLER(void)
-//{
-//  uint32_t now = xTaskGetTickCountFromISR();
-//  xQueueSendToBackFromISR(tsqueue, &now, NULL);
-//}
-//
-//void GPIO_HANDLER_00(void)
-//{
-//printf("00 handler");
-//  uint32_t now = xTaskGetTickCountFromISR();
-//  xQueueSendToBackFromISR(tsqueue, &now, NULL);
-//}
-//
-//void GPIO_HANDLER_02(void)
-//{
-//printf("02 handler");
-//  uint32_t now = xTaskGetTickCountFromISR();
-//  xQueueSendToBackFromISR(tsqueue, &now, NULL);
-//}
-//
-//void GPIO_HANDLER_04(void)
-//{
-//	printf("04 handler");
-// uint32_t now = xTaskGetTickCountFromISR();
-//   xQueueSendToBackFromISR(tsqueue, &now, NULL);
-//  // xQueueSendToBackFromISR(tsqueue, &now, NULL);
-//}
+void GPIO_HANDLER(void)
+{
+  uint32_t now = xTaskGetTickCountFromISR();
+  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+}
+
+void GPIO_HANDLER_00(void)
+{
+printf("00 handler");
+  uint32_t now = xTaskGetTickCountFromISR();
+  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+}
+
+void GPIO_HANDLER_02(void)
+{
+printf("02 handler");
+  uint32_t now = xTaskGetTickCountFromISR();
+  xQueueSendToBackFromISR(tsqueue, &now, NULL);
+}
+
+void GPIO_HANDLER_04(void)
+{
+	printf("04 handler");
+ uint32_t now = xTaskGetTickCountFromISR();
+   xQueueSendToBackFromISR(tsqueue, &now, NULL);
+  // xQueueSendToBackFromISR(tsqueue, &now, NULL);
+}
 //
 //int setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority) {
 //	  xTaskHandle xHandle = NULL;
@@ -189,9 +189,9 @@ void interrupt_init(int pin, int changeType)
 
   uart_set_baud(0, 115200);
   //gpio_enable(gpio, GPIO_INPUT);
-  //gpio_enable(0, GPIO_INPUT);
-//  gpio_enable(2, GPIO_INPUT);
-//  gpio_enable(4, GPIO_INPUT);
+  gpio_enable(0, GPIO_INPUT);
+  gpio_enable(2, GPIO_INPUT);
+  gpio_enable(4, GPIO_INPUT);
 
   signed char *pFnName = NULL;
 
@@ -201,7 +201,7 @@ void interrupt_init(int pin, int changeType)
 	  tsqueue = xQueueCreate(2, sizeof(uint32_t));
   }
 
-  xTaskCreate(&int02Task, (signed char *)"int02Task", 256, &tsqueue, 1, NULL);
+//  xTaskCreate(&int02Task, (signed char *)"int02Task", 256, &tsqueue, 1, NULL);
   xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, 2, NULL);
 }
 
