@@ -52,69 +52,11 @@ typedef void (*pdTASK_CODE)( void * );
 // does this need multiple fns for more vars?
 
 // flag for count change is set here, and reset when lisp env var is updated
-int buttonCountChanged = 0;
+int button04CountChanged = 0;
 // add button press count
-int buttonPressCount = 0;
+int button04PressCount = 0;
 
 //void buttonIntTask(void *pvParameters)
-//void int00Task(void *pvParameters)
-//{
-//    printf("Waiting for button press interrupt on gpio 0 \r\n");
-//    xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
-//    //gpio_set_interrupt(gpio, int_type);
-//    gpio_set_interrupt(0, int_type);
-//    //gpio_set_interrupt(2, int_type);
-//
-//    uint32_t last = 0;
-//    while(1) {
-//        uint32_t button_ts;
-//        xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
-//        button_ts *= portTICK_RATE_MS;
-//
-//        buttonCountChanged = 1;
-//        buttonPressCount = buttonPressCount + 1;
-//
-//        //if (buttonPressCount >= 1) {
-////          printf("still waiting - %d", button_ts);
-//        //	buttonPressCount = 0;
-//        //}
-//
-//        if(last < button_ts-200) {
-////            printf("interrupt 0 fired at %dms\r\n", button_ts);
-//            last = button_ts;
-//        }
-//    }
-//}
-//
-//void int02Task(void *pvParameters)
-//{
-//    printf("Waiting for button press interrupt on gpio 2 \r\n");
-//    xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
-//    //gpio_set_interrupt(gpio, int_type);
-//    //gpio_set_interrupt(0, int_type);
-//    //gpio_set_interrupt(2, int_type);
-//
-//    uint32_t last = 0;
-//    while(1) {
-//printf(".");
-//        uint32_t button_ts;
-//        xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
-//     //   button_ts *= portTICK_RATE_MS;
-//
-//    //    buttonCountChanged = 1;
-//     //   buttonPressCount = buttonPressCount + 1;
-//
-//        //if (buttonPressCount >= 1) {
-////          printf("still waiting - %d", button_ts);
-//        //	buttonPressCount = 0;
-//        //}
-//
-//      //  if(last < button_ts-200) {
-//  //          printf("interrupt 0 fired at %dms\r\n", button_ts);
-//       //     last = button_ts;
-//        //}
-//    }
-//}
 
 struct ButtonMessage {           
         uint32_t now;            
@@ -137,31 +79,31 @@ void int04Task(void *pvParameters)
     	//btnMsg.now 			= now;
     	// btnMsg.buttonNumber   = 0;
 
-printf("x");
+//printf("x");
         //xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
         xQueueReceive(*tsqueue, &btnMsg, portMAX_DELAY);
 
         button_ts = btnMsg.now;
         button_ts *= portTICK_RATE_MS;
 
-//        buttonCountChanged = 1;
- //       buttonPressCount = buttonPressCount + 1;
+        button04CountChanged = 1;
+        button04PressCount = button04PressCount + 1;
 
-        //if (buttonPressCount >= 1) {
+        //if (button04PressCount >= 1) {
 //          printf("still waiting - %d", button_ts);
-        //	buttonPressCount = 0;
+        //	button04PressCount = 0;
         //}
 
         if(last < button_ts-200) {
-    //        printf("interrupt 4 fired at %dms\r\n", button_ts);
+            printf("interrupt 4 fired at %dms\r\n", button_ts);
             last = button_ts;
         }
     }
 }
 
 static xQueueHandle tsqueue = NULL;
-static xQueueHandle tsqueue02 = NULL;
-static xQueueHandle tsqueue04 = NULL;
+//static xQueueHandle tsqueue02 = NULL;
+//static xQueueHandle tsqueue04 = NULL;
 
 void GPIO_HANDLER(void)
 {
@@ -213,22 +155,6 @@ void GPIO_HANDLER_04(void)
    xQueueSendToBackFromISR(tsqueue, &btnMsg04, NULL);
 }
 //
-//int setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority) {
-//	  xTaskHandle xHandle = NULL;
-//
-//	printf("creating task %s \r\n", pFnName);
-//int retVal =	  xTaskCreate(intFn, pFnName, 256, &tsqueue, priority, &xHandle);
-//
-//	// printf("q - %ld", q);
-//	 printf("handle - %ld", xHandle);
-//return retVal;
-//}
-
-//struct ButtonMessage {
-//	uint32_t now;
-//	uint32_t buttonNumber;
-//};
-
 // multiple tasks seem to cause an error
 // will multiplex clicks through a single task
 //

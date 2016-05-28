@@ -789,27 +789,27 @@ PRIM interrupt(lisp pin, lisp changeType) {
     return pin;
 }
 
-extern int buttonCountChanged;
-extern int buttonPressCount;
+extern int button04CountChanged;
+extern int button04PressCount;
 
 PRIM _setb(lisp* envp, lisp name, lisp v);
 
 PRIM updateButtonClickCount(lisp* envp) {
-  lisp count = mkint(buttonPressCount);
+  lisp count = mkint(button04PressCount);
 
-  _setb(envp, symbol("buttonClickCount"), count);
+  _setb(envp, symbol("*button04ClickCount*"), count);
   return count;
 }
 
 PRIM resetButtonClickCount(lisp* envp) {
   lisp count = mkint(0);
 
-  _setb(envp, symbol("buttonClickCount"), count);
+  _setb(envp, symbol("*button04ClickCount*"), count);
   return count;
 }
 
 PRIM intChange(lisp* envp, lisp v) {
-	_setb(envp, symbol("intEvent"), v);
+	_setb(envp, symbol("*intEvent*"), v);
 
 	return v;
 }
@@ -3138,15 +3138,15 @@ PRIM idle(int lticks) {
     atrun(global_envp);
 
     // if flag for interrupt event is set, update env symbol value
-    if (buttonCountChanged != 0) {
+    if (button04CountChanged != 0) {
     	 printf("click event, updating symbol");
 
     	updateButtonClickCount(global_envp);
 
-    	lisp val = mkint(buttonCountChanged);
+    	lisp val = mkint(button04CountChanged);
     	intChange(global_envp, val);
 
-  		buttonCountChanged = 0;
+  		button04CountChanged = 0;
     }
 
     // gc
@@ -3433,11 +3433,13 @@ void init_library(lisp* envp) {
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
-  DEFINE(buttonClickCount, 0);
+  DEFINE("*button00ClickCount", 0);
+  DEFINE("*button02ClickCount", 0);
+  DEFINE("*button04ClickCount", 0);
   DEFINE(intEvent, nil);
 
-  DEFINE("*buttonClick0*", 0);
-  DEFINE("*buttonClick4*", 0);
+//  DEFINE("*button00Click*", 0);
+//  DEFINE("*button04Click*", 0);
 
   //check for button click value and
 //  display line1 using button click value as rotate
