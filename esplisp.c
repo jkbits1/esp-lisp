@@ -227,7 +227,7 @@ int clock_ms() {
     void int02Taska(void *pvParameters)
     {
         printf("Waiting for button press interrupt on gpio 2 \r\n");
-//        xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
+        xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
         //gpio_set_interrupt(gpio, int_type);
         //gpio_set_interrupt(0, int_type);
         //gpio_set_interrupt(2, int_type);
@@ -235,7 +235,7 @@ int clock_ms() {
         uint32_t last = 0;
         while(1) {
             uint32_t button_ts;
-//            xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
+            xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
 //            button_ts *= portTICK_RATE_MS;
 
             //buttonCountChanged = 1;
@@ -256,13 +256,13 @@ int clock_ms() {
     void int04Taska(void *pvParameters)
     {
         printf("Waiting for button press interrupt on gpio 4\r\n");
-//        xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
+        xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
       //  gpio_set_interrupt(4, int_type);
 
         uint32_t last = 0;
         while(1) {
             uint32_t button_ts;
-//            xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
+            xQueueReceive(*tsqueue, &button_ts, portMAX_DELAY);
 //            button_ts *= portTICK_RATE_MS;
 //
 //            buttonCountChanged = 1;
@@ -281,6 +281,8 @@ int clock_ms() {
     }
 
 
+static xQueueHandle tsqueue;
+
 void user_init(void) {
     lastTick = xTaskGetTickCount();
     startMem = lastMem = xPortGetFreeHeapSize();
@@ -293,15 +295,19 @@ void user_init(void) {
     // this doesn't have enough stack!
     //lispTask(NULL); return;
 
+ if (tsqueue == NULL ) {
+          tsqueue = xQueueCreate(2, sizeof(uint32_t));
+  }
+
     // for now run in a task, in order to allocate a bigger stack
     // 1024 --> (fibo 13)
     // 2048 --> (fibo 30) ???
     xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 3, NULL);
     //xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 2, NULL);
-    xTaskCreate(&int02Taska, (signed char *)"int02Taska", 256, NULL, 1, NULL);
-    xTaskCreate(&int04Taska, (signed char *)"int04Taska", 256, NULL, 2, NULL);
+    //xTaskCreate(&int02Taska, (signed char *)"int02Taska", 256, &tsqueue, 1, NULL);
+    xTaskCreate(&int04Taska, (signed char *)"int04Taska", 256, &tsqueue, 2, NULL);
 
-    interrupt_init(0, 2);
+    //interrupt_init(0, 2);
 
 }
 
