@@ -42,9 +42,9 @@ const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW
 
 //#define gpio00_interrupt_handler gpio_interrupt_handler
 
-// #define GPIO_HANDLER_00 gpio00_interrupt_handler
-// #define GPIO_HANDLER_02 gpio02_interrupt_handler
-// #define GPIO_HANDLER_04 gpio04_interrupt_handler
+ #define GPIO_HANDLER_00 gpio00_interrupt_handler
+ #define GPIO_HANDLER_02 gpio02_interrupt_handler
+ #define GPIO_HANDLER_04 gpio04_interrupt_handler
 
 typedef void (*pdTASK_CODE)( void * );
 
@@ -171,7 +171,7 @@ static xQueueHandle tsqueue = NULL;
 //   xQueueSendToBackFromISR(tsqueue, &now, NULL);
 //  // xQueueSendToBackFromISR(tsqueue, &now, NULL);
 //}
-
+//
 //int setUpInterruptTask (pdTASK_CODE intFn, signed char *pFnName, int priority) {
 //	  xTaskHandle xHandle = NULL;
 //

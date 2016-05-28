@@ -253,11 +253,45 @@ int clock_ms() {
         }
     }
 
+//    int gpio = 0; // 4;
+    extern const int active = 0; // active == 0 for active low
+    extern const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW; // GPIO_INTTYPE_EDGE_NEG;
+
+    static xQueueHandle tsqueue;
+
+    void GPIO_HANDLER_00(void)
+    {
+    	printf("00 handler");
+      uint32_t now = xTaskGetTickCountFromISR();
+      xQueueSendToBackFromISR(tsqueue, &now, NULL);
+    }
+
+    void GPIO_HANDLER_02(void)
+    {
+    printf("02 handler");
+      uint32_t now = xTaskGetTickCountFromISR();
+      xQueueSendToBackFromISR(tsqueue, &now, NULL);
+    }
+
+    void GPIO_HANDLER_04(void)
+    {
+    	printf("04 handler");
+     uint32_t now = xTaskGetTickCountFromISR();
+       xQueueSendToBackFromISR(tsqueue, &now, NULL);
+      // xQueueSendToBackFromISR(tsqueue, &now, NULL);
+    }
+
     void int04Taska(void *pvParameters)
     {
         printf("Waiting for button press interrupt on gpio 4\r\n");
         xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
-      //  gpio_set_interrupt(4, int_type);
+        gpio_enable(0, GPIO_INPUT);
+        gpio_enable(2, GPIO_INPUT);
+        gpio_enable(4, GPIO_INPUT);
+
+        gpio_set_interrupt(0, int_type);
+        gpio_set_interrupt(2, int_type);
+        gpio_set_interrupt(4, int_type);
 
         uint32_t last = 0;
         while(1) {
@@ -281,7 +315,6 @@ int clock_ms() {
     }
 
 
-static xQueueHandle tsqueue;
 
 void user_init(void) {
     lastTick = xTaskGetTickCount();
