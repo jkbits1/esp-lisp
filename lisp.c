@@ -790,7 +790,11 @@ PRIM interrupt(lisp pin, lisp changeType) {
 }
 
 extern int button04CountChanged;
+extern int button02CountChanged;
+extern int button00CountChanged;
 extern int button04PressCount;
+extern int button02PressCount;
+extern int button00PressCount;
 
 PRIM _setb(lisp* envp, lisp name, lisp v);
 
@@ -3155,10 +3159,10 @@ void checkButtonClick(int *buttonCountChanged) {
 
 	updateButtonClickCount(global_envp, mkint(4));
 
-	lisp val = mkint(*button04CountChanged);
+	lisp val = mkint(*buttonCountChanged);
 	intChange(global_envp, val);
 
-	*button04CountChanged = 0;
+	*buttonCountChanged = 0;
 }
 
 void checkButtonClickCounts() {
@@ -3172,7 +3176,7 @@ void checkButtonClickCounts() {
 
 		 checkButtonClick(&button02CountChanged);
 	}
-    else {
+    else if (button00CountChanged != 0) {
 		 printf("click 00 event");
 
 		 checkButtonClick(&button00CountChanged);
