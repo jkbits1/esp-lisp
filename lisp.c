@@ -3176,17 +3176,17 @@ void checkButtonClick(int buttonNum, int *buttonCountChanged) {
 
 void checkButtonClickCounts() {
     if (button04CountChanged != 0) {
-		 printf("click 04 event");
+//		 printf("click 04 event");
 
 		 checkButtonClick(4, &button04CountChanged);
     }
     else if (button02CountChanged != 0) {
-		 printf("click 02 event");
+//		 printf("click 02 event");
 
 		 checkButtonClick(2, &button02CountChanged);
 	}
     else if (button00CountChanged != 0) {
-		 printf("click 00 event");
+//		 printf("click 00 event");
 
 		 checkButtonClick(0, &button00CountChanged);
 	}
