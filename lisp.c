@@ -3179,8 +3179,9 @@ void checkButtonClick(int buttonNum, int *buttonCountChanged) {
 
 	updateButtonClickCount(global_envp, mkint(buttonNum));
 
+	lisp pin = mkint(buttonNum);
 	lisp val = mkint(*buttonCountChanged);
-	intChange(global_envp, buttonNum, val);
+	intChange(global_envp, pin, val);
 
 	*buttonCountChanged = 0;
 }
