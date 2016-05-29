@@ -187,9 +187,9 @@ printf("pin %d chgType %d", pin, changeType);
   gpio_enable(2, GPIO_INPUT);
   gpio_enable(4, GPIO_INPUT);
 
-  signed char *pFnName = NULL;
-
-  int retVal = 0;
+//  signed char *pFnName = NULL;
+//
+//  int retVal = 0;
 
   if (tsqueue == NULL ) {
 	  tsqueue = xQueueCreate(2,
