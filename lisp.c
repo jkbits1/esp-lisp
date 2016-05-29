@@ -784,14 +784,18 @@ PRIM in(lisp pin) {
     return mkint(gpio_read(getint(pin)));
 }
 
+// NOTE pin param is currently redundant, and changeType
+//		is used to set task priority
 PRIM interrupt(lisp pin, lisp changeType) {
 	interrupt_init(getint(pin), getint(changeType));
     return pin;
 }
 
+// flags and counts declared in interrupt.c
 extern int button04CountChanged;
 extern int button02CountChanged;
 extern int button00CountChanged;
+
 extern int button04PressCount;
 extern int button02PressCount;
 extern int button00PressCount;
@@ -802,6 +806,7 @@ PRIM updateButtonClickCount(lisp* envp, lisp pin) {
   int pinNum = getint(pin);
   lisp count;
 
+  //NOTE may refactor this section to share code
   if (pinNum == 4) {
 	  count = mkint(button04PressCount);
 	  _setb(envp, symbol("*button04ClickCount*"), count);
@@ -820,18 +825,20 @@ PRIM updateButtonClickCount(lisp* envp, lisp pin) {
 
 PRIM resetButtonClickCount(lisp* envp, lisp pin) {
   int  pinNum = getint(pin);
-  lisp count = mkint(0);
+  lisp zero = mkint(0);
 
+  //NOTE may refactor this section to share code
   if (pinNum == 4) {
-	  _setb(envp, symbol("*button04ClickCount*"), count);
+	  _setb(envp, symbol("*button04ClickCount*"), zero);
   }
   else if (pinNum == 2) {
-	  _setb(envp, symbol("*button02ClickCount*"), count);
+	  _setb(envp, symbol("*button02ClickCount*"), zero);
   }
   else {
-	  _setb(envp, symbol("*button00ClickCount*"), count);
+	  _setb(envp, symbol("*button00ClickCount*"), zero);
   }
-  return count;
+
+  return zero;
 }
 
 PRIM intChange(lisp* envp, lisp v) {
@@ -3155,6 +3162,8 @@ void maybeGC() {
 
 PRIM atrun(lisp* envp);
 
+// NOTE this fn has a side effect, it resets the button changed
+//		flag that is passed as a param
 void checkButtonClick(int buttonNum, int *buttonCountChanged) {
 
 	updateButtonClickCount(global_envp, mkint(buttonNum));

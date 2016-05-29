@@ -128,6 +128,7 @@ void GPIO_HANDLER(void)
   xQueueSendToBackFromISR(tsqueue, &now, NULL);
 }
 
+// NOTE probably refactor these fns to share code
 void GPIO_HANDLER_00(void)
 {
 	printf("00 handler");
