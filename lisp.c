@@ -842,12 +842,13 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
 }
 
 PRIM intChange(lisp* envp, lisp pin, lisp v) {
+	  int pinNum = getint(pin);
 
 	  //NOTE may refactor this section to share code
-	  if (pin == 4) {
+	  if (pinNum == 4) {
 		  _setb(envp, symbol("*intEvent04*"), v);
 	  }
-	  else if (pin == 2) {
+	  else if (pinNum == 2) {
 		  _setb(envp, symbol("*intEvent02*"), v);
 	  }
 	  else {
