@@ -3487,10 +3487,16 @@ void init_library(lisp* envp) {
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
-  DEFINE("*button00ClickCount*", 0);
-  DEFINE("*button02ClickCount*", 0);
-  DEFINE("*button04ClickCount*", 0);
-  DEFINE(intEvent, nil);
+//  DEFINE("*button00ClickCount*", 0);
+//  DEFINE("*button02ClickCount*", 0);
+//  DEFINE("*button04ClickCount*", 0);
+
+  SET("*button00ClickCount*", 0);
+  SETQc("*button02ClickCount*", 0);
+  SETQ("*button04ClickCount*", 0);
+
+
+  DEFINE("*intEvent*", nil);
 
 //  DEFINE("*button00Click*", 0);
 //  DEFINE("*button04Click*", 0);
@@ -3515,7 +3521,7 @@ void init_library(lisp* envp) {
   // (rather than always true conditional above
   DEFINE(rotateOnClick,
 		  (lambda ()
-			(cond ((not(eq intEvent nil)) (list (pp (rotate buttonClickCount zs))
+			(cond ((not(eq *intEvent* nil)) (list (pp (rotate *button00ClickCount* zs))
 					                            (intChange nil)
 					                      )
 				  )
@@ -3523,7 +3529,7 @@ void init_library(lisp* envp) {
 	      )
 	    );
 
-  // (at -10000 (lambda () (cond ((not(eq intEvent nil)) (list (pp (rotate buttonClickCount zs)) (intChange nil))))))
+  // (at -10000 (lambda () (cond ((not(eq *intEvent* nil)) (list (pp (rotate *button00ClickCount* zs)) (intChange nil))))))
 
   // (at -1000 rotClick)
 
