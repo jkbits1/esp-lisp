@@ -841,8 +841,18 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
   return zero;
 }
 
-PRIM intChange(lisp* envp, lisp v) {
-	_setb(envp, symbol("*intEvent*"), v);
+PRIM intChange(lisp* envp, lisp pin, lisp v) {
+
+	  //NOTE may refactor this section to share code
+	  if (pinNum == 4) {
+		  _setb(envp, symbol("*intEvent04*"), v);
+	  }
+	  else if (pinNum == 2) {
+		  _setb(envp, symbol("*intEvent02*"), v);
+	  }
+	  else {
+		  _setb(envp, symbol("*intEvent00*"), v);
+	  }
 
 	return v;
 }
@@ -3025,7 +3035,7 @@ lisp lisp_init() {
     DEFPRIM(interrupt, 2, interrupt);
     DEFPRIM(updateClicks, -7, updateButtonClickCount);
     DEFPRIM(resetClicks, -7, resetButtonClickCount);
-    DEFPRIM(intChange, -2, intChange);
+    DEFPRIM(intChange, -3, intChange);
 
 
     // system stuff
@@ -3169,7 +3179,7 @@ void checkButtonClick(int buttonNum, int *buttonCountChanged) {
 	updateButtonClickCount(global_envp, mkint(buttonNum));
 
 	lisp val = mkint(*buttonCountChanged);
-	intChange(global_envp, val);
+	intChange(global_envp, buttonNum, val);
 
 	*buttonCountChanged = 0;
 }
@@ -3390,6 +3400,9 @@ void init_library(lisp* envp) {
                   )
         );
 
+//  NOTE refactor defs to be in a larger init def,
+//       as with setupInterrupts def below - makes syntax more
+//  	 like that actually used in interpreter
   DEFINE (drop, (lambda (x xs)
                   (if (= x 0)
                     xs
@@ -3491,7 +3504,9 @@ void init_library(lisp* envp) {
   DEFINE("*button02ClickCount*", 0);
   DEFINE("*button04ClickCount*", 0);
 
-  DEFINE("*intEvent*", nil);
+  DEFINE("*intEvent00*", nil);
+  DEFINE("*intEvent02*", nil);
+  DEFINE("*intEvent04*", nil);
 
 //  DEFINE("*button00Click*", 0);
 //  DEFINE("*button04Click*", 0);
@@ -3499,32 +3514,32 @@ void init_library(lisp* envp) {
   //check for button click value and
 //  display line1 using button click value as rotate
 
-  //(cond ((not(eq intEvent 0)) (rotate buttonClickCount zs)))
+  //(cond ((not(eq intEvent00 0)) (rotate buttonClickCount zs)))
 
   // NOTE need to merge two fns below
   // on timer, show rotate if button clicked
-//  (at -10000 (lambda () (cond ((not(eq intEvent 0)) (pp (rotate buttonClickCount zs))))))
+//  (at -10000 (lambda () (cond ((not(eq intEvent00 0)) (pp (rotate buttonClickCount zs))))))
 
   // show rotate then turn off change flag
-  //(cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange 0)))
+  //(cond ((not (eq (pp (rotate buttonClick00Count zs)) 0)) (intChange 0 0)))
 
-// NOTE revised as intEvent starts at nil, not zero
+// NOTE revised as intEvent00 starts at nil, not zero
   // works
-    //(at -10000 (lambda () (cond ((not(eq intEvent nil)) (cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange nil)))))))
+    //(at -10000 (lambda () (cond ((not(eq intEvent00 nil)) (cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange 0 nil)))))))
 
   // works, uses list to initiate multiple events sequentially
   // (rather than always true conditional above
   DEFINE(rotateOnClick,
 		  (lambda ()
-			(cond ((not(eq *intEvent* nil)) (list (pp (rotate *button00ClickCount* zs))
-					                            (intChange nil)
+			(cond ((not(eq *intEvent00* nil)) (list (pp (rotate *button00ClickCount* zs))
+					                            (intChange 0 nil)
 					                      )
 				  )
 			)
 	      )
 	    );
 
-  // (at -10000 (lambda () (cond ((not(eq *intEvent* nil)) (list (pp (rotate *button00ClickCount* zs)) (intChange nil))))))
+  // (at -10000 (lambda () (cond ((not(eq *intEvent00* nil)) (list (pp (rotate *button00ClickCount* zs)) (intChange 0 nil))))))
 
   // (at -1000 rotClick)
 
