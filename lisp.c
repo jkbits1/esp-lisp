@@ -3487,9 +3487,9 @@ void init_library(lisp* envp) {
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
-  DEFINE("*button00ClickCount", 0);
-  DEFINE("*button02ClickCount", 0);
-  DEFINE("*button04ClickCount", 0);
+  DEFINE("*button00ClickCount*", 0);
+  DEFINE("*button02ClickCount*", 0);
+  DEFINE("*button04ClickCount*", 0);
   DEFINE(intEvent, nil);
 
 //  DEFINE("*button00Click*", 0);
