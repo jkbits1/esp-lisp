@@ -74,7 +74,7 @@ struct ButtonMessage {
 //void buttonIntTask(void *pvParameters)
 void int04Task(void *pvParameters)
 {
-    printf("Waiting for button press interrupt on gpio 4\r\n");
+//    printf("Waiting for button press interrupt on gpio 4\r\n");
     xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
     gpio_set_interrupt(0, int_type);
     gpio_set_interrupt(2, int_type);
@@ -99,7 +99,7 @@ void int04Task(void *pvParameters)
         //}
 
         if(last < button_ts-200) {
-            printf("interrupt %d fired at %dms\r\n", btnMsg.buttonNumber, button_ts);
+//            printf("interrupt %d fired at %dms\r\n", btnMsg.buttonNumber, button_ts);
             last = button_ts;
 
             if (btnMsg.buttonNumber == 0) {
@@ -131,7 +131,7 @@ void GPIO_HANDLER(void)
 // NOTE probably refactor these fns to share code
 void GPIO_HANDLER_00(void)
 {
-	printf("00 handler");
+//	printf("00 handler");
 	uint32_t now = xTaskGetTickCountFromISR();
 
 	struct ButtonMessage btnMsg00;
@@ -145,7 +145,7 @@ void GPIO_HANDLER_00(void)
 
 void GPIO_HANDLER_02(void)
 {
-printf("02 handler");
+//printf("02 handler");
   uint32_t now = xTaskGetTickCountFromISR();
 
 	struct ButtonMessage btnMsg02;
@@ -159,7 +159,7 @@ printf("02 handler");
 
 void GPIO_HANDLER_04(void)
 {
-	printf("04 handler");
+//	printf("04 handler");
 	uint32_t now = xTaskGetTickCountFromISR();
 
  	 struct ButtonMessage btnMsg04;
