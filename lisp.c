@@ -3529,6 +3529,29 @@ void init_library(lisp* envp) {
   // (at -1000 rotClick)
 
 
+  DEFINE(setupInterrupts,
+		  (lambda ()
+			(cond ((eq *button00ClickCount* nil)
+				   (list (set! *button00ClickCount* 0)
+						 (set! *button02ClickCount* 0)
+						 (set! *button04ClickCount* 0)
+						 (interrupt 4 3)
+				   )
+				  )
+			)
+	      )
+	    );
+
+  //  DEFINE("*button00ClickCount*", 0);
+  //  DEFINE("*button02ClickCount*", 0);
+  //  DEFINE("*button04ClickCount*", 0);
+
+  //  SET("*button00ClickCount*", 0);
+  //  SETQc("*button02ClickCount*", 0);
+  //  SETQ("*button04ClickCount*", 0);
+
+
+
 //  (cons line1 ((rotate buttonClickCount line1)))
   // creates - (don't know if 2 3 1 is a list)
 //		((1 2 3) 2 3 1)
