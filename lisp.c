@@ -809,15 +809,15 @@ PRIM updateButtonClickCount(lisp* envp, lisp pin) {
   //NOTE may refactor this section to share code
   if (pinNum == 4) {
 	  count = mkint(button04PressCount);
-	  _setb(envp, symbol("*button04ClickCount*"), count);
+	  _setb(envp, symbol("*buttonClickCount04*"), count);
   }
   else if (pinNum == 2) {
 	  count = mkint(button02PressCount);
-	  _setb(envp, symbol("*button02ClickCount*"), count);
+	  _setb(envp, symbol("*buttonClickCount02*"), count);
   }
   else {
 	  count = mkint(button00PressCount);
-	  _setb(envp, symbol("*button00ClickCount*"), count);
+	  _setb(envp, symbol("*buttonClickCount00*"), count);
   }
 
   return count;
@@ -829,13 +829,13 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
 
   //NOTE may refactor this section to share code
   if (pinNum == 4) {
-	  _setb(envp, symbol("*button04ClickCount*"), zero);
+	  _setb(envp, symbol("*buttonClickCount04*"), zero);
   }
   else if (pinNum == 2) {
-	  _setb(envp, symbol("*button02ClickCount*"), zero);
+	  _setb(envp, symbol("*buttonClickCount02*"), zero);
   }
   else {
-	  _setb(envp, symbol("*button00ClickCount*"), zero);
+	  _setb(envp, symbol("*buttonClickCount00*"), zero);
   }
 
   return zero;
@@ -3502,29 +3502,39 @@ void init_library(lisp* envp) {
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
-//  DEFINE("*button00ClickCount*", 0);
-//  DEFINE("*button02ClickCount*", 0);
-//  DEFINE("*button04ClickCount*", 0);
+//  DEFINE("*buttonClickCount00*", 0);
+//  DEFINE("*buttonClickCount02*", 0);
+//  DEFINE("*buttonClickCount04*", 0);
 //
-//  DEFINE("*intEvent00*", nil);
-//  DEFINE("*intEvent02*", nil);
-//  DEFINE("*intEvent04*", nil);
+//  DEFINE("*intEvent00*", 0);
+//  DEFINE("*intEvent02*", 0);
+//  DEFINE("*intEvent04*", 0);
 
 //check for button click value and
 //  display line1 using button click value as rotate
 
   DEFINE(setupInterrupts,
 		  (lambda ()
-			(cond ((eq *button00ClickCount* nil)
-				   (list (set! *button00ClickCount* 0)
-						 (set! *button02ClickCount* 0)
-						 (set! *button04ClickCount* 0)
+			(cond ((eq *buttonClickCount00* nil)
+				   (list (set! *buttonClickCount00* 0)
+						 (set! *buttonClickCount02* 0)
+						 (set! *buttonClickCount04* 0)
+						 (set! *02ClickCount* 0)
+						 (set! *buttonClickCount04* 0)
+						 (set! *buttonClickCount02* 0)
 						 (interrupt 4 3)
 				   )
 				  )
 			)
 	      )
 	    );
+
+  //  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
+  //  DEFINE (bcs, (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)));
+
+      //(de ies (lambda () (list *intEvent00* *intEvent02* *intEvent04*)))
+      //(de bcs (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
+
 
   // works - changes result as var changes
 //  DEFINE (ie, (lambda (n)
@@ -3537,31 +3547,28 @@ void init_library(lisp* envp) {
       //   );
   // (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t        *intEvent04*)))
 
-//  (de cks (lambda (n) (cond ((eq n 0) (eval *button00ClickCount*)))))
+//  (de cks (lambda (n) (cond ((eq n 0) (eval *buttonClickCount00*)))))
 //  (de cks (lambda (n) (cond ((eq n 0) (eval 1)))))
 //  (de cks2 (lambda (n) (cond ((eq n 0) (eval 1)))))
 
   // works
 //  DEFINE (clks, (lambda (n)
  //                     (cond
-    //                    ((eq n 0) *button00ClickCount*)
-       //                 ((eq n 2) *button02ClickCount*)
-          //              (t        *button04ClickCount*)
+    //                    ((eq n 0) *buttonClickCount00*)
+       //                 ((eq n 2) *buttonClickCount02*)
+          //              (t        *buttonClickCount04*)
              //         )
                 //    )
  //         );
 
-//   (lambda (n) (cond ((eq n 0) *button00ClickCount*) ((eq n 2) *button02ClickCount*) (t *button04ClickCount*)))
+//   (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))
 
-  // (lambda (n) (cond ((eq n 0) *button00ClickCount*) ((eq n 2) *button02ClickCount*) (t *button04ClickCount*)))
+  // (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))
 
   // short test version
-//   (define ck4 (lambda (n) (cond (eq n 0) (eval *button00ClickCount*))))
+//   (define ck4 (lambda (n) (cond (eq n 0) (eval *buttonClickCount00*))))
 
-  //(de cks (lambda (n) (cond ((eq n 0) *button00ClickCount*))))
-
-//  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
-//  DEFINE (bcs, (lambda () (list *button00ClickCount* *button02ClickCount* *button04ClickCount*)));
+  //(de cks (lambda (n) (cond ((eq n 0) *buttonClickCount00*))))
 
 
 
@@ -3576,14 +3583,14 @@ void init_library(lisp* envp) {
 
 // NOTE revised as intEvent00 starts at nil, not zero
   // works
-    //(at -10000 (lambda () (cond ((not(eq intEvent00 nil)) (cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange 0 nil)))))))
+    //(at -10000 (lambda () (cond ((not(eq intEvent00 0)) (cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange 0 0)))))))
 
   // works, uses list to initiate multiple events sequentially
   // (rather than always true conditional above
   DEFINE(rotateOnClick,
 		  (lambda ()
-			(cond ((not(eq *intEvent00* nil)) (list (pp (rotate *button00ClickCount* zs))
-					                            (intChange 0 nil)
+			(cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs))
+					                            (intChange 0 0)
 					                      )
 				  )
 			)
@@ -3592,20 +3599,20 @@ void init_library(lisp* envp) {
 
   // (at -1000 rotClick)
 
-  // (at -10000 (lambda () (cond ((not(eq *intEvent00* nil)) (list (pp (rotate *button00ClickCount* zs)) (intChange 0 nil))))))
+  // (at -10000 (lambda () (cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs)) (intChange 0 0))))))
 
   // pass *intEvent0x* as param
-		// (define ie (lambda (i0) (eq i0 nil)))
+		// (define ie (lambda (i0) (eq i0 0)))
 
   //(define ie4 (ie  *intEvent04*))
 
-  //  DEFINE("*button00ClickCount*", 0);
-  //  DEFINE("*button02ClickCount*", 0);
-  //  DEFINE("*button04ClickCount*", 0);
+  //  DEFINE("*buttonClickCount00*", 0);
+  //  DEFINE("*buttonClickCount02*", 0);
+  //  DEFINE("*buttonClickCount04*", 0);
 
-  //  SET("*button00ClickCount*", 0);
-  //  SETQc("*button02ClickCount*", 0);
-  //  SETQ("*button04ClickCount*", 0);
+  //  SET("*buttonClickCount00*", 0);
+  //  SETQc("*buttonClickCount02*", 0);
+  //  SETQ("*buttonClickCount04*", 0);
 
 
 
