@@ -3541,10 +3541,40 @@ void init_library(lisp* envp) {
 	      )
 	    );
 
-  // (at -10000 (lambda () (cond ((not(eq *intEvent00* nil)) (list (pp (rotate *button00ClickCount* zs)) (intChange 0 nil))))))
-
   // (at -1000 rotClick)
 
+  // (at -10000 (lambda () (cond ((not(eq *intEvent00* nil)) (list (pp (rotate *button00ClickCount* zs)) (intChange 0 nil))))))
+
+  // pass *intEvent0x* as param
+		// (define ie (lambda (i0) (eq i0 nil)))
+
+  //(define ie4 (ie  *intEvent04*))
+
+  // works - changes result as var changes
+  DEFINE (ie, (lambda (n)
+                     (cond
+                       ((eq n 0) *intEvent00*)
+                       ((eq n 2) *intEvent02*)
+                       (t        *intEvent04*)
+                     )
+                   )
+         );
+  // (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t        *intEvent04*)))
+
+  // doesn't work
+  DEFINE (clks, (lambda (n)
+                     (cond
+                       ((eq n 0) *buttonClick00Count*)
+                       ((eq n 2) *buttonClick02Count*)
+                       (t        *buttonClick04Count*)
+                     )
+                   )
+         );
+
+  // (lambda (n) (cond ((eq n 0) *buttonClick00Count*) ((eq n 2) *buttonClick02Count*) (t *buttonClick04Count*)))
+
+  // short test version, also fails
+  //(define ck4 (lambda (n) (cond ((eq n 0) (eval *buttonClick00Count*)))))
 
   DEFINE(setupInterrupts,
 		  (lambda ()
