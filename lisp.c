@@ -3561,20 +3561,20 @@ void init_library(lisp* envp) {
          );
   // (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t        *intEvent04*)))
 
-  // doesn't work
-//  DEFINE (clks, (lambda (n)
-//                     (cond
-//                       ((eq n 0) *buttonClick00Count*)
-//                       ((eq n 2) *buttonClick02Count*)
-//                       (t        *buttonClick04Count*)
-//                     )
-//                   )
-//         );
+  // works
+  DEFINE (clks, (lambda (n)
+                     (cond
+                       ((eq n 0) *button00ClickCount*)
+                       ((eq n 2) *button02ClickCount*)
+                       (t        *button04ClickCount*)
+                     )
+                   )
+         );
 
-  // (lambda (n) (cond ((eq n 0) *buttonClick00Count*) ((eq n 2) *buttonClick02Count*) (t *buttonClick04Count*)))
+  // (lambda (n) (cond ((eq n 0) *button00ClickCount*) ((eq n 2) *button02ClickCount*) (t *button04ClickCount*)))
 
-  // short test version, also fails
-  //(define ck4 (lambda (n) (cond ((eq n 0) (eval *buttonClick00Count*)))))
+  // short test version
+//   (define ck4 (lambda (n) (cond (eq n 0) (eval *button00ClickCount*))))
 
   DEFINE(setupInterrupts,
 		  (lambda ()
@@ -3589,10 +3589,6 @@ void init_library(lisp* envp) {
 	      )
 	    );
 
-  // (list *intEvent00* *intEvent02* *intEvent04*)
-  // (list *button00ClickCount* *button02ClickCount* *button04ClickCount*)
-
-
   //  DEFINE("*button00ClickCount*", 0);
   //  DEFINE("*button02ClickCount*", 0);
   //  DEFINE("*button04ClickCount*", 0);
@@ -3604,8 +3600,6 @@ void init_library(lisp* envp) {
 
   DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
   DEFINE (bcs, (lambda () (list *button00ClickCount* *button02ClickCount* *button04ClickCount*)));
-  // (list *intEvent00* *intEvent02* *intEvent04*)
-  // (list *button00ClickCount* *button02ClickCount* *button04ClickCount*)
 
 
 //  (cons line1 ((rotate buttonClickCount line1)))
