@@ -3562,14 +3562,14 @@ void init_library(lisp* envp) {
   // (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t        *intEvent04*)))
 
   // doesn't work
-  DEFINE (clks, (lambda (n)
-                     (cond
-                       ((eq n 0) *buttonClick00Count*)
-                       ((eq n 2) *buttonClick02Count*)
-                       (t        *buttonClick04Count*)
-                     )
-                   )
-         );
+//  DEFINE (clks, (lambda (n)
+//                     (cond
+//                       ((eq n 0) *buttonClick00Count*)
+//                       ((eq n 2) *buttonClick02Count*)
+//                       (t        *buttonClick04Count*)
+//                     )
+//                   )
+//         );
 
   // (lambda (n) (cond ((eq n 0) *buttonClick00Count*) ((eq n 2) *buttonClick02Count*) (t *buttonClick04Count*)))
 
@@ -3597,6 +3597,8 @@ void init_library(lisp* envp) {
   //  SETQc("*button02ClickCount*", 0);
   //  SETQ("*button04ClickCount*", 0);
 
+
+  // (list *intEvent00* *intEvent02* *intEvent04*)
 
 
 //  (cons line1 ((rotate buttonClickCount line1)))
