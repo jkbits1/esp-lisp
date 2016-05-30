@@ -3502,13 +3502,13 @@ void init_library(lisp* envp) {
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
-  DEFINE("*button00ClickCount*", 0);
-  DEFINE("*button02ClickCount*", 0);
-  DEFINE("*button04ClickCount*", 0);
-
-  DEFINE("*intEvent00*", nil);
-  DEFINE("*intEvent02*", nil);
-  DEFINE("*intEvent04*", nil);
+//  DEFINE("*button00ClickCount*", 0);
+//  DEFINE("*button02ClickCount*", 0);
+//  DEFINE("*button04ClickCount*", 0);
+//
+//  DEFINE("*intEvent00*", nil);
+//  DEFINE("*intEvent02*", nil);
+//  DEFINE("*intEvent04*", nil);
 
 //check for button click value and
 //  display line1 using button click value as rotate
