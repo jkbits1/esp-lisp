@@ -3529,31 +3529,31 @@ void init_library(lisp* envp) {
   // works - changes result as var changes
 //  DEFINE (ie, (lambda (n)
 //                     (cond
-//                       ((eq n 0) *intEvent00*)
-//                       ((eq n 2) *intEvent02*)
-//                       (t        *intEvent04*)
-//                     )
-//                   )
-//         );
+ //                      ((eq n 0) *intEvent00*)
+  //                     ((eq n 2) *intEvent02*)
+   //                    (t        *intEvent04*)
+    //                 )
+     //              )
+      //   );
   // (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t        *intEvent04*)))
 
   // works
 //  DEFINE (clks, (lambda (n)
-//                     (cond
-//                       ((eq n 0) *button00ClickCount*)
-//                       ((eq n 2) *button02ClickCount*)
-//                       (t        *button04ClickCount*)
-//                     )
-//                   )
-//         );
+ //                     (cond
+    //                    ((eq n 0) *button00ClickCount*)
+       //                 ((eq n 2) *button02ClickCount*)
+          //              (t        *button04ClickCount*)
+             //         )
+                //    )
+ //         );
 
   // (lambda (n) (cond ((eq n 0) *button00ClickCount*) ((eq n 2) *button02ClickCount*) (t *button04ClickCount*)))
 
   // short test version
 //   (define ck4 (lambda (n) (cond (eq n 0) (eval *button00ClickCount*))))
 
-//  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
-//  DEFINE (bcs, (lambda () (list *button00ClickCount* *button02ClickCount* *button04ClickCount*)));
+  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
+  DEFINE (bcs, (lambda () (list *button00ClickCount* *button02ClickCount* *button04ClickCount*)));
 
 
 
