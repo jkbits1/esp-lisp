@@ -3589,6 +3589,10 @@ void init_library(lisp* envp) {
 	      )
 	    );
 
+  // (list *intEvent00* *intEvent02* *intEvent04*)
+  // (list *button00ClickCount* *button02ClickCount* *button04ClickCount*)
+
+
   //  DEFINE("*button00ClickCount*", 0);
   //  DEFINE("*button02ClickCount*", 0);
   //  DEFINE("*button04ClickCount*", 0);
@@ -3598,7 +3602,10 @@ void init_library(lisp* envp) {
   //  SETQ("*button04ClickCount*", 0);
 
 
+  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
+  DEFINE (bcs, (lambda () (list *button00ClickCount* *button02ClickCount* *button04ClickCount*)));
   // (list *intEvent00* *intEvent02* *intEvent04*)
+  // (list *button00ClickCount* *button02ClickCount* *button04ClickCount*)
 
 
 //  (cons line1 ((rotate buttonClickCount line1)))
