@@ -844,8 +844,11 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
 PRIM intChange(lisp* envp, lisp pin, lisp v) {
 	  int pinNum = getint(pin);
 
+printf ("pin %d", pinNum);
+
 	  //NOTE may refactor this section to share code
 	  if (pinNum == 4) {
+printf(" p4 v %d", getint(v)); 
 		  _setb(envp, symbol("*intEvent04*"), v);
 	  }
 	  else if (pinNum == 2) {
@@ -3034,9 +3037,9 @@ lisp lisp_init() {
     DEFPRIM(out, 2, out);
     DEFPRIM(in, 1, in);
     DEFPRIM(interrupt, 2, interrupt);
-    DEFPRIM(updateClicks, -7, updateButtonClickCount);
-    DEFPRIM(resetClicks, -7, resetButtonClickCount);
-    DEFPRIM(intChange, -3, intChange);
+    DEFPRIM(updateClicks, -1, updateButtonClickCount);
+    DEFPRIM(resetClicks, -1, resetButtonClickCount);
+    DEFPRIM(intChange, -2, intChange);
 
 
     // system stuff
