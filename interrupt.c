@@ -186,6 +186,8 @@ printf("pin %d chgType %d", pin, changeType);
   gpio_enable(2, GPIO_INPUT);
   gpio_enable(4, GPIO_INPUT);
 
+  gpio_set_interrupt(0, int_type);
+
   if (tsqueue == NULL ) {
 	  tsqueue = xQueueCreate(2,
 			  //sizeof(uint32_t)
@@ -197,7 +199,7 @@ printf("pin %d chgType %d", pin, changeType);
 printf("p - %lu", priority);
 
     // debugging
-    xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, NULL);
+//    xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, NULL);
 }
 
 static inline void gpio_set_interrupt2(const uint8_t gpio_num, const gpio_inttype_t int_type)
