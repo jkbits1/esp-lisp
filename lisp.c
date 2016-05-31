@@ -3513,15 +3513,32 @@ void init_library(lisp* envp) {
 //check for button click value and
 //  display line1 using button click value as rotate
 
+  DEFINE(setupInterrupts,
+		  (lambda ()
+			(cond ((eq *buttonClickCount00* nil)
+				   (list (set! *buttonClickCount00* 0)
+						 (set! *buttonClickCount02* 0)
+						 (set! *buttonClickCount04* 0)
+						 (set! *intEvent00* 0)
+						 (set! *intEvent02* 0)
+						 (set! *intEvent04* 0)
+						 (interrupt 4 3)
+				   )
+				  )
+			)
+	      )
+	    );
+
+  // revised to use define
 //  DEFINE(setupInterrupts,
 //		  (lambda ()
 //			(cond ((eq *buttonClickCount00* nil)
-//				   (list (set! *buttonClickCount00* 0)
-//						 (set! *buttonClickCount02* 0)
-//						 (set! *buttonClickCount04* 0)
-//						 (set! *intEvent00* 0)
-//						 (set! *intEvent02* 0)
-//						 (set! *intEvent04* 0)
+//				   (list (define *buttonClickCount00* 0)
+//						 (define *buttonClickCount02* 0)
+//						 (define *buttonClickCount04* 0)
+//						 (define *intEvent00* 0)
+//						 (define *intEvent02* 0)
+//						 (define *intEvent04* 0)
 //						 (interrupt 4 3)
 //				   )
 //				  )
@@ -3529,22 +3546,7 @@ void init_library(lisp* envp) {
 //	      )
 //	    );
 
-  // revised to use define
-  DEFINE(setupInterrupts,
-		  (lambda ()
-			(cond ((eq *buttonClickCount00* nil)
-				   (list (define *buttonClickCount00* 0)
-						 (define *buttonClickCount02* 0)
-						 (define *buttonClickCount04* 0)
-						 (define *intEvent00* 0)
-						 (define *intEvent02* 0)
-						 (define *intEvent04* 0)
-						 (interrupt 4 3)
-				   )
-				  )
-			)
-	      )
-	    );
+  //(progn (define *buttonClickCount00* 0) (define *buttonClickCount02* 0) (define *buttonClickCount04* 0) (define *intEvent00* 0) (define *intEvent02* 0) (define *intEvent04* 0) (interrupt 4 3))
 
 
   // errors - can paste them in one by one without error, though
