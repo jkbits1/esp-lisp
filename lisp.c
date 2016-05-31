@@ -3541,38 +3541,38 @@ void init_library(lisp* envp) {
 //	      )
 //	    );
 
-  DEFINE(setupInterrupts,
-		  (lambda (n)
-			(cond ((eq *buttonClickCount00* nil)
-				   (list (set! *buttonClickCount00* 0)
-						 (set! *buttonClickCount02* 0)
-						 (set! *buttonClickCount04* 0)
-						 (set! *intEvent00* 0)
-						 (set! *intEvent02* 0)
-						 (set! *intEvent04* 0)
-						 (interrupt 4 n)
-				   )
-				  )
-			)
-	      )
-	    );
-
-  // revised to use define
 //  DEFINE(setupInterrupts,
-//		  (lambda ()
+//		  (lambda (n)
 //			(cond ((eq *buttonClickCount00* nil)
-//				   (list (define *buttonClickCount00* 0)
-//						 (define *buttonClickCount02* 0)
-//						 (define *buttonClickCount04* 0)
-//						 (define *intEvent00* 0)
-//						 (define *intEvent02* 0)
-//						 (define *intEvent04* 0)
-//						 (interrupt 4 3)
+//				   (list (set! *buttonClickCount00* 0)
+//						 (set! *buttonClickCount02* 0)
+//						 (set! *buttonClickCount04* 0)
+//						 (set! *intEvent00* 0)
+//						 (set! *intEvent02* 0)
+//						 (set! *intEvent04* 0)
+//						 (interrupt 4 n)
 //				   )
 //				  )
 //			)
 //	      )
 //	    );
+
+  // revised to use define
+  DEFINE(setupInterrupts,
+		  (lambda ()
+			(cond ((eq *buttonClickCount00* nil)
+				   (list (define *buttonClickCount00* 0)
+						 (define *buttonClickCount02* 0)
+						 (define *buttonClickCount04* 0)
+						 (define *intEvent00* 0)
+						 (define *intEvent02* 0)
+						 (define *intEvent04* 0)
+						 (interrupt 4 3)
+				   )
+				  )
+			)
+	      )
+	    );
 
   //(progn (define *buttonClickCount00* 0) (define *buttonClickCount02* 0) (define *buttonClickCount04* 0) (define *intEvent00* 0) (define *intEvent02* 0) (define *intEvent04* 0) (interrupt 4 3))
 
@@ -3691,15 +3691,15 @@ void init_library(lisp* envp) {
   // (at -1000 rotateOnClick)
   // (at -10000 (lambda () (cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs)) (intChange 0 0))))))
 
-//  DEFINE(rota,
-//		  (lambda (n)
-//			(cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))
-//					                            (intChange 0 0)
-//					                      )
-//				  )
-//			)
-//	      )
-//	    );
+  DEFINE(rota,
+		  (lambda (n)
+			(cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))
+					                            (intChange n 0)
+					                      )
+				  )
+			)
+	      )
+	    );
 
   // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
 
