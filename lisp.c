@@ -3217,7 +3217,7 @@ PRIM idle(int lticks) {
     atrun(global_envp);
 
     // if flag for interrupt event is set, update env symbol value
-    checkButtonClickCounts();
+     checkButtonClickCounts();
 
     // gc
     maybeGC(); // TODO: backoff, can't do all the time???

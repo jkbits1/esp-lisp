@@ -210,7 +210,10 @@ printf("p - %lu", priority);
 //  }
 
   //xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue04, priority, NULL);
-  xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, NULL);
+  
+
+    // debugging
+    xTaskCreate(&int04Task, (signed char *)"int04Task", 256, &tsqueue, priority, NULL);
 //}
 //else {
 //if (tsqueue02 == NULL ) {
