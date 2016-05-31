@@ -199,7 +199,7 @@ void GPIO_HANDLER_00(void)
 	btnMsg00.buttonNumber   = 0;
 
   // debugging
-//  xQueueSendToBackFromISR(tsqueue, &btnMsg00, NULL);
+  xQueueSendToBackFromISR(tsqueue, &btnMsg00, NULL);
 }
 
 void GPIO_HANDLER_02(void)
