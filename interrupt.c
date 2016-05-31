@@ -75,6 +75,8 @@ struct ButtonMessage {
         uint32_t buttonNumber;   
 };
 
+static checkCount = 0;
+
 void checkInterruptQueue()
 {
         uint32_t button_ts;
@@ -85,14 +87,20 @@ void checkInterruptQueue()
     		return;
     	}
 
-
-
 //printf("x");
     	// debugging
 //    	 xQueueReceive(*tsqueue, &btnMsg, portMAX_DELAY);
 
     	 if (xQueueReceive(tsqueue, &btnMsg, 0)) {
+    		 checkCount = 0;
+
     		 printf("item in queue");
+    	 } else {
+    	    checkCount = checkCount + 1;
+
+    	    if (checkCount == 500) {
+    	    	printf("q");
+    	    }
     	 }
 
 //        button_ts = btnMsg.now;
