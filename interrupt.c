@@ -99,7 +99,7 @@ void checkInterruptQueue()
     	    checkCount = checkCount + 1;
 
     	    if (checkCount > 10000) {
-    	    	printf("q");
+//    	    	printf("q");
 
     	    	checkCount = 0;
     	    }
