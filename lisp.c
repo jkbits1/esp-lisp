@@ -3389,10 +3389,10 @@ PRIM fibb(lisp n) { return mkint(fib(getint(n))); }
 void init_library(lisp* envp) {
     //DEFINE(fibo, (lambda (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
     DE((fibo (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
-  DEFINE(dropx, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
-  DEFINE(drop1, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
-
-  DEFINE(drop2, (lambda (xs) (cdr xs)));
+//  DEFINE(dropx, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
+//  DEFINE(drop1, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
+//
+//  DEFINE(drop2, (lambda (xs) (cdr xs)));
 
   DEFINE(pinOn,  (lambda (n) (out n 1)));
   DEFINE(pinOff, (lambda (n) (out n 0)));
@@ -3626,15 +3626,15 @@ void init_library(lisp* envp) {
 
   // works, uses list to initiate multiple events sequentially
   // (rather than always true conditional above
-  DEFINE(rotateOnClick,
-		  (lambda ()
-			(cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs))
-					                            (intChange 0 0)
-					                      )
-				  )
-			)
-	      )
-	    );
+//  DEFINE(rotateOnClick,
+//		  (lambda ()
+//			(cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs))
+//					                            (intChange 0 0)
+//					                      )
+//				  )
+//			)
+//	      )
+//	    );
 
   // (at -1000 rotateOnClick)
   // (at -10000 (lambda () (cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs)) (intChange 0 0))))))
