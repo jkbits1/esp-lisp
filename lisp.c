@@ -3196,7 +3196,7 @@ void checkButtonClickCounts() {
 
 	checkInterruptQueue();
 
-	return;
+	//return;
 
 
     if (button04CountChanged != 0) {
