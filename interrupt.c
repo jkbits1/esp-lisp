@@ -48,6 +48,10 @@ const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW
 
 typedef void (*pdTASK_CODE)( void * );
 
+static xQueueHandle tsqueue = NULL;
+//static xQueueHandle tsqueue02 = NULL;
+//static xQueueHandle tsqueue04 = NULL;
+
 // NOTE: need to support multiple buttons -
 // does this need multiple fns for more vars?
 
@@ -166,10 +170,6 @@ void int04Task(void *pvParameters)
 //        }
     }
 }
-
-static xQueueHandle tsqueue = NULL;
-//static xQueueHandle tsqueue02 = NULL;
-//static xQueueHandle tsqueue04 = NULL;
 
 void GPIO_HANDLER(void)
 {
