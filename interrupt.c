@@ -248,6 +248,8 @@ printf("pin %d chgType %d", pin, changeType);
   gpio_enable(4, GPIO_INPUT);
 
   gpio_set_interrupt(0, int_type);
+  gpio_set_interrupt(2, int_type);
+  gpio_set_interrupt(4, int_type);
 
   if (tsqueue == NULL ) {
 	  tsqueue = xQueueCreate(2,
