@@ -3529,12 +3529,24 @@ void init_library(lisp* envp) {
 	      )
 	    );
 
+  DEFINE(setupIntFns,
+		  (lambda ()
+		    (
+		      (list
+		    	(define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*)))
+				(define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
+				(define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*))))
+				(define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*))))
+			  )
+			)));
+
   //  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
   //  DEFINE (bcs, (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)));
 
-      //(de ies (lambda () (list *intEvent00* *intEvent02* *intEvent04*)))
-      //(de bcs (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
+      //(define ies (lambda () (list *intEvent00* *intEvent02* *intEvent04*)))
+      //(define bcs (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
 
+  //(define ies (lambda () (mapcar princ (list *intEvent00* *intEvent02* *intEvent04*))))
 
   // works - changes result as var changes
 //  DEFINE (ie, (lambda (n)
@@ -3545,11 +3557,11 @@ void init_library(lisp* envp) {
     //                 )
      //              )
       //   );
-  // (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t        *intEvent04*)))
+  // (define ie (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*))))
 
-//  (de cks (lambda (n) (cond ((eq n 0) (eval *buttonClickCount00*)))))
-//  (de cks (lambda (n) (cond ((eq n 0) (eval 1)))))
-//  (de cks2 (lambda (n) (cond ((eq n 0) (eval 1)))))
+//  (define cks (lambda (n) (cond ((eq n 0) (eval *buttonClickCount00*)))))
+//  (define cks (lambda (n) (cond ((eq n 0) (eval 1)))))
+//  (define cks2 (lambda (n) (cond ((eq n 0) (eval 1)))))
 
   // works
 //  DEFINE (clks, (lambda (n)
@@ -3561,14 +3573,14 @@ void init_library(lisp* envp) {
                 //    )
  //         );
 
-//   (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))
+// (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*))))
 
   // (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))
 
   // short test version
 //   (define ck4 (lambda (n) (cond (eq n 0) (eval *buttonClickCount00*))))
 
-  //(de cks (lambda (n) (cond ((eq n 0) *buttonClickCount00*))))
+  //(define cks (lambda (n) (cond ((eq n 0) *buttonClickCount00*))))
 
 
 
