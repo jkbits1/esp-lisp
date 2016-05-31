@@ -3517,8 +3517,24 @@ void init_library(lisp* envp) {
 //check for button click value and
 //  display line1 using button click value as rotate
 
+//  DEFINE(setupInterrupts,
+//		  (lambda ()
+//			(cond ((eq *buttonClickCount00* nil)
+//				   (list (set! *buttonClickCount00* 0)
+//						 (set! *buttonClickCount02* 0)
+//						 (set! *buttonClickCount04* 0)
+//						 (set! *intEvent00* 0)
+//						 (set! *intEvent02* 0)
+//						 (set! *intEvent04* 0)
+//						 (interrupt 4 3)
+//				   )
+//				  )
+//			)
+//	      )
+//	    );
+
   DEFINE(setupInterrupts,
-		  (lambda ()
+		  (lambda (n)
 			(cond ((eq *buttonClickCount00* nil)
 				   (list (set! *buttonClickCount00* 0)
 						 (set! *buttonClickCount02* 0)
@@ -3526,7 +3542,7 @@ void init_library(lisp* envp) {
 						 (set! *intEvent00* 0)
 						 (set! *intEvent02* 0)
 						 (set! *intEvent04* 0)
-						 (interrupt 4 3)
+						 (interrupt 4 n)
 				   )
 				  )
 			)
