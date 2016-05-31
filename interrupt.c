@@ -76,6 +76,7 @@ struct ButtonMessage {
 };
 
 static checkCount = 0;
+static uint32_t last = 0;
 
 void checkInterruptQueue()
 {
