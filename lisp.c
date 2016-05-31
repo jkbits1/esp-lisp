@@ -3513,21 +3513,39 @@ void init_library(lisp* envp) {
 //check for button click value and
 //  display line1 using button click value as rotate
 
+//  DEFINE(setupInterrupts,
+//		  (lambda ()
+//			(cond ((eq *buttonClickCount00* nil)
+//				   (list (set! *buttonClickCount00* 0)
+//						 (set! *buttonClickCount02* 0)
+//						 (set! *buttonClickCount04* 0)
+//						 (set! *intEvent00* 0)
+//						 (set! *intEvent02* 0)
+//						 (set! *intEvent04* 0)
+//						 (interrupt 4 3)
+//				   )
+//				  )
+//			)
+//	      )
+//	    );
+
+  // revised to use define
   DEFINE(setupInterrupts,
 		  (lambda ()
 			(cond ((eq *buttonClickCount00* nil)
-				   (list (set! *buttonClickCount00* 0)
-						 (set! *buttonClickCount02* 0)
-						 (set! *buttonClickCount04* 0)
-						 (set! *intEvent00* 0)
-						 (set! *intEvent02* 0)
-						 (set! *intEvent04* 0)
+				   (list (define *buttonClickCount00* 0)
+						 (define *buttonClickCount02* 0)
+						 (define *buttonClickCount04* 0)
+						 (define *intEvent00* 0)
+						 (define *intEvent02* 0)
+						 (define *intEvent04* 0)
 						 (interrupt 4 3)
 				   )
 				  )
 			)
 	      )
 	    );
+
 
   // errors - can paste them in one by one without error, though
   DEFINE(setupIntFns,
@@ -3616,9 +3634,22 @@ void init_library(lisp* envp) {
 	      )
 	    );
 
-  // (at -1000 rotClick)
-
+  // (at -1000 rotateOnClick)
   // (at -10000 (lambda () (cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs)) (intChange 0 0))))))
+
+  DEFINE(rota,
+		  (lambda (n)
+			(cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))
+					                            (intChange 0 0)
+					                      )
+				  )
+			)
+	      )
+	    );
+
+  // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
+
+
 
   // pass *intEvent0x* as param
 		// (define ie (lambda (i0) (eq i0 0)))
