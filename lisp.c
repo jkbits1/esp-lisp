@@ -3036,11 +3036,12 @@ lisp lisp_init() {
     DEFPRIM(web, -2, web);
     DEFPRIM(out, 2, out);
     DEFPRIM(in, 1, in);
+
+    // interrupts
     DEFPRIM(interrupt, 2, interrupt);
     DEFPRIM(updateClicks, -1, updateButtonClickCount);
     DEFPRIM(resetClicks, -1, resetButtonClickCount);
     DEFPRIM(intChange, -2, intChange);
-
 
     // system stuff
     DEFPRIM(gc, -1, gc);
@@ -3564,8 +3565,32 @@ void init_library(lisp* envp) {
 			  )
 			)));
 
-  // tried this, but causes reset
+  // tried this, but can cause a reset - may be due to other issues
   //  (list (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
+
+  //  (progn (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
+
+
+  // COPIES for convenience
+  // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (intChange n 0))))))
+
+  // test
+  // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (princ n) (intChange n 0))))))
+  // (define rota1 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (pp (rotate (clks n) zs)) (intChange n 0))))))
+  // (define rota2 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (intChange n 0) (pp (rotate (clks n) zs)) )))))
+
+  // (define intChg (lambda (n v) (cond ((eq n 4) (set! *intEvent04* v)))))
+  // (define rota3 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (intChg n 0) (pp (rotate (clks n) zs)) )))))
+
+  // progn version
+  // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
+
+  // (at -10000 (lambda () (rota 4)))
+  // (at -10000 (lambda () (rota1 4)))
+  // (at -10000 (lambda () (rota2 4)))
+  // (at -10000 (lambda () (rota3 4)))
+
+
 
 
   //  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
@@ -3654,6 +3679,10 @@ void init_library(lisp* envp) {
 
   // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
 
+  // progn version
+  // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
+
+  // (at -1000 (lambda () (rota 4)))
 
 
   // pass *intEvent0x* as param
