@@ -3639,15 +3639,15 @@ void init_library(lisp* envp) {
   // (at -1000 rotateOnClick)
   // (at -10000 (lambda () (cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs)) (intChange 0 0))))))
 
-  DEFINE(rota,
-		  (lambda (n)
-			(cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))
-					                            (intChange 0 0)
-					                      )
-				  )
-			)
-	      )
-	    );
+//  DEFINE(rota,
+//		  (lambda (n)
+//			(cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))
+//					                            (intChange 0 0)
+//					                      )
+//				  )
+//			)
+//	      )
+//	    );
 
   // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
 
