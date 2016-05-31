@@ -69,7 +69,56 @@ int button04PressCount = 0;
 struct ButtonMessage {           
         uint32_t now;            
         uint32_t buttonNumber;   
-};                               
+};
+
+void checkInterruptQueue()
+{
+        uint32_t button_ts;
+
+    	struct ButtonMessage btnMsg;
+
+    	if (tsqueue == NULL) {
+    		return;
+    	}
+
+
+
+//printf("x");
+    	// debugging
+//    	 xQueueReceive(*tsqueue, &btnMsg, portMAX_DELAY);
+
+    	 if (xQueueReceive(tsqueue, &btnMsg, 0)) {
+    		 printf("item in queue");
+    	 }
+
+//        button_ts = btnMsg.now;
+//        button_ts *= portTICK_RATE_MS;
+//
+//        //if (button04PressCount >= 1) {
+////          printf("still waiting - %d", button_ts);
+//        //	button04PressCount = 0;
+//        //}
+//
+//        if(last < button_ts-200) {
+////            printf("interrupt %d fired at %dms\r\n", btnMsg.buttonNumber, button_ts);
+//            last = button_ts;
+//
+//            if (btnMsg.buttonNumber == 0) {
+//            	button00CountChanged = 1;
+//            	button00PressCount = button00PressCount + 1;
+//            }
+//            if (btnMsg.buttonNumber == 2) {
+//            	button02CountChanged = 1;
+//            	button02PressCount = button02PressCount + 1;
+//            }
+//            if (btnMsg.buttonNumber == 4) {
+//            	button04CountChanged = 1;
+//            	button04PressCount = button04PressCount + 1;
+//            }
+//        }
+}
+
+
 
 //void buttonIntTask(void *pvParameters)
 void int04Task(void *pvParameters)

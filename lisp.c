@@ -3190,7 +3190,15 @@ void checkButtonClick(int buttonNum, int *buttonCountChanged) {
 	*buttonCountChanged = 0;
 }
 
+void checkInterruptQueue();
+
 void checkButtonClickCounts() {
+
+	checkInterruptQueue();
+
+	return;
+
+
     if (button04CountChanged != 0) {
 //		 printf("click 04 event");
 
