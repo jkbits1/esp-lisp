@@ -3529,6 +3529,7 @@ void init_library(lisp* envp) {
 	      )
 	    );
 
+  // errors - can paste them in one by one without error, though
   DEFINE(setupIntFns,
 		  (lambda ()
 		    (
@@ -3540,6 +3541,10 @@ void init_library(lisp* envp) {
 			  )
 			)));
 
+  // tried this, but causes reset
+  //  (list (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
+
+
   //  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
   //  DEFINE (bcs, (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)));
 
@@ -3547,6 +3552,8 @@ void init_library(lisp* envp) {
       //(define bcs (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
 
   //(define ies (lambda () (mapcar princ (list *intEvent00* *intEvent02* *intEvent04*))))
+
+
 
   // works - changes result as var changes
 //  DEFINE (ie, (lambda (n)
