@@ -76,7 +76,7 @@ void int04Task(void *pvParameters)
 {
 //    printf("Waiting for button press interrupt on gpio 4\r\n");
     xQueueHandle *tsqueue = (xQueueHandle *)pvParameters;
-//    gpio_set_interrupt(0, int_type);
+    gpio_set_interrupt(0, int_type);
 //    gpio_set_interrupt(2, int_type);
 //    gpio_set_interrupt(4, int_type);
 
@@ -88,7 +88,7 @@ void int04Task(void *pvParameters)
 
 //printf("x");
     	// debugging
-    	// xQueueReceive(*tsqueue, &btnMsg, portMAX_DELAY);
+    	 xQueueReceive(*tsqueue, &btnMsg, portMAX_DELAY);
 
 //        button_ts = btnMsg.now;
 //        button_ts *= portTICK_RATE_MS;
@@ -139,8 +139,8 @@ void GPIO_HANDLER_00(void)
 	btnMsg00.now 			= now;
 	btnMsg00.buttonNumber   = 0;
 
-  //xQueueSendToBackFromISR(tsqueue, &now, NULL);
-  xQueueSendToBackFromISR(tsqueue, &btnMsg00, NULL);
+  // debugging
+//  xQueueSendToBackFromISR(tsqueue, &btnMsg00, NULL);
 }
 
 void GPIO_HANDLER_02(void)
