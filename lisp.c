@@ -3576,6 +3576,9 @@ void init_library(lisp* envp) {
 
   //(progn (define *buttonClickCount00* 0) (define *buttonClickCount02* 0) (define *buttonClickCount04* 0) (define *intEvent00* 0) (define *intEvent02* 0) (define *intEvent04* 0) (interrupt 4 3))
 
+  // initialises int vars
+  // (list (set! *buttonClickCount00* 0) (set! *buttonClickCount02* 0) (set! *buttonClickCount04* 0) (set! *intEvent00* 0) (set! *intEvent02* 0) (set! *intEvent04* 0))
+
 
   // errors - can paste them in one by one without error, though
   DEFINE(setupIntFns,
@@ -3589,10 +3592,11 @@ void init_library(lisp* envp) {
 			  )
 			)));
 
-  // tried this, but can cause a reset - may be due to other issues
   //  (list (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
 
   //  (progn (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
+
+
 
 
   // COPIES for convenience
