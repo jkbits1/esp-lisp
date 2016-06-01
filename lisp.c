@@ -3579,7 +3579,6 @@ void init_library(lisp* envp) {
   // initialises int vars
   // (list (set! *buttonClickCount00* 0) (set! *buttonClickCount02* 0) (set! *buttonClickCount04* 0) (set! *intEvent00* 0) (set! *intEvent02* 0) (set! *intEvent04* 0))
 
-
   // errors - can paste them in one by one without error, though
   DEFINE(setupIntFns,
 		  (lambda ()
@@ -3593,10 +3592,7 @@ void init_library(lisp* envp) {
 			)));
 
   //  (list (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
-
   //  (progn (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
-
-
 
 
   // COPIES for convenience
@@ -3617,8 +3613,6 @@ void init_library(lisp* envp) {
   // (at -10000 (lambda () (rota1 4)))
   // (at -10000 (lambda () (rota2 4)))
   // (at -10000 (lambda () (rota3 4)))
-
-
 
 
   //  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
@@ -3664,7 +3658,6 @@ void init_library(lisp* envp) {
 //   (define ck4 (lambda (n) (cond (eq n 0) (eval *buttonClickCount00*))))
 
   //(define cks (lambda (n) (cond ((eq n 0) *buttonClickCount00*))))
-
 
 
   //(cond ((not(eq intEvent00 0)) (rotate buttonClickCount zs)))
@@ -3754,9 +3747,9 @@ void init_library(lisp* envp) {
 //		(buildLoop line1 () 0)
   //(buildLoop line1 () ( - (length line1) 1))
 
+  //
   //traffic light, repeat pattern
-
-
+  //
 
     // pins
     // d2 - set with gpio 4
