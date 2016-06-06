@@ -3740,8 +3740,9 @@ void init_library(lisp* envp) {
   // (define ic4 (lambda (m n o) (intChangeFix m n)))
 
   // works
-  // (define sb  (lambda (n) (set! *intEvent04* n)))
-  // (define sb4 (lambda (s n) (set! *intEvent04* n)))
+  // (define sb  (lambda (n) (set! *intEvent04* n))) - hard-coded global
+  // (define sb4 (lambda (s n) (set! *intEvent04* n))) - hard-coded global
+  // (define ic5 (lambda (n) (intChange 4 n))) - hard-coded param
 
   //fails (first param seems to be envp - not so sure now)
   // (define sb2 (lambda (s n) (set! s n)))
