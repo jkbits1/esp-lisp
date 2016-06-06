@@ -841,10 +841,12 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
   return zero;
 }
 
-PRIM intChange(lisp* envp, lisp pin, lisp v) {
+PRIM _intChange(lisp* envp, lisp pin, lisp v, lisp d) {
+printf("raw pin %u raw v %u raw d %u", pin, v, d);
 	  int pinNum = getint(pin);
-
-printf ("pin %d", pinNum);
+int val = getint(v);
+int dd = getint(d);
+printf ("pin %d val %d dd %d", pinNum, val, dd);
 
 	  //NOTE may refactor this section to share code
 	  if (pinNum == 4) {
@@ -860,6 +862,14 @@ printf(" p4 v %d", getint(v));
 
 	return v;
 }
+
+
+
+PRIM _intChangeFix(lisp pin, lisp v) {
+  return	_intChange(global_envp, pin, v, mkint(4));
+
+}
+
 
 // wget functions...
 // echo '
@@ -997,6 +1007,7 @@ PRIM primapply(lisp ff, lisp args, lisp* envp, lisp all, int noeval) {
     // these special cases are redundant, can be done at general solution
     // but for optimization we extracted them, it improves speed quite a lot
     if (n == 2) { // eq/plus etc
+// printf("fn 2");
         lisp (*fp)(lisp,lisp) = GETPRIMFUNC(ff);
         return (*fp)(e(car(args), envp), e(car(cdr(args)), envp)); // safe!
     }
@@ -3041,7 +3052,8 @@ lisp lisp_init() {
     DEFPRIM(interrupt, 2, interrupt);
     DEFPRIM(updateClicks, -1, updateButtonClickCount);
     DEFPRIM(resetClicks, -1, resetButtonClickCount);
-    DEFPRIM(intChange, -2, intChange);
+    DEFPRIM(intChange, -3, _intChange);
+    DEFPRIM(intChangeFix, 2, _intChangeFix);
 
     // system stuff
     DEFPRIM(gc, -1, gc);
@@ -3185,7 +3197,7 @@ void checkButtonClick(int buttonNum, int *buttonCountChanged) {
 
 	lisp pin = mkint(buttonNum);
 	lisp val = mkint(*buttonCountChanged);
-	intChange(global_envp, pin, val);
+	_intChange(global_envp, pin, val, 0);
 
 	*buttonCountChanged = 0;
 }
