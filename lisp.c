@@ -3574,7 +3574,7 @@ void init_library(lisp* envp) {
 	      )
 	    );
 
-  //(progn (define *buttonClickCount00* 0) (define *buttonClickCount02* 0) (define *buttonClickCount04* 0) (define *intEvent00* 0) (define *intEvent02* 0) (define *intEvent04* 0) (interrupt 4 3))
+  // (progn (define *buttonClickCount00* 0) (define *buttonClickCount02* 0) (define *buttonClickCount04* 0) (define *intEvent00* 0) (define *intEvent02* 0) (define *intEvent04* 0) (interrupt 4 3))
 
   // initialises int vars
   // (list (set! *buttonClickCount00* 0) (set! *buttonClickCount02* 0) (set! *buttonClickCount04* 0) (set! *intEvent00* 0) (set! *intEvent02* 0) (set! *intEvent04* 0))
@@ -3591,6 +3591,7 @@ void init_library(lisp* envp) {
 			  )
 			)));
 
+  //  set up fns in lisp env
   //  (list (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
   //  (progn (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
 
@@ -3598,12 +3599,19 @@ void init_library(lisp* envp) {
   // COPIES for convenience
   // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (intChange n 0))))))
 
+  // works
+  // (define rotaF (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (intChangeFix n 0))))))
+
   // test
   // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (princ n) (intChange n 0))))))
   // (define rota1 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (pp (rotate (clks n) zs)) (intChange n 0))))))
   // (define rota2 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (intChange n 0) (pp (rotate (clks n) zs)) )))))
 
-  // (define intChg (lambda (n v) (cond ((eq n 4) (set! *intEvent04* v)))))
+  //
+  //
+  // alternative version of PRIM intChange
+   // (define intChg (lambda (n v) (cond ((eq n 0) (set! *intEvent00* v)) ((eq n 2) (set! *intEvent02* v)) ((eq n 4) (set! *intEvent04* v)))))
+
   // (define rota3 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (intChg n 0) (pp (rotate (clks n) zs)) )))))
 
   // progn version
@@ -3613,6 +3621,9 @@ void init_library(lisp* envp) {
   // (at -10000 (lambda () (rota1 4)))
   // (at -10000 (lambda () (rota2 4)))
   // (at -10000 (lambda () (rota3 4)))
+
+  // works
+  // (at -10000 (lambda () (rotaF 4)))
 
 
   //  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
@@ -3689,6 +3700,8 @@ void init_library(lisp* envp) {
   // (at -10000 (lambda () (cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs)) (intChange 0 0))))))
 
   // currently causes a reset (run out of conses) if no clicks
+  //	resolved, caused by guard clause succeeding if
+  //	relevant var is not initialised
   DEFINE(rota,
 		  (lambda (n)
 			(cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))
@@ -3699,6 +3712,31 @@ void init_library(lisp* envp) {
 			)
 	      )
 	    );
+
+  // test code - also fails to reset correct pin
+  // (define ic (lambda (n) (intChange n 0)))
+  // (at -20000 (lambda () (ic 4)))
+
+  // ISSUE
+
+  // misc tests
+  // (define ic (lambda (m n o) (intChange m n o)))
+  // (define ic2 (lambda (m n o) (intChange *intEvent04* n o)))
+  // (define ic3 (lambda (m n o) (intChange *intEvent04* 1 2)))
+
+  // works - uses non-global version of intChange
+  // (define ic4 (lambda (m n o) (intChangeFix m n)))
+
+  // works
+  // (define sb  (lambda (n) (set! *intEvent04* n)))
+  // (define sb4 (lambda (s n) (set! *intEvent04* n)))
+
+  //fails (first param seems to be envp - not so sure now)
+  // (define sb2 (lambda (s n) (set! s n)))
+
+  // guessing
+  // (define sb3 (lambda (x s n) (intChange x s n)))
+
 
   // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
 
