@@ -784,16 +784,21 @@ PRIM in(lisp pin) {
     return mkint(gpio_read(getint(pin)));
 }
 
+// moved higher in file, but unchanged
+PRIM _setbang(lisp* envp, lisp name, lisp v);
+
 PRIM intChange(lisp* envp, lisp pin, lisp v) {
 
+    int pinNum = getint(pin);
+
     if (pinNum == 4) {
-	    _setb(envp, symbol("*intEvent04*"), v);
+	    _setbang(envp, symbol("*intEvent04*"), v);
     }
     else if (pinNum == 2) {
-	    _setb(envp, symbol("*intEvent02*"), v);
+	    _setbang(envp, symbol("*intEvent02*"), v);
     }
     else {
-	    _setb(envp, symbol("*intEvent00*"), v);
+	    _setbang(envp, symbol("*intEvent00*"), v);
     }
 
     return v;
@@ -880,7 +885,7 @@ static void response(int req, char* method, char* path) {
 // (web 8080 (lambda (r w s m p) (princ w) (princ " ") (princ s) (princ " ") (princ m) (princ " ") (princ p) (terpri) "FISH-42"))
 // ' | ./run
 
-PRIM _setbang(lisp* envp, lisp name, lisp v);
+// PRIM _setbang(lisp* envp, lisp name, lisp v);
 
 int web_socket = 0;
 
