@@ -784,6 +784,21 @@ PRIM in(lisp pin) {
     return mkint(gpio_read(getint(pin)));
 }
 
+PRIM intChange(lisp* envp, lisp pin, lisp v) {
+
+    if (pinNum == 4) {
+	    _setb(envp, symbol("*intEvent04*"), v);
+    }
+    else if (pinNum == 2) {
+	    _setb(envp, symbol("*intEvent02*"), v);
+    }
+    else {
+	    _setb(envp, symbol("*intEvent00*"), v);
+    }
+
+    return v;
+ }
+
 //    gpio_set_interrupt(gpio, int_type);
 
 // wget functions...
@@ -2961,6 +2976,8 @@ lisp lisp_init() {
     DEFPRIM(web, -2, web);
     DEFPRIM(out, 2, out);
     DEFPRIM(in, 1, in);
+
+    DEFPRIM(intChange, -2, intChange);
 
     // system stuff
     DEFPRIM(gc, -1, gc);
