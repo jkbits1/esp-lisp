@@ -784,41 +784,83 @@ PRIM in(lisp pin) {
     return mkint(gpio_read(getint(pin)));
 }
 
-// NOTE pin param is currently redundant, and changeType
-//		is used to set task priority
+// NOTE pin param is currently redundant
 PRIM interrupt(lisp pin, lisp changeType) {
-	interrupt_init(getint(pin), getint(changeType));
+	int pins[16] = {0};
+
+	pins[0] = 1;
+	pins[2] = 1;
+	pins[4] = 1;
+
+	interrupt_init(pins, getint(changeType));
+
     return pin;
 }
 
 // flags and counts declared in interrupt.c
-extern int button04CountChanged;
-extern int button02CountChanged;
-extern int button00CountChanged;
+//extern int button04CountChanged;
+//extern int button02CountChanged;
+//extern int button00CountChanged;
+extern int buttonCountChanged[];
+extern int buttonPressCount  [];
 
-extern int button04PressCount;
-extern int button02PressCount;
-extern int button00PressCount;
+
+//extern int button04PressCount;
+//extern int button02PressCount;
+//extern int button00PressCount;
 
 PRIM _setb(lisp* envp, lisp name, lisp v);
+
+const char symbolNameLen = 25;
+
+void createSymbolName(
+		char symbolName[symbolNameLen],
+		char *pSymbolNameStub,
+		int pinNum) {
+
+	int len = strlen(pSymbolNameStub);
+
+	char numChar = 0;
+	char asciiOffset = 0;
+
+	memset(symbolName, '\0');
+
+	strcpy(symbolName, pSymbolNameStub);
+
+	if (pinNum >= 10) {
+	    asciiOffset = 10;
+
+		symbolName[len-1] = '1';
+	}
+
+	numChar = '0' + (pinNum - asciiOffset);
+
+	symbolName[len] = numChar;
+	symbolName[len + 1] = '*';
+}
 
 PRIM updateButtonClickCount(lisp* envp, lisp pin) {
   int pinNum = getint(pin);
   lisp count;
 
-  //NOTE may refactor this section to share code
-  if (pinNum == 4) {
-	  count = mkint(button04PressCount);
-	  _setb(envp, symbol("*buttonClickCount04*"), count);
-  }
-  else if (pinNum == 2) {
-	  count = mkint(button02PressCount);
-	  _setb(envp, symbol("*buttonClickCount02*"), count);
-  }
-  else {
-	  count = mkint(button00PressCount);
-	  _setb(envp, symbol("*buttonClickCount00*"), count);
-  }
+  char  symbolName[symbolNameLen];
+
+  createSymbolName(symbolName, "*buttonClickCount0", pinNum);
+
+  printf("ubcc - sym name %s", symbolName);
+
+//  if (pinNum == 4) {
+	  count = mkint(buttonPressCount[pinNum]);
+	  _setb(envp, symbol(symbolName), count);
+//  }
+//  else if (pinNum == 2) {
+//	  count = mkint(button02PressCount);
+//	  _setb(envp, symbol("*buttonClickCount02*"), count);
+//  }
+//  else {
+//	  count = mkint(button00PressCount);
+//	  _setb(envp, symbol("*buttonClickCount00*"), count);
+//  }
 
   return count;
 }
@@ -827,38 +869,47 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
   int  pinNum = getint(pin);
   lisp zero = mkint(0);
 
+  char  symbolName[symbolNameLen];
+
+  createSymbolName(symbolName, "*buttonClickCount0", pinNum);
+
   //NOTE may refactor this section to share code
-  if (pinNum == 4) {
-	  _setb(envp, symbol("*buttonClickCount04*"), zero);
-  }
-  else if (pinNum == 2) {
-	  _setb(envp, symbol("*buttonClickCount02*"), zero);
-  }
-  else {
-	  _setb(envp, symbol("*buttonClickCount00*"), zero);
-  }
+//  if (pinNum == 4) {
+	  _setb(envp, symbol(symbolName), zero);
+//  }
+//  else if (pinNum == 2) {
+//	  _setb(envp, symbol("*buttonClickCount02*"), zero);
+//  }
+//  else {
+//	  _setb(envp, symbol("*buttonClickCount00*"), zero);
+//  }
 
   return zero;
 }
 
 PRIM _intChange(lisp* envp, lisp pin, lisp v, lisp d) {
-printf("raw pin %u raw v %u raw d %u", pin, v, d);
-	  int pinNum = getint(pin);
-int val = getint(v);
-int dd = getint(d);
-printf ("pin %d val %d dd %d", pinNum, val, dd);
+	printf("raw pin %u raw v %u raw d %u", pin, v, d);
+		  int pinNum = getint(pin);
+	int val = getint(v);
+	int dd = getint(d);
+	printf ("pin %d val %d dd %d", pinNum, val, dd);
 
-	  //NOTE may refactor this section to share code
-	  if (pinNum == 4) {
-printf(" p4 v %d", getint(v)); 
-		  _setb(envp, symbol("*intEvent04*"), v);
-	  }
-	  else if (pinNum == 2) {
-		  _setb(envp, symbol("*intEvent02*"), v);
-	  }
-	  else {
-		  _setb(envp, symbol("*intEvent00*"), v);
-	  }
+	char  symbolName[symbolNameLen];
+
+	createSymbolName(symbolName, "*intEvent0", pinNum);
+
+	printf("ic - sym name %s", symbolName);
+
+//	  if (pinNum == 4) {
+//printf(" p4 v %d", getint(v));
+		  _setb(envp, symbol(symbolName), v);
+//	  }
+//	  else if (pinNum == 2) {
+//		  _setb(envp, symbol("*intEvent02*"), v);
+//	  }
+//	  else {
+//		  _setb(envp, symbol("*intEvent00*"), v);
+//	  }
 
 	return v;
 }
