@@ -3240,43 +3240,41 @@ void maybeGC() {
 
 PRIM atrun(lisp* envp);
 
-// NOTE this fn has a side effect, it resets the button changed
-//		flag that is passed as a param
-void checkButtonClick(int buttonNum, int *buttonCountChanged) {
+void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
 
 	updateButtonClickCount(global_envp, mkint(buttonNum));
 
 	lisp pin = mkint(buttonNum);
-	lisp val = mkint(*buttonCountChanged);
-	_intChange(global_envp, pin, val, 0);
+	lisp val = mkint(buttonCountChanged);
 
-	*buttonCountChanged = 0;
+	_intChange(global_envp, pin, val, 0);
 }
 
 void checkInterruptQueue();
+
+extern int gpioPinCount;
 
 void checkButtonClickCounts() {
 
 	checkInterruptQueue();
 
-	//return;
+	for (int pin = 0; pin < gpioPinCount; pin++) {
 
-
-    if (button04CountChanged != 0) {
-//		 printf("click 04 event");
-
-		 checkButtonClick(4, &button04CountChanged);
-    }
-    else if (button02CountChanged != 0) {
-//		 printf("click 02 event");
-
-		 checkButtonClick(2, &button02CountChanged);
+		if (buttonCountChanged[pin] != 0) {
+			updateButtonEnvVars(pin, buttonCountChanged[pin]);
+			buttonCountChanged[pin] = 0;
+		}
 	}
-    else if (button00CountChanged != 0) {
-//		 printf("click 00 event");
-
-		 checkButtonClick(0, &button00CountChanged);
-	}
+//    else if (button02CountChanged != 0) {
+////		 printf("click 02 event");
+//
+//		 checkButtonClick(2, &button02CountChanged);
+//	}
+//    else if (button00CountChanged != 0) {
+////		 printf("click 00 event");
+//
+//		 checkButtonClick(0, &button00CountChanged);
+//	}
 }
 
 PRIM idle(int lticks) {
