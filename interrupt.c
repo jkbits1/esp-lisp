@@ -121,21 +121,23 @@ void checkInterruptQueue()
 
 void interrupt_init(int pins[gpioPinCount], int changeType)
 {
-	printf("pin %d chgType %d", pin, changeType);
+	// printf("pin %d chgType %d", pin, changeType);
 
 	// in effect, this is a no-op - it makes no difference to the default,
     // but may expand this code later
 	if (changeType == 2) {
-		int_type = GPIO_INTTYPE_EDGE_NEG;
+		// int_type = GPIO_INTTYPE_EDGE_NEG;
 	}
 
-	gpio = pin;
+	// gpio = pin;
 
 	//uart_set_baud(0, 115200);
 
 	for (int pin = 0; pin < gpioPinCount; pin++) {
-		gpio_enable(0, GPIO_INPUT);
-		gpio_set_interrupt(0, int_type);
+		if (pins[pin] != 0) {
+			gpio_enable(pin, GPIO_INPUT);
+			gpio_set_interrupt(pin, int_type);
+		}
 	}
 
     if (tsqueue == NULL ) {
