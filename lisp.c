@@ -798,16 +798,8 @@ PRIM interrupt(lisp pin, lisp changeType) {
 }
 
 // flags and counts declared in interrupt.c
-//extern int button04CountChanged;
-//extern int button02CountChanged;
-//extern int button00CountChanged;
 extern int buttonCountChanged[];
 extern int buttonPressCount  [];
-
-
-//extern int button04PressCount;
-//extern int button02PressCount;
-//extern int button00PressCount;
 
 PRIM _setb(lisp* envp, lisp name, lisp v);
 
@@ -847,20 +839,10 @@ PRIM updateButtonClickCount(lisp* envp, lisp pin) {
 
   createSymbolName(symbolName, "*buttonClickCount0", pinNum);
 
-  printf("ubcc - sym name %s", symbolName);
+//  printf("ubcc - sym name %s", symbolName);
 
-//  if (pinNum == 4) {
-	  count = mkint(buttonPressCount[pinNum]);
-	  _setb(envp, symbol(symbolName), count);
-//  }
-//  else if (pinNum == 2) {
-//	  count = mkint(button02PressCount);
-//	  _setb(envp, symbol("*buttonClickCount02*"), count);
-//  }
-//  else {
-//	  count = mkint(button00PressCount);
-//	  _setb(envp, symbol("*buttonClickCount00*"), count);
-//  }
+  count = mkint(buttonPressCount[pinNum]);
+  _setb(envp, symbol(symbolName), count);
 
   return count;
 }
@@ -873,16 +855,7 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
 
   createSymbolName(symbolName, "*buttonClickCount0", pinNum);
 
-  //NOTE may refactor this section to share code
-//  if (pinNum == 4) {
-	  _setb(envp, symbol(symbolName), zero);
-//  }
-//  else if (pinNum == 2) {
-//	  _setb(envp, symbol("*buttonClickCount02*"), zero);
-//  }
-//  else {
-//	  _setb(envp, symbol("*buttonClickCount00*"), zero);
-//  }
+  _setb(envp, symbol(symbolName), zero);
 
   return zero;
 }
@@ -900,27 +873,15 @@ PRIM _intChange(lisp* envp, lisp pin, lisp v, lisp d) {
 
 	printf("ic - sym name %s", symbolName);
 
-//	  if (pinNum == 4) {
-//printf(" p4 v %d", getint(v));
-		  _setb(envp, symbol(symbolName), v);
-//	  }
-//	  else if (pinNum == 2) {
-//		  _setb(envp, symbol("*intEvent02*"), v);
-//	  }
-//	  else {
-//		  _setb(envp, symbol("*intEvent00*"), v);
-//	  }
+	_setb(envp, symbol(symbolName), v);
 
 	return v;
 }
-
-
 
 PRIM _intChangeFix(lisp pin, lisp v) {
   return	_intChange(global_envp, pin, v, mkint(4));
 
 }
-
 
 // wget functions...
 // echo '
@@ -3265,16 +3226,6 @@ void checkButtonClickCounts() {
 			buttonCountChanged[pin] = 0;
 		}
 	}
-//    else if (button02CountChanged != 0) {
-////		 printf("click 02 event");
-//
-//		 checkButtonClick(2, &button02CountChanged);
-//	}
-//    else if (button00CountChanged != 0) {
-////		 printf("click 00 event");
-//
-//		 checkButtonClick(0, &button00CountChanged);
-//	}
 }
 
 PRIM idle(int lticks) {

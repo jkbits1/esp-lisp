@@ -29,11 +29,11 @@
 
 #include "compat.h"
 
-
-// code from interrupt example
-int gpio = 0; // 4;
-const int active = 0; // active == 0 for active low
+// constant copied from RTOS button interrupt example -
+// could include esp/gpio_regs.h instead
 const gpio_inttype_t int_type = GPIO_INTTYPE_EDGE_NEG; // GPIO_INTTYPE_LEVEL_LOW; // GPIO_INTTYPE_EDGE_NEG;
+// copied from projdefs.h
+typedef void (*pdTASK_CODE)( void * );
 
 const int gpioPinCount = 16;
 
@@ -54,24 +54,12 @@ const int gpioPinCount = 16;
 #define GPIO_HANDLER_14 gpio14_interrupt_handler
 #define GPIO_HANDLER_15 gpio15_interrupt_handler
 
-typedef void (*pdTASK_CODE)( void * );
-
 static xQueueHandle tsqueue = NULL;
 
-//int buttonCountChanged[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-//int buttonPressCount  [16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+// flags for count change is set here,
+// then reset when lisp env var is updated
 int buttonCountChanged[16] = {0};
 int buttonPressCount  [16] = {0};
-
-// flag for count change is set here, and reset when lisp env var is updated
-//int button00CountChanged = 0;
-//int button00PressCount = 0;
-//
-//int button02CountChanged = 0;
-//int button02PressCount = 0;
-//
-//int button04CountChanged = 0;
-//int button04PressCount = 0;
 
 struct ButtonMessage {           
         uint32_t now;            
@@ -101,20 +89,10 @@ void checkInterruptQueue()
 			//printf("interrupt %d fired at %dms\r\n", btnMsg.buttonNumber, button_ts);
 			last = button_ts;
 
-//			if (btnMsg.buttonNumber == 0) {
-				buttonCountChanged[btnMsg.buttonNumber] = 1;
+			buttonCountChanged[btnMsg.buttonNumber] = 1;
 
-				buttonPressCount[btnMsg.buttonNumber]   =
-					buttonPressCount[btnMsg.buttonNumber] + 1;
-//			}
-//			if (btnMsg.buttonNumber == 2) {
-//				button02CountChanged = 1;
-//				button02PressCount = button02PressCount + 1;
-//			}
-//			if (btnMsg.buttonNumber == 4) {
-//				button04CountChanged = 1;
-//				button04PressCount = button04PressCount + 1;
-//			}
+			buttonPressCount[btnMsg.buttonNumber]   =
+				buttonPressCount[btnMsg.buttonNumber] + 1;
 		}
 	 }
 }
@@ -123,15 +101,11 @@ void interrupt_init(int pins[gpioPinCount], int changeType)
 {
 	// printf("pin %d chgType %d", pin, changeType);
 
-	// in effect, this is a no-op - it makes no difference to the default,
-    // but may expand this code later
+	// in effect, this is a no-op - the default cannot be changed,
+    // but may expand on this code later
 	if (changeType == 2) {
 		// int_type = GPIO_INTTYPE_EDGE_NEG;
 	}
-
-	// gpio = pin;
-
-	//uart_set_baud(0, 115200);
 
 	for (int pin = 0; pin < gpioPinCount; pin++) {
 		if (pins[pin] != 0) {
@@ -145,15 +119,6 @@ void interrupt_init(int pins[gpioPinCount], int changeType)
 	}
 }
 
-//static inline void gpio_set_interrupt2(const uint8_t gpio_num, const gpio_inttype_t int_type)
-//{
-//    GPIO.CONF[gpio_num] = SET_FIELD(GPIO.CONF[gpio_num], GPIO_CONF_INTTYPE, int_type);
-//    if(int_type != GPIO_INTTYPE_NONE) {
-//        _xt_isr_attach(INUM_GPIO, gpio_interrupt_handler);
-//        _xt_isr_unmask(1<<INUM_GPIO);
-//    }
-//}
-
 void gpio_int_handler(int buttonNumber)
 {
 	uint32_t now = xTaskGetTickCountFromISR();
@@ -166,6 +131,7 @@ void gpio_int_handler(int buttonNumber)
 	xQueueSendToBackFromISR(tsqueue, &btnMsg, NULL);
 }
 
+// could refactor these 16 functions as instances of a macro
 void GPIO_HANDLER_00(void)
 {
 	return gpio_int_handler(0);
