@@ -823,7 +823,7 @@ void createSymbolName(
 	char numChar = 0;
 	char asciiOffset = 0;
 
-	memset(symbolName, '\0');
+	memset(symbolName, '\0', symbolNameLen);
 
 	strcpy(symbolName, pSymbolNameStub);
 
