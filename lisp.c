@@ -3198,6 +3198,9 @@ void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
 	intChange(global_envp, pin, val);
 }
 
+extern int gpioPinCount;
+void checkInterruptQueue();
+
 void checkButtonClickCounts() {
 
 	checkInterruptQueue();
@@ -3212,8 +3215,6 @@ void checkButtonClickCounts() {
 }
 
 PRIM atrun(lisp* envp);
-void checkInterruptQueue();
-extern int gpioPinCount;
 
 PRIM idle(int lticks) {
     // 1 000 000 == 1s for x61 laptop
