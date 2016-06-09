@@ -85,6 +85,7 @@ void checkInterruptQueue()
 		button_ts = btnMsg.now;
 		button_ts *= portTICK_RATE_MS;
 
+		// debounce check (from button.c example code)
 		if(last < button_ts-200) {
 			//printf("interrupt %d fired at %dms\r\n", btnMsg.buttonNumber, button_ts);
 			last = button_ts;
