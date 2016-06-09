@@ -883,11 +883,6 @@ PRIM _intChange(lisp* envp, lisp pin, lisp v, lisp d) {
 	return v;
 }
 
-PRIM _intChangeFix(lisp pin, lisp v) {
-  return	_intChange(global_envp, pin, v, mkint(4));
-
-}
-
 // wget functions...
 // echo '
 // (wget "yesco.org" "http://yesco.org/index.html" (lambda (t a v) (princ t) (cond (a (princ " ") (princ a) (princ "=") (princ v)(terpri)))))
@@ -3070,7 +3065,6 @@ lisp lisp_init() {
     DEFPRIM(updateClicks, -1, updateButtonClickCount);
     DEFPRIM(resetClicks, -1, resetButtonClickCount);
     DEFPRIM(intChange, -3, _intChange);
-    DEFPRIM(intChangeFix, 2, _intChangeFix);
 
     // system stuff
     DEFPRIM(gc, -1, gc);
@@ -3616,9 +3610,6 @@ void init_library(lisp* envp) {
   // COPIES for convenience
   // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (intChange n 0))))))
 
-  // works
-  // (define rotaF (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (intChangeFix n 0))))))
-
   // test
   // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (princ n) (intChange n 0))))))
   // (define rota1 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (pp (rotate (clks n) zs)) (intChange n 0))))))
@@ -3638,9 +3629,6 @@ void init_library(lisp* envp) {
   // (at -10000 (lambda () (rota1 4)))
   // (at -10000 (lambda () (rota2 4)))
   // (at -10000 (lambda () (rota3 4)))
-
-  // works
-  // (at -10000 (lambda () (rotaF 4)))
 
 
   //  DEFINE (ies, (lambda () (list *ie00* *ie02* *ie04*)));
@@ -3740,9 +3728,6 @@ void init_library(lisp* envp) {
   // (define ic (lambda (m n o) (intChange m n o)))
   // (define ic2 (lambda (m n o) (intChange *ie04* n o)))
   // (define ic3 (lambda (m n o) (intChange *ie04* 1 2)))
-
-  // works - uses non-global version of intChange
-  // (define ic4 (lambda (m n o) (intChangeFix m n)))
 
   // works
   // (define sb  (lambda (n) (set! *ie04* n))) - hard-coded global
