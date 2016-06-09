@@ -784,7 +784,105 @@ PRIM in(lisp pin) {
     return mkint(gpio_read(getint(pin)));
 }
 
+// NOTE pin param is currently redundant
+PRIM interrupt(lisp pin, lisp changeType) {
+	int pins[16] = {0};
+
+	pins[0] = 1;
+	pins[2] = 1;
+	pins[4] = 1;
+
+	interrupt_init(pins, getint(changeType));
+
+    return pin;
+}
+
 //    gpio_set_interrupt(gpio, int_type);
+
+// flags and counts declared in interrupt.c
+extern int buttonCountChanged[];
+extern int buttonClickCount  [];
+
+PRIM _setbang(lisp* envp, lisp name, lisp v);
+
+const char symbolNameLen = 25;
+
+void createSymbolName(
+		char symbolName[symbolNameLen],
+		char *pSymbolNameStub,
+		int pinNum) {
+
+	int len = strlen(pSymbolNameStub);
+
+	char numChar = 0;
+	char asciiOffset = 0;
+
+	memset(symbolName, '\0', symbolNameLen);
+
+	strcpy(symbolName, pSymbolNameStub);
+
+	if (pinNum >= 10) {
+	    asciiOffset = 10;
+
+		symbolName[len-1] = '1';
+	}
+
+	numChar = '0' + (pinNum - asciiOffset);
+
+	symbolName[len] = numChar;
+	symbolName[len + 1] = '*';
+}
+
+PRIM updateButtonClickCount(lisp* envp, lisp pin) {
+  int pinNum = getint(pin);
+  lisp count;
+
+  char  symbolName[symbolNameLen];
+
+  createSymbolName(symbolName, "*bc0", pinNum);
+
+//  printf("ubcc - sym name %s", symbolName);
+
+  count = mkint(buttonClickCount[pinNum]);
+  _setbang(envp, symbol(symbolName), count);
+
+  return count;
+}
+
+PRIM resetButtonClickCount(lisp* envp, lisp pin) {
+  int  pinNum = getint(pin);
+  lisp zero = mkint(0);
+
+  char  symbolName[symbolNameLen];
+
+  createSymbolName(symbolName, "*bc0", pinNum);
+
+  _setbang(envp, symbol(symbolName), zero);
+
+  return zero;
+}
+
+PRIM print(lisp x);
+
+PRIM intChange(lisp* envp, lisp pin, lisp v) {
+	printf("raw pin %u raw v %u ", pin, v);
+		  int pinNum = getint(eval(pin, envp));
+	int val = getint(v);
+	printf ("pin %d val %d ", pinNum, val);
+
+	printf("PIN"); princ(pin);
+	printf("v"); print(v);
+
+	char  symbolName[symbolNameLen];
+
+	createSymbolName(symbolName, "*ie0", pinNum);
+
+	printf("ic - sym name %s", symbolName);
+
+	_setbang(envp, symbol(symbolName), v);
+
+	return v;
+}
 
 // wget functions...
 // echo '
@@ -3090,7 +3188,32 @@ void maybeGC() {
     if (needGC()) gc(global_envp);
 }
 
+void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
+
+	updateButtonClickCount(global_envp, mkint(buttonNum));
+
+	lisp pin = mkint(buttonNum);
+	lisp val = mkint(buttonCountChanged);
+
+	intChange(global_envp, pin, val);
+}
+
+void checkButtonClickCounts() {
+
+	checkInterruptQueue();
+
+	for (int pin = 0; pin < gpioPinCount; pin++) {
+
+		if (buttonCountChanged[pin] != 0) {
+			updateButtonEnvVars(pin, buttonCountChanged[pin]);
+			buttonCountChanged[pin] = 0;
+		}
+	}
+}
+
 PRIM atrun(lisp* envp);
+void checkInterruptQueue();
+extern int gpioPinCount;
 
 PRIM idle(int lticks) {
     // 1 000 000 == 1s for x61 laptop
@@ -3099,6 +3222,9 @@ PRIM idle(int lticks) {
     // polling tasks, invoking callbacks
     web_one();
     atrun(global_envp);
+
+    // if flag for interrupt event is set, update env symbol values
+     checkButtonClickCounts();
 
     // gc
     maybeGC(); // TODO: backoff, can't do all the time???
