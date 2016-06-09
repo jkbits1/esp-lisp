@@ -869,7 +869,7 @@ PRIM _intChange(lisp* envp, lisp pin, lisp v, lisp d) {
 
 	char  symbolName[symbolNameLen];
 
-	createSymbolName(symbolName, "*intEvent0", pinNum);
+	createSymbolName(symbolName, "*ie0", pinNum);
 
 	printf("ic - sym name %s", symbolName);
 
@@ -3530,9 +3530,9 @@ void init_library(lisp* envp) {
 //  DEFINE("*buttonClickCount02*", 0);
 //  DEFINE("*buttonClickCount04*", 0);
 //
-//  DEFINE("*intEvent00*", 0);
-//  DEFINE("*intEvent02*", 0);
-//  DEFINE("*intEvent04*", 0);
+//  DEFINE("*ie00*", 0);
+//  DEFINE("*ie02*", 0);
+//  DEFINE("*ie04*", 0);
 
 //check for button click value and
 //  display line1 using button click value as rotate
@@ -3543,9 +3543,9 @@ void init_library(lisp* envp) {
 //				   (list (set! *buttonClickCount00* 0)
 //						 (set! *buttonClickCount02* 0)
 //						 (set! *buttonClickCount04* 0)
-//						 (set! *intEvent00* 0)
-//						 (set! *intEvent02* 0)
-//						 (set! *intEvent04* 0)
+//						 (set! *ie00* 0)
+//						 (set! *ie02* 0)
+//						 (set! *ie04* 0)
 //						 (interrupt 4 3)
 //				   )
 //				  )
@@ -3559,9 +3559,9 @@ void init_library(lisp* envp) {
 //				   (list (set! *buttonClickCount00* 0)
 //						 (set! *buttonClickCount02* 0)
 //						 (set! *buttonClickCount04* 0)
-//						 (set! *intEvent00* 0)
-//						 (set! *intEvent02* 0)
-//						 (set! *intEvent04* 0)
+//						 (set! *ie00* 0)
+//						 (set! *ie02* 0)
+//						 (set! *ie04* 0)
 //						 (interrupt 4 n)
 //				   )
 //				  )
@@ -3576,9 +3576,9 @@ void init_library(lisp* envp) {
 				   (list (define *buttonClickCount00* 0)
 						 (define *buttonClickCount02* 0)
 						 (define *buttonClickCount04* 0)
-						 (define *intEvent00* 0)
-						 (define *intEvent02* 0)
-						 (define *intEvent04* 0)
+						 (define *ie00* 0)
+						 (define *ie02* 0)
+						 (define *ie04* 0)
 						 (interrupt 4 3)
 				   )
 				  )
@@ -3586,26 +3586,26 @@ void init_library(lisp* envp) {
 	      )
 	    );
 
-  // (progn (define *buttonClickCount00* 0) (define *buttonClickCount02* 0) (define *buttonClickCount04* 0) (define *intEvent00* 0) (define *intEvent02* 0) (define *intEvent04* 0) (interrupt 4 3))
+  // (progn (define *buttonClickCount00* 0) (define *buttonClickCount02* 0) (define *buttonClickCount04* 0) (define *ie00* 0) (define *ie02* 0) (define *ie04* 0) (interrupt 4 3))
 
   // initialises int vars
-  // (list (set! *buttonClickCount00* 0) (set! *buttonClickCount02* 0) (set! *buttonClickCount04* 0) (set! *intEvent00* 0) (set! *intEvent02* 0) (set! *intEvent04* 0))
+  // (list (set! *buttonClickCount00* 0) (set! *buttonClickCount02* 0) (set! *buttonClickCount04* 0) (set! *ie00* 0) (set! *ie02* 0) (set! *ie04* 0))
 
   // errors - can paste them in one by one without error, though
   DEFINE(setupIntFns,
 		  (lambda ()
 		    (
 		      (list
-		    	(define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*)))
+		    	(define ies  (lambda ()  (list *ie00* *ie02* *ie04*)))
 				(define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
-				(define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*))))
+				(define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*))))
 				(define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*))))
 			  )
 			)));
 
   //  set up fns in lisp env
-  //  (list (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
-  //  (progn (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
+  //  (list (define ies  (lambda ()  (list *ie00* *ie02* *ie04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
+  //  (progn (define ies  (lambda ()  (list *ie00* *ie02* *ie04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
 
 
   // COPIES for convenience
@@ -3622,7 +3622,7 @@ void init_library(lisp* envp) {
   //
   //
   // alternative version of PRIM intChange
-   // (define intChg (lambda (n v) (cond ((eq n 0) (set! *intEvent00* v)) ((eq n 2) (set! *intEvent02* v)) ((eq n 4) (set! *intEvent04* v)))))
+   // (define intChg (lambda (n v) (cond ((eq n 0) (set! *ie00* v)) ((eq n 2) (set! *ie02* v)) ((eq n 4) (set! *ie04* v)))))
 
   // (define rota3 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (intChg n 0) (pp (rotate (clks n) zs)) )))))
 
@@ -3638,26 +3638,26 @@ void init_library(lisp* envp) {
   // (at -10000 (lambda () (rotaF 4)))
 
 
-  //  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
+  //  DEFINE (ies, (lambda () (list *ie00* *ie02* *ie04*)));
   //  DEFINE (bcs, (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)));
 
-      //(define ies (lambda () (list *intEvent00* *intEvent02* *intEvent04*)))
+      //(define ies (lambda () (list *ie00* *ie02* *ie04*)))
       //(define bcs (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
 
-  //(define ies (lambda () (mapcar princ (list *intEvent00* *intEvent02* *intEvent04*))))
+  //(define ies (lambda () (mapcar princ (list *ie00* *ie02* *ie04*))))
 
 
 
   // works - changes result as var changes
 //  DEFINE (ie, (lambda (n)
 //                     (cond
- //                      ((eq n 0) *intEvent00*)
-  //                     ((eq n 2) *intEvent02*)
-   //                    (t        *intEvent04*)
+ //                      ((eq n 0) *ie00*)
+  //                     ((eq n 2) *ie02*)
+   //                    (t        *ie04*)
     //                 )
      //              )
       //   );
-  // (define ie (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*))))
+  // (define ie (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*))))
 
 //  (define cks (lambda (n) (cond ((eq n 0) (eval *buttonClickCount00*)))))
 //  (define cks (lambda (n) (cond ((eq n 0) (eval 1)))))
@@ -3683,24 +3683,24 @@ void init_library(lisp* envp) {
   //(define cks (lambda (n) (cond ((eq n 0) *buttonClickCount00*))))
 
 
-  //(cond ((not(eq intEvent00 0)) (rotate buttonClickCount zs)))
+  //(cond ((not(eq ie00 0)) (rotate buttonClickCount zs)))
 
   // NOTE need to merge two fns below
   // on timer, show rotate if button clicked
-//  (at -10000 (lambda () (cond ((not(eq intEvent00 0)) (pp (rotate buttonClickCount zs))))))
+//  (at -10000 (lambda () (cond ((not(eq ie00 0)) (pp (rotate buttonClickCount zs))))))
 
   // show rotate then turn off change flag
   //(cond ((not (eq (pp (rotate buttonClick00Count zs)) 0)) (intChange 0 0)))
 
-// NOTE revised as intEvent00 starts at nil, not zero
+// NOTE revised as ie00 starts at nil, not zero
   // works
-    //(at -10000 (lambda () (cond ((not(eq intEvent00 0)) (cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange 0 0)))))))
+    //(at -10000 (lambda () (cond ((not(eq ie00 0)) (cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange 0 0)))))))
 
   // works, uses list to initiate multiple events sequentially
   // (rather than always true conditional above
 //  DEFINE(rotateOnClick,
 //		  (lambda ()
-//			(cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs))
+//			(cond ((not(eq *ie00* 0)) (list (pp (rotate *buttonClickCount00* zs))
 //					                            (intChange 0 0)
 //					                      )
 //				  )
@@ -3709,7 +3709,7 @@ void init_library(lisp* envp) {
 //	    );
 
   // (at -1000 rotateOnClick)
-  // (at -10000 (lambda () (cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs)) (intChange 0 0))))))
+  // (at -10000 (lambda () (cond ((not(eq *ie00* 0)) (list (pp (rotate *buttonClickCount00* zs)) (intChange 0 0))))))
 
   // currently causes a reset (run out of conses) if no clicks
   //	resolved, caused by guard clause succeeding if
@@ -3733,15 +3733,15 @@ void init_library(lisp* envp) {
 
   // misc tests
   // (define ic (lambda (m n o) (intChange m n o)))
-  // (define ic2 (lambda (m n o) (intChange *intEvent04* n o)))
-  // (define ic3 (lambda (m n o) (intChange *intEvent04* 1 2)))
+  // (define ic2 (lambda (m n o) (intChange *ie04* n o)))
+  // (define ic3 (lambda (m n o) (intChange *ie04* 1 2)))
 
   // works - uses non-global version of intChange
   // (define ic4 (lambda (m n o) (intChangeFix m n)))
 
   // works
-  // (define sb  (lambda (n) (set! *intEvent04* n))) - hard-coded global
-  // (define sb4 (lambda (s n) (set! *intEvent04* n))) - hard-coded global
+  // (define sb  (lambda (n) (set! *ie04* n))) - hard-coded global
+  // (define sb4 (lambda (s n) (set! *ie04* n))) - hard-coded global
   // (define ic5 (lambda (n) (intChange 4 n))) - hard-coded param
 
   //fails (first param seems to be envp - not so sure now)
@@ -3759,10 +3759,10 @@ void init_library(lisp* envp) {
   // (at -1000 (lambda () (rota 4)))
 
 
-  // pass *intEvent0x* as param
+  // pass *ie0x* as param
 		// (define ie (lambda (i0) (eq i0 0)))
 
-  //(define ie4 (ie  *intEvent04*))
+  //(define ie4 (ie  *ie04*))
 
   //  DEFINE("*buttonClickCount00*", 0);
   //  DEFINE("*buttonClickCount02*", 0);
