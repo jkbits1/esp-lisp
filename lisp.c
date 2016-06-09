@@ -864,7 +864,7 @@ PRIM print(lisp x);
 
 PRIM _intChange(lisp* envp, lisp pin, lisp v, lisp d) {
 	printf("raw pin %u raw v %u raw d %u", pin, v, d);
-		  int pinNum = getint(pin);
+		  int pinNum = getint(eval(pin, envp));
 	int val = getint(v);
 	int dd = getint(d);
 	printf ("pin %d val %d dd %d", pinNum, val, dd);
