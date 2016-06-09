@@ -56,10 +56,10 @@ const int gpioPinCount = 16;
 
 static xQueueHandle tsqueue = NULL;
 
-// flags for count change is set here,
-// then reset when lisp env var is updated
+
+// flags for count change, reset when lisp env var is updated
 int buttonCountChanged[16] = {0};
-int buttonPressCount  [16] = {0};
+int buttonClickCount  [16] = {0};
 
 struct ButtonMessage {           
         uint32_t now;            
@@ -91,8 +91,8 @@ void checkInterruptQueue()
 
 			buttonCountChanged[btnMsg.buttonNumber] = 1;
 
-			buttonPressCount[btnMsg.buttonNumber]   =
-				buttonPressCount[btnMsg.buttonNumber] + 1;
+			buttonClickCount[btnMsg.buttonNumber]   =
+				buttonClickCount[btnMsg.buttonNumber] + 1;
 		}
 	 }
 }

@@ -799,7 +799,7 @@ PRIM interrupt(lisp pin, lisp changeType) {
 
 // flags and counts declared in interrupt.c
 extern int buttonCountChanged[];
-extern int buttonPressCount  [];
+extern int buttonClickCount  [];
 
 PRIM _setb(lisp* envp, lisp name, lisp v);
 
@@ -841,7 +841,7 @@ PRIM updateButtonClickCount(lisp* envp, lisp pin) {
 
 //  printf("ubcc - sym name %s", symbolName);
 
-  count = mkint(buttonPressCount[pinNum]);
+  count = mkint(buttonClickCount[pinNum]);
   _setb(envp, symbol(symbolName), count);
 
   return count;
