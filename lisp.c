@@ -804,7 +804,7 @@ PRIM interrupt(lisp pin, lisp changeType) {
 extern int buttonCountChanged[];
 extern int buttonClickCount  [];
 
-PRIM _setb(lisp* envp, lisp name, lisp v);
+PRIM _setbang(lisp* envp, lisp name, lisp v);
 
 const char symbolNameLen = 25;
 
@@ -845,7 +845,7 @@ PRIM updateButtonClickCount(lisp* envp, lisp pin) {
 //  printf("ubcc - sym name %s", symbolName);
 
   count = mkint(buttonClickCount[pinNum]);
-  _setb(envp, symbol(symbolName), count);
+  _setbang(envp, symbol(symbolName), count);
 
   return count;
 }
@@ -858,7 +858,7 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
 
   createSymbolName(symbolName, "*bc0", pinNum);
 
-  _setb(envp, symbol(symbolName), zero);
+  _setbang(envp, symbol(symbolName), zero);
 
   return zero;
 }
@@ -880,7 +880,7 @@ PRIM intChange(lisp* envp, lisp pin, lisp v) {
 
 	printf("ic - sym name %s", symbolName);
 
-	_setb(envp, symbol(symbolName), v);
+	_setbang(envp, symbol(symbolName), v);
 
 	return v;
 }
@@ -2449,12 +2449,7 @@ PRIM atrun(lisp* envp) {
         prev = lst;
         lst = cdr(lst);
 
-        if (!lst) {
-          // As the code is now, this blanks out the screen.
-          // The code could be adjusted so that this prints once only, 
-          // after a scheduled event has been executed.
-          //terpri();
-        }
+        //if (!lst) terpri();
     }
     return nil;
 }
