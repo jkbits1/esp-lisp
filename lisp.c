@@ -80,6 +80,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+#include <setjmp.h>
 
 // added for interrupt handling
 // #include "queue.h"
@@ -166,6 +167,9 @@ lisp* global_envp = NULL;
 // adding real debugging - http://software-lab.de/doc/tut.html#dbg
 static int traceGC = 0;
 static int trace = 0;
+
+// handle errors, break
+jmp_buf lisp_break = {0};
 
 // use for list(mkint(1), symbol("foo"), mkint(3), END);
 
@@ -762,7 +766,6 @@ int getint(lisp x) {
     return IS(x, intint) ? ATTR(intint, x, v) : 0;
 }
 
-lisp eval(lisp e, lisp* env);
 PRIM eq(lisp a, lisp b);
 
 PRIM member(lisp e, lisp r) {
@@ -947,8 +950,12 @@ static void response(int req, char* method, char* path) {
 
     // TODO: instead redirect output to write!!! 
     char* s = getstring(ret);
-    // TODO: loop until all of the string written?
-    write(req, s, strlen(s));
+
+    do {
+        int r = write(req, s, strlen(s));
+        if (r < 0) { printf("%%Error on writing response, errno=%d\n", errno); break; }
+        s += r;
+    } while (*s);
 
     maybeGC();
 }
@@ -957,12 +964,19 @@ static void response(int req, char* method, char* path) {
 // (web 8080 (lambda (r w s m p) (princ w) (princ " ") (princ s) (princ " ") (princ m) (princ " ") (princ p) (terpri) "FISH-42"))
 // ' | ./run
 
-
 int web_socket = 0;
 
 int web_one() {
+    int r = -1;
     if (!web_socket) return 0;
-    return httpd_next(web_socket, header, body, response);
+    if (setjmp(lisp_break) == 0) {
+        r = httpd_next(web_socket, header, body, response);
+    } else {
+        printf("\n%%web_one.error... recovering...\n");
+    }
+    // disable longjmp
+    memset(lisp_break, 0, sizeof(lisp_break));
+    return r;
 }
 
 PRIM web(lisp* envp, lisp port, lisp callback) {
@@ -1282,6 +1296,7 @@ inline lisp getBind(lisp* envp, lisp name, int create) {
     // check "global"
     return hashsym(name, NULL, 0, 0); // not create, read only
 }
+lisp getBind(lisp* envp, lisp name, int create);
 
 // like setqq but returns binding, used by setXX
 // 1. define, de - create binding in current environment
@@ -1296,7 +1311,9 @@ inline lisp _setqqbind(lisp* envp, lisp name, lisp v, int create) {
     setcdr(bind, v);
     return bind;
 }
-
+// magic, this "instantiates" an inline function!
+lisp _setqqbind(lisp* envp, lisp name, lisp v, int create);
+    
 inline PRIM _setqq(lisp* envp, lisp name, lisp v) {
     _setqqbind(envp, name, nil, 0);
 
@@ -1315,10 +1332,13 @@ inline PRIM _setqq(lisp* envp, lisp name, lisp v) {
 
     return v;
 }
+// magic, this "instantiates" an inline function!
+PRIM _setqq(lisp* envp, lisp name, lisp v); 
+
 // next line only needed because C99 can't get pointer to inlined function?
 PRIM _setqq_(lisp* envp, lisp name, lisp v) { return _setqq(envp, name, v); }
 
-inline PRIM _setb(lisp* envp, lisp name, lisp v) {
+inline PRIM _setbang(lisp* envp, lisp name, lisp v) {
     if (!symbolp(name)) { printf("set! of non symbol="); prin1(name); terpri(); error("set! of non atom: "); }
     lisp bind = _setqqbind(envp, name, nil, 0);
     // TODO: evalGC? probably safe as steqqbind changed an existing env
@@ -1331,10 +1351,10 @@ inline PRIM _setb(lisp* envp, lisp name, lisp v) {
 
 inline PRIM _set(lisp* envp, lisp name, lisp v) {
     // TODO: evalGC? probably safe as steqqbind changed an existing env
-    return _setb(envp, eval(name, envp), v);
+    return _setbang(envp, eval(name, envp), v);
 }
-// next line only needed because C99 can't get pointer to inlined function?
-PRIM _set_(lisp* envp, lisp name, lisp v) { return _set(envp, name, v); }
+// magic, this "instantiates" an inline function!
+PRIM _set(lisp* envp, lisp name, lisp v);
 
 PRIM de(lisp* envp, lisp namebody);
 
@@ -1927,6 +1947,7 @@ static void indent(int n) {
 
 static lisp funcapply(lisp f, lisp args, lisp* envp, int noeval);
 
+// get value of var, or complain if not defined
 static inline lisp getvar(lisp e, lisp env) {
     lisp v = getBind(&env, e, 0);
     if (v) return cdr(v);
@@ -2010,7 +2031,8 @@ lisp eval(lisp e, lisp* envp) {
 
 PRIM _eval(lisp e, lisp env) {
     // taking pointer creates a new "scrope"
-    return evalGC(e, &env);
+    // if no env given, use the global env (so define will be on top level)
+    return evalGC(e, env ? &env : global_envp);
 }
 
 lisp mem_usage(int count) {
@@ -2023,6 +2045,8 @@ inline int needGC() {
     if (cons_count < MAX_CONS * 0.2) return 1;
     return (allocs_count < MAX_ALLOCS * 0.8) ? 0 : 1;
 }
+// magic, this "instantiates" an inline function!
+int needGC();
 
 
 // (de rec (n) (print n) (rec (+ n 1)) nil) // not tail recursive!
@@ -2375,20 +2399,17 @@ PRIM at(lisp* envp, lisp spec, lisp f) {
     int c = clock_ms();
     int w = getint(spec);
     lisp r = cons(mkint(c + abs(w)), cons(spec, evalGC(f, envp)));
-    lisp nm = symbol("*at*");
-    lisp bind = assoc(nm, *envp);
-    lisp rest = bind ? cdr(bind) : nil;
+    lisp bind = getBind(envp, ATSYMBOL, 0);
     // TOOD: insert sort should be easy, only problem is the first
     // so, we could prefix by atom QUEUE.
-    _setqq(envp, nm, cons(r, rest));
+    setcdr(bind, cons(r, cdr(bind)));
     return r;
 }
 
 // we allow stopping original scheduled event, or any repeated
 PRIM stop(lisp* envp, lisp at) {
     lisp att = evalGC(at, envp);
-    lisp nm = symbol("*at*");
-    lisp bind = assoc(nm, *envp);
+    lisp bind = getBind(envp, ATSYMBOL, 0);
     lisp lst = cdr(bind);
     lisp prev = bind;
     while (lst) {
@@ -2404,10 +2425,8 @@ PRIM stop(lisp* envp, lisp at) {
 }
 
 PRIM atrun(lisp* envp) {
-    lisp nm = symbol("*at*");
-    lisp bind = assoc(nm, *envp);
-    lisp lst = cdr(bind);
-    lisp prev = bind;
+    lisp prev = getBind(envp, ATSYMBOL, 0);
+    lisp lst = cdr(prev);
     // TODO: sort? now we're checking all tasks all the time.
     // for now don't care as we do it as idle.
     while (lst) {
@@ -2437,7 +2456,7 @@ PRIM atrun(lisp* envp) {
           //terpri();
         }
     }
-    return bind;
+    return nil;
 }
 
 //lisp imacs_(lisp name) {
@@ -2958,6 +2977,8 @@ lisp lisp_init() {
 
     t = symbol("t");
     DEFINE(t, 1);
+    ATSYMBOL = symbol("*at*");
+    DEFINE(ATSYMBOL, nil);
 
     DEFPRIM(lambda, -7, lambda);
 
@@ -3038,7 +3059,7 @@ lisp lisp_init() {
     //DEFPRIM(set, -2, _set_);
     //DEFPRIM(setq, -2, _setq);
     //DEFPRIM(setqq, -2, _setqq_);
-    DEFPRIM(set!, -2, _setb);
+    DEFPRIM(set!, -2, _setbang);
 
     DEFPRIM(define, -7, _define);
     DEFPRIM(de, -7, de);
@@ -3090,9 +3111,9 @@ lisp lisp_init() {
     // scheduling
     DEFPRIM(at, -2, at); // TODO: eval at => #stop?!?!??!
     DEFPRIM(stop, -1, stop);
-    DEFPRIM(atrun, -1, atrun);
+    // DEFPRIM(atrun, -1, atrun); // no reason for user to call (yet)
 
-//    DEFPRIM(imacs, -1, imacs_);
+    // DEFPRIM(imacs, -1, imacs_); // link in the imacs?
     DEFPRIM(syms, 0, syms); // TODO: rename to apropos?
     DEFPRIM(fib, 1, fibb);
 
@@ -3124,10 +3145,6 @@ void help(lisp* envp) {
     printf("CTRL-C: to break execution, CTRL-T: shows current time/load status, CTRL-D: to exit\n\n");
     printf("Type 'help' to get this message again\n");
 }
-
-#include <setjmp.h>
-
-jmp_buf lisp_break = {0};
 
 // TODO: make it take one lisp parameter?
 // TODO: https://groups.csail.mit.edu/mac/ftpdir/scheme-7.4/doc-html/scheme_17.html#SEC153
