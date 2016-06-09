@@ -3060,6 +3060,12 @@ lisp lisp_init() {
     DEFPRIM(out, 2, out);
     DEFPRIM(in, 1, in);
 
+    // interrupts support
+    DEFPRIM(interrupt, 2, interrupt);
+    DEFPRIM(updateClicks, -1, updateButtonClickCount);
+    DEFPRIM(resetClicks, -1, resetButtonClickCount);
+    DEFPRIM(intChange, -2, intChange);
+
     // system stuff
     DEFPRIM(gc, -1, gc);
     DEFPRIM(test, -7, test);
