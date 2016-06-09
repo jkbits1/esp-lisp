@@ -862,12 +862,11 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
 
 PRIM print(lisp x);
 
-PRIM _intChange(lisp* envp, lisp pin, lisp v, lisp d) {
-	printf("raw pin %u raw v %u raw d %u", pin, v, d);
+PRIM intChange(lisp* envp, lisp pin, lisp v) {
+	printf("raw pin %u raw v %u ", pin, v);
 		  int pinNum = getint(eval(pin, envp));
 	int val = getint(v);
-	int dd = getint(d);
-	printf ("pin %d val %d dd %d", pinNum, val, dd);
+	printf ("pin %d val %d ", pinNum, val);
 
 	printf("PIN"); princ(pin);
 	printf("v"); print(v);
@@ -3064,7 +3063,7 @@ lisp lisp_init() {
     DEFPRIM(interrupt, 2, interrupt);
     DEFPRIM(updateClicks, -1, updateButtonClickCount);
     DEFPRIM(resetClicks, -1, resetButtonClickCount);
-    DEFPRIM(intChange, -3, _intChange);
+    DEFPRIM(intChange, -2, intChange);
 
     // system stuff
     DEFPRIM(gc, -1, gc);
@@ -3207,7 +3206,7 @@ void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
 	lisp pin = mkint(buttonNum);
 	lisp val = mkint(buttonCountChanged);
 
-	_intChange(global_envp, pin, val, 0);
+	intChange(global_envp, pin, val);
 }
 
 void checkInterruptQueue();
