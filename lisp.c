@@ -860,6 +860,8 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
   return zero;
 }
 
+PRIM print(lisp x);
+
 PRIM _intChange(lisp* envp, lisp pin, lisp v, lisp d) {
 	printf("raw pin %u raw v %u raw d %u", pin, v, d);
 		  int pinNum = getint(pin);
