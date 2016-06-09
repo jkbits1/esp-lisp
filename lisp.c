@@ -837,7 +837,7 @@ PRIM updateButtonClickCount(lisp* envp, lisp pin) {
 
   char  symbolName[symbolNameLen];
 
-  createSymbolName(symbolName, "*buttonClickCount0", pinNum);
+  createSymbolName(symbolName, "*bc0", pinNum);
 
 //  printf("ubcc - sym name %s", symbolName);
 
@@ -853,7 +853,7 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
 
   char  symbolName[symbolNameLen];
 
-  createSymbolName(symbolName, "*buttonClickCount0", pinNum);
+  createSymbolName(symbolName, "*bc0", pinNum);
 
   _setb(envp, symbol(symbolName), zero);
 
@@ -3526,9 +3526,9 @@ void init_library(lisp* envp) {
 
 // take head of xs, cons to append of tail xs and ys, recurse ...
 
-//  DEFINE("*buttonClickCount00*", 0);
-//  DEFINE("*buttonClickCount02*", 0);
-//  DEFINE("*buttonClickCount04*", 0);
+//  DEFINE("*bc00*", 0);
+//  DEFINE("*bc02*", 0);
+//  DEFINE("*bc04*", 0);
 //
 //  DEFINE("*ie00*", 0);
 //  DEFINE("*ie02*", 0);
@@ -3539,10 +3539,10 @@ void init_library(lisp* envp) {
 
 //  DEFINE(setupInterrupts,
 //		  (lambda ()
-//			(cond ((eq *buttonClickCount00* nil)
-//				   (list (set! *buttonClickCount00* 0)
-//						 (set! *buttonClickCount02* 0)
-//						 (set! *buttonClickCount04* 0)
+//			(cond ((eq *bc00* nil)
+//				   (list (set! *bc00* 0)
+//						 (set! *bc02* 0)
+//						 (set! *bc04* 0)
 //						 (set! *ie00* 0)
 //						 (set! *ie02* 0)
 //						 (set! *ie04* 0)
@@ -3555,10 +3555,10 @@ void init_library(lisp* envp) {
 
 //  DEFINE(setupInterrupts,
 //		  (lambda (n)
-//			(cond ((eq *buttonClickCount00* nil)
-//				   (list (set! *buttonClickCount00* 0)
-//						 (set! *buttonClickCount02* 0)
-//						 (set! *buttonClickCount04* 0)
+//			(cond ((eq *bc00* nil)
+//				   (list (set! *bc00* 0)
+//						 (set! *bc02* 0)
+//						 (set! *bc04* 0)
 //						 (set! *ie00* 0)
 //						 (set! *ie02* 0)
 //						 (set! *ie04* 0)
@@ -3572,10 +3572,10 @@ void init_library(lisp* envp) {
   // revised to use define
   DEFINE(setupInterrupts,
 		  (lambda ()
-			(cond ((eq *buttonClickCount00* nil)
-				   (list (define *buttonClickCount00* 0)
-						 (define *buttonClickCount02* 0)
-						 (define *buttonClickCount04* 0)
+			(cond ((eq *bc00* nil)
+				   (list (define *bc00* 0)
+						 (define *bc02* 0)
+						 (define *bc04* 0)
 						 (define *ie00* 0)
 						 (define *ie02* 0)
 						 (define *ie04* 0)
@@ -3586,10 +3586,10 @@ void init_library(lisp* envp) {
 	      )
 	    );
 
-  // (progn (define *buttonClickCount00* 0) (define *buttonClickCount02* 0) (define *buttonClickCount04* 0) (define *ie00* 0) (define *ie02* 0) (define *ie04* 0) (interrupt 4 3))
+  // (progn (define *bc00* 0) (define *bc02* 0) (define *bc04* 0) (define *ie00* 0) (define *ie02* 0) (define *ie04* 0) (interrupt 4 3))
 
   // initialises int vars
-  // (list (set! *buttonClickCount00* 0) (set! *buttonClickCount02* 0) (set! *buttonClickCount04* 0) (set! *ie00* 0) (set! *ie02* 0) (set! *ie04* 0))
+  // (list (set! *bc00* 0) (set! *bc02* 0) (set! *bc04* 0) (set! *ie00* 0) (set! *ie02* 0) (set! *ie04* 0))
 
   // errors - can paste them in one by one without error, though
   DEFINE(setupIntFns,
@@ -3597,15 +3597,15 @@ void init_library(lisp* envp) {
 		    (
 		      (list
 		    	(define ies  (lambda ()  (list *ie00* *ie02* *ie04*)))
-				(define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
+				(define bcs  (lambda ()  (list *bc00* *bc02* *bc04*)))
 				(define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*))))
-				(define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*))))
+				(define clks (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*))))
 			  )
 			)));
 
   //  set up fns in lisp env
-  //  (list (define ies  (lambda ()  (list *ie00* *ie02* *ie04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
-  //  (progn (define ies  (lambda ()  (list *ie00* *ie02* *ie04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
+  //  (list (define ies  (lambda ()  (list *ie00* *ie02* *ie04*))) (define bcs  (lambda ()  (list *bc00* *bc02* *bc04*))) (define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*)))) (define clks (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*)))))
+  //  (progn (define ies  (lambda ()  (list *ie00* *ie02* *ie04*))) (define bcs  (lambda ()  (list *bc00* *bc02* *bc04*))) (define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*)))) (define clks (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*)))))
 
 
   // COPIES for convenience
@@ -3639,10 +3639,10 @@ void init_library(lisp* envp) {
 
 
   //  DEFINE (ies, (lambda () (list *ie00* *ie02* *ie04*)));
-  //  DEFINE (bcs, (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)));
+  //  DEFINE (bcs, (lambda () (list *bc00* *bc02* *bc04*)));
 
       //(define ies (lambda () (list *ie00* *ie02* *ie04*)))
-      //(define bcs (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
+      //(define bcs (lambda () (list *bc00* *bc02* *bc04*)))
 
   //(define ies (lambda () (mapcar princ (list *ie00* *ie02* *ie04*))))
 
@@ -3659,28 +3659,28 @@ void init_library(lisp* envp) {
       //   );
   // (define ie (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*))))
 
-//  (define cks (lambda (n) (cond ((eq n 0) (eval *buttonClickCount00*)))))
+//  (define cks (lambda (n) (cond ((eq n 0) (eval *bc00*)))))
 //  (define cks (lambda (n) (cond ((eq n 0) (eval 1)))))
 //  (define cks2 (lambda (n) (cond ((eq n 0) (eval 1)))))
 
   // works
 //  DEFINE (clks, (lambda (n)
  //                     (cond
-    //                    ((eq n 0) *buttonClickCount00*)
-       //                 ((eq n 2) *buttonClickCount02*)
-          //              (t        *buttonClickCount04*)
+    //                    ((eq n 0) *bc00*)
+       //                 ((eq n 2) *bc02*)
+          //              (t        *bc04*)
              //         )
                 //    )
  //         );
 
-// (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*))))
+// (define clks (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*))))
 
-  // (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))
+  // (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*)))
 
   // short test version
-//   (define ck4 (lambda (n) (cond (eq n 0) (eval *buttonClickCount00*))))
+//   (define ck4 (lambda (n) (cond (eq n 0) (eval *bc00*))))
 
-  //(define cks (lambda (n) (cond ((eq n 0) *buttonClickCount00*))))
+  //(define cks (lambda (n) (cond ((eq n 0) *bc00*))))
 
 
   //(cond ((not(eq ie00 0)) (rotate buttonClickCount zs)))
@@ -3700,7 +3700,7 @@ void init_library(lisp* envp) {
   // (rather than always true conditional above
 //  DEFINE(rotateOnClick,
 //		  (lambda ()
-//			(cond ((not(eq *ie00* 0)) (list (pp (rotate *buttonClickCount00* zs))
+//			(cond ((not(eq *ie00* 0)) (list (pp (rotate *bc00* zs))
 //					                            (intChange 0 0)
 //					                      )
 //				  )
@@ -3709,7 +3709,7 @@ void init_library(lisp* envp) {
 //	    );
 
   // (at -1000 rotateOnClick)
-  // (at -10000 (lambda () (cond ((not(eq *ie00* 0)) (list (pp (rotate *buttonClickCount00* zs)) (intChange 0 0))))))
+  // (at -10000 (lambda () (cond ((not(eq *ie00* 0)) (list (pp (rotate *bc00* zs)) (intChange 0 0))))))
 
   // currently causes a reset (run out of conses) if no clicks
   //	resolved, caused by guard clause succeeding if
@@ -3764,13 +3764,13 @@ void init_library(lisp* envp) {
 
   //(define ie4 (ie  *ie04*))
 
-  //  DEFINE("*buttonClickCount00*", 0);
-  //  DEFINE("*buttonClickCount02*", 0);
-  //  DEFINE("*buttonClickCount04*", 0);
+  //  DEFINE("*bc00*", 0);
+  //  DEFINE("*bc02*", 0);
+  //  DEFINE("*bc04*", 0);
 
-  //  SET("*buttonClickCount00*", 0);
-  //  SETQc("*buttonClickCount02*", 0);
-  //  SETQ("*buttonClickCount04*", 0);
+  //  SET("*bc00*", 0);
+  //  SETQc("*bc02*", 0);
+  //  SETQ("*bc04*", 0);
 
 
 
