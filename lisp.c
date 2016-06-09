@@ -867,6 +867,9 @@ PRIM _intChange(lisp* envp, lisp pin, lisp v, lisp d) {
 	int dd = getint(d);
 	printf ("pin %d val %d dd %d", pinNum, val, dd);
 
+	printf("PIN"); princ(pin);
+	printf("v"); print(v);
+
 	char  symbolName[symbolNameLen];
 
 	createSymbolName(symbolName, "*ie0", pinNum);
