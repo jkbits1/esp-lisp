@@ -864,6 +864,7 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
 
 PRIM print(lisp x);
 
+// changes lisp var only
 PRIM intChange(lisp* envp, lisp pin, lisp v) {
 	printf("raw pin %u raw v %u ", pin, v);
 		  int pinNum = getint(eval(pin, envp));
@@ -3407,6 +3408,36 @@ PRIM fibb(lisp n) { return mkint(fib(getint(n))); }
 void init_library(lisp* envp) {
     //DEFINE(fibo, (lambda (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
     DE((fibo (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
+
+    // define interrupt-related vars and
+    // start up RTOS interrupt functionality
+    //
+    // NOTE *ie0x* vars are interrupt event flags
+    //      *bc0x* vars are button click counts
+    DEFINE(setupInterrupts,
+  		  (lambda ()
+  			(cond ((eq *bc00* nil)
+  				   (list (define *bc00* 0)
+  						 (define *bc02* 0)
+  						 (define *bc04* 0)
+  						 (define *ie00* 0)
+  						 (define *ie02* 0)
+  						 (define *ie04* 0)
+  						 (interrupt 4 3)
+  				   )
+  				  )
+  			)
+  	      )
+  	    );
+
+  // initialises interrupt-related vars
+  // (list (set! *bc00* 0) (set! *bc02* 0) (set! *bc04* 0) (set! *ie00* 0) (set! *ie02* 0) (set! *ie04* 0))
+
+  // defines four support functions for interrupt vars
+  // ies and bcs show the values for all vars
+  // ie and clks show the value for a specific var
+  // (list (define ies (lambda () (list *ie00* *ie02* *ie04*))) (define bcs  (lambda ()  (list *bc00* *bc02* *bc04*))) (define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*)))) (define clks (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*)))))
+
 // POSSIBLE encodings to save memory:
     // symbol: fibo
     // "fibo" 
