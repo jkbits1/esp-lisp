@@ -833,31 +833,26 @@ void createSymbolName(
 	symbolName[len + 1] = '*';
 }
 
-PRIM updateButtonClickCount(lisp* envp, lisp pin) {
-  int pinNum = getint(pin);
-  lisp count;
+void setButtonClickSymbolValue(lisp* envp, int pin, lisp count) {
 
-  char  symbolName[symbolNameLen];
+	char  symbolName[symbolNameLen];
 
-  createSymbolName(symbolName, "*bc0", pinNum);
+	createSymbolName(symbolName, "*bc0", pin);
 
-//  printf("ubcc - sym name %s", symbolName);
+	_setbang(envp, symbol(symbolName), count);
+}
 
-  count = mkint(buttonClickCount[pinNum]);
-  _setbang(envp, symbol(symbolName), count);
+void updateButtonClickCount(lisp* envp, int pin) {
+  lisp count = mkint(buttonClickCount[pin]);
 
-  return count;
+  setButtonClickSymbolValue(envp, pin, count);
 }
 
 PRIM resetButtonClickCount(lisp* envp, lisp pin) {
-  int  pinNum = getint(pin);
+  int  pinNum = getint(eval(pin, envp));
   lisp zero = mkint(0);
 
-  char  symbolName[symbolNameLen];
-
-  createSymbolName(symbolName, "*bc0", pinNum);
-
-  _setbang(envp, symbol(symbolName), zero);
+  setButtonClickSymbolValue(envp, pinNum, zero);
 
   return zero;
 }
@@ -3063,7 +3058,6 @@ lisp lisp_init() {
 
     // interrupts support
     DEFPRIM(interrupt, 2, interrupt);
-    DEFPRIM(updateClicks, -1, updateButtonClickCount);
     DEFPRIM(resetClicks, -1, resetButtonClickCount);
     DEFPRIM(intChange, -2, intChange);
 
@@ -3197,7 +3191,7 @@ void maybeGC() {
 
 void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
 
-	updateButtonClickCount(global_envp, mkint(buttonNum));
+	updateButtonClickCount(global_envp, buttonNum);
 
 	lisp pin = mkint(buttonNum);
 	lisp val = mkint(buttonCountChanged);
@@ -3208,7 +3202,7 @@ void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
 extern int gpioPinCount;
 void checkInterruptQueue();
 
-void checkButtonClickCounts() {
+void handleButtonEvents() {
 
 	checkInterruptQueue();
 
@@ -3232,7 +3226,7 @@ PRIM idle(int lticks) {
     atrun(global_envp);
 
     // if flag for interrupt event is set, update env symbol values
-     checkButtonClickCounts();
+    handleButtonEvents();
 
     // gc
     maybeGC(); // TODO: backoff, can't do all the time???
