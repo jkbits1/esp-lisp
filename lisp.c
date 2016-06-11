@@ -834,20 +834,14 @@ void createSymbolName(
 	symbolName[len + 1] = '*';
 }
 
-PRIM updateButtonClickCount(lisp* envp, lisp pin) {
-  int pinNum = getint(pin);
-  lisp count;
+void updateButtonClickCount(lisp* envp, int pin) {
+  lisp count = mkint(buttonClickCount[pin]);
 
   char  symbolName[symbolNameLen];
 
-  createSymbolName(symbolName, "*bc0", pinNum);
+  createSymbolName(symbolName, "*bc0", pin);
 
-//  printf("ubcc - sym name %s", symbolName);
-
-  count = mkint(buttonClickCount[pinNum]);
   _setbang(envp, symbol(symbolName), count);
-
-  return count;
 }
 
 PRIM resetButtonClickCount(lisp* envp, lisp pin) {
@@ -857,7 +851,6 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
   char  symbolName[symbolNameLen];
 
   createSymbolName(symbolName, "*bc0", pinNum);
-
   _setbang(envp, symbol(symbolName), zero);
 
   return zero;
@@ -3075,9 +3068,8 @@ lisp lisp_init() {
     DEFPRIM(out, 2, out);
     DEFPRIM(in, 1, in);
 
-    // interrupts
+    // interrupts support
     DEFPRIM(interrupt, 2, interrupt);
-    DEFPRIM(updateClicks, -1, updateButtonClickCount);
     DEFPRIM(resetClicks, -1, resetButtonClickCount);
     DEFPRIM(intChange, -2, intChange);
 
@@ -3211,9 +3203,11 @@ void maybeGC() {
 
 PRIM atrun(lisp* envp);
 
+// lisp vars exist at global level,
+// so passing C global env ptr (like
 void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
 
-	updateButtonClickCount(global_envp, mkint(buttonNum));
+	updateButtonClickCount(global_envp, buttonNum);
 
 	lisp pin = mkint(buttonNum);
 	lisp val = mkint(buttonCountChanged);
@@ -3246,7 +3240,7 @@ PRIM idle(int lticks) {
     web_one();
     atrun(global_envp);
 
-    // if flag for interrupt event is set, update env symbol value
+    // if flag for interrupt event is set, update env symbol values
      checkButtonClickCounts();
 
     // gc
