@@ -82,9 +82,6 @@
 #include <errno.h>
 #include <setjmp.h>
 
-// added for interrupt handling
-// #include "queue.h"
-
 #ifndef UNIX
   #include "FreeRTOS.h"
 
@@ -1043,7 +1040,6 @@ PRIM primapply(lisp ff, lisp args, lisp* envp, lisp all, int noeval) {
     // these special cases are redundant, can be done at general solution
     // but for optimization we extracted them, it improves speed quite a lot
     if (n == 2) { // eq/plus etc
-// printf("fn 2");
         lisp (*fp)(lisp,lisp) = GETPRIMFUNC(ff);
         return (*fp)(e(car(args), envp), e(car(cdr(args)), envp)); // safe!
     }
@@ -1327,20 +1323,6 @@ lisp _setqqbind(lisp* envp, lisp name, lisp v, int create);
     
 inline PRIM _setqq(lisp* envp, lisp name, lisp v) {
     _setqqbind(envp, name, nil, 0);
-
-    // NOTE - this code has been added to fully support scheduled tasks    
-    if (eq (symbol("*at*"), name) ) {
-        lisp bind = assoc(name, *envp);
-
-        if (!bind) {
-          bind = cons(name, nil);
-
-          *envp = cons(bind, *envp);
-        }
-
-        setcdr(bind, v);
-    }
-
     return v;
 }
 // magic, this "instantiates" an inline function!
@@ -2459,7 +2441,6 @@ PRIM atrun(lisp* envp) {
         }
         prev = lst;
         lst = cdr(lst);
-
         //if (!lst) terpri();
     }
     return nil;
