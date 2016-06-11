@@ -844,6 +844,40 @@ void createSymbolName(
 	symbolName[len + 1] = '*';
 }
 
+// flags and counts declared in interrupt.c
+extern int buttonCountChanged[];
+extern int buttonClickCount  [];
+
+PRIM _setbang(lisp* envp, lisp name, lisp v);
+
+const char symbolNameLen = 25;
+
+void createSymbolName(
+		char symbolName[symbolNameLen],
+		char *pSymbolNameStub,
+		int pinNum) {
+
+	int len = strlen(pSymbolNameStub);
+
+	char numChar = 0;
+	char asciiOffset = 0;
+
+	memset(symbolName, '\0', symbolNameLen);
+
+	strcpy(symbolName, pSymbolNameStub);
+
+	if (pinNum >= 10) {
+	    asciiOffset = 10;
+
+		symbolName[len-1] = '1';
+	}
+
+	numChar = '0' + (pinNum - asciiOffset);
+
+	symbolName[len] = numChar;
+	symbolName[len + 1] = '*';
+}
+
 void setButtonClickSymbolValue(lisp* envp, int pin, lisp count) {
 	char  symbolName[symbolNameLen];
 
@@ -860,7 +894,10 @@ void updateButtonClickCount(lisp* envp, int pin) {
 // NOTE this has the side effect of resetting
 // 		the C var for buttonclickcount to zero
 PRIM resetButtonClickCount(lisp* envp, lisp pin) {
+	printf("raw pin %u ", pin);
   int  pinNum = getint(eval(pin, envp));
+	printf ("pin %d ", pinNum);
+	printf("PIN"); princ(pin);
   lisp zero = mkint(0);
 
   setButtonClickSymbolValue(envp, pinNum, zero);
@@ -872,6 +909,7 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
 
 PRIM print(lisp x);
 
+// changes lisp var only
 PRIM intChange(lisp* envp, lisp pin, lisp v) {
 	printf("raw pin %u raw v %u ", pin, v);
 		  int pinNum = getint(eval(pin, envp));
