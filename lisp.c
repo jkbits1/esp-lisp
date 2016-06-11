@@ -82,6 +82,9 @@
 #include <errno.h>
 #include <setjmp.h>
 
+// added for interrupt handling
+// #include "queue.h"
+
 #ifndef UNIX
   #include "FreeRTOS.h"
 
@@ -797,7 +800,84 @@ PRIM interrupt(lisp pin, lisp changeType) {
     return pin;
 }
 
-//    gpio_set_interrupt(gpio, int_type);
+// flags and counts declared in interrupt.c
+extern int buttonCountChanged[];
+extern int buttonClickCount  [];
+
+PRIM _setbang(lisp* envp, lisp name, lisp v);
+
+const char symbolNameLen = 25;
+
+void createSymbolName(
+		char symbolName[symbolNameLen],
+		char *pSymbolNameStub,
+		int pinNum) {
+
+	int len = strlen(pSymbolNameStub);
+
+	char numChar = 0;
+	char asciiOffset = 0;
+
+	memset(symbolName, '\0', symbolNameLen);
+
+	strcpy(symbolName, pSymbolNameStub);
+
+	if (pinNum >= 10) {
+	    asciiOffset = 10;
+
+		symbolName[len-1] = '1';
+	}
+
+	numChar = '0' + (pinNum - asciiOffset);
+
+	symbolName[len] = numChar;
+	symbolName[len + 1] = '*';
+}
+
+void updateButtonClickCount(lisp* envp, int pin) {
+  lisp count = mkint(buttonClickCount[pin]);
+
+  char  symbolName[symbolNameLen];
+
+  createSymbolName(symbolName, "*bc0", pin);
+
+  _setbang(envp, symbol(symbolName), count);
+}
+
+PRIM resetButtonClickCount(lisp* envp, lisp pin) {
+  int  pinNum = getint(pin);
+  lisp zero = mkint(0);
+
+  char  symbolName[symbolNameLen];
+
+  createSymbolName(symbolName, "*bc0", pinNum);
+  _setbang(envp, symbol(symbolName), zero);
+
+  return zero;
+}
+
+PRIM print(lisp x);
+
+PRIM intChange(lisp* envp, lisp pin, lisp v) {
+	printf("raw pin %u raw v %u ", pin, v);
+		  int pinNum = getint(eval(pin, envp));
+	int val = getint(v);
+	printf ("pin %d val %d ", pinNum, val);
+
+	printf("PIN"); princ(pin);
+	printf("v"); print(v);
+
+	char  symbolName[symbolNameLen];
+
+	createSymbolName(symbolName, "*ie0", pinNum);
+
+	printf("ic - sym name %s", symbolName);
+
+	_setbang(envp, symbol(symbolName), v);
+
+	return v;
+}
+>>>>>>> origin/int-refactor
 
 // flags and counts declared in interrupt.c
 extern int buttonCountChanged[];
@@ -964,8 +1044,6 @@ static void response(int req, char* method, char* path) {
 // (web 8080 (lambda (r w s m p) (princ w) (princ " ") (princ s) (princ " ") (princ m) (princ " ") (princ p) (terpri) "FISH-42"))
 // ' | ./run
 
-PRIM _setbang(lisp* envp, lisp name, lisp v);
-
 int web_socket = 0;
 
 int web_one() {
@@ -1034,6 +1112,7 @@ PRIM primapply(lisp ff, lisp args, lisp* envp, lisp all, int noeval) {
     // these special cases are redundant, can be done at general solution
     // but for optimization we extracted them, it improves speed quite a lot
     if (n == 2) { // eq/plus etc
+// printf("fn 2");
         lisp (*fp)(lisp,lisp) = GETPRIMFUNC(ff);
         return (*fp)(e(car(args), envp), e(car(cdr(args)), envp)); // safe!
     }
@@ -1317,6 +1396,20 @@ lisp _setqqbind(lisp* envp, lisp name, lisp v, int create);
     
 inline PRIM _setqq(lisp* envp, lisp name, lisp v) {
     _setqqbind(envp, name, nil, 0);
+
+    // NOTE - this code has been added to fully support scheduled tasks    
+    if (eq (symbol("*at*"), name) ) {
+        lisp bind = assoc(name, *envp);
+
+        if (!bind) {
+          bind = cons(name, nil);
+
+          *envp = cons(bind, *envp);
+        }
+
+        setcdr(bind, v);
+    }
+
     return v;
 }
 // magic, this "instantiates" an inline function!
@@ -2435,6 +2528,7 @@ PRIM atrun(lisp* envp) {
         }
         prev = lst;
         lst = cdr(lst);
+
         //if (!lst) terpri();
     }
     return nil;
@@ -3223,6 +3317,35 @@ void handleButtonEvents() {
 
 PRIM atrun(lisp* envp);
 
+// lisp vars exist at global level,
+// so passing C global env ptr (like
+void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
+
+	updateButtonClickCount(global_envp, buttonNum);
+
+	lisp pin = mkint(buttonNum);
+	lisp val = mkint(buttonCountChanged);
+
+	intChange(global_envp, pin, val);
+}
+
+void checkInterruptQueue();
+
+extern int gpioPinCount;
+
+void checkButtonClickCounts() {
+
+	checkInterruptQueue();
+
+	for (int pin = 0; pin < gpioPinCount; pin++) {
+
+		if (buttonCountChanged[pin] != 0) {
+			updateButtonEnvVars(pin, buttonCountChanged[pin]);
+			buttonCountChanged[pin] = 0;
+		}
+	}
+}
+
 PRIM idle(int lticks) {
     // 1 000 000 == 1s for x61 laptop
     //if (lticks % 1000000 == 0) { putchar('^'); fflush(stdout); }
@@ -3232,7 +3355,11 @@ PRIM idle(int lticks) {
     atrun(global_envp);
 
     // if flag for interrupt event is set, update env symbol values
+<<<<<<< HEAD
     handleButtonEvents();
+=======
+     checkButtonClickCounts();
+>>>>>>> origin/int-refactor
 
     // gc
     maybeGC(); // TODO: backoff, can't do all the time???
@@ -3408,6 +3535,7 @@ PRIM fibb(lisp n) { return mkint(fib(getint(n))); }
 void init_library(lisp* envp) {
     //DEFINE(fibo, (lambda (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
     DE((fibo (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
+<<<<<<< HEAD
 
     // define interrupt-related vars and
     // start up RTOS interrupt functionality
@@ -3438,6 +3566,393 @@ void init_library(lisp* envp) {
   // ie and clks show the value for a specific var
   // (list (define ies (lambda () (list *ie00* *ie02* *ie04*))) (define bcs  (lambda ()  (list *bc00* *bc02* *bc04*))) (define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*)))) (define clks (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*)))))
 
+=======
+//  DEFINE(dropx, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
+//  DEFINE(drop1, (lambda (n) (if (= n 0) 1 (* n (fibo (- n 1))))));
+//
+//  DEFINE(drop2, (lambda (xs) (cdr xs)));
+
+  DEFINE(pinOn,  (lambda (n) (out n 1)));
+  DEFINE(pinOff, (lambda (n) (out n 0)));
+
+  DEFINE(pin2Off, (lambda (n)
+                    (out 2 0)
+                  )
+        );
+
+//  NOTE refactor defs to be in a larger init def,
+//       as with setupInterrupts def below - makes syntax more
+//  	 like that actually used in interpreter
+  DEFINE (drop, (lambda (x xs)
+                  (if (= x 0)
+                    xs
+                    (drop (- x 1) (cdr xs))
+                  )
+  ));
+
+  DEFINE (take, (lambda (x xs)
+                  (if (= x 0)
+                    ()
+                    (cons (car xs) (take (- x 1) (cdr xs)))
+                  )
+                )
+         );
+
+
+  //define some lists to work with
+  DEFINE (xs, (quote(a b c)));
+  DEFINE (ys, (quote(1 2 3)));
+
+  DEFINE (line1, (quote(1 2 3)));
+
+  // need a helper fn for recursion
+  // like reduce?
+  DEFINE (append, (lambda (xs ys)
+                    (if (= (car xs) nil)
+                      ys
+                      (cons (car xs) (append (cdr xs) ys) )
+                    )
+                  )
+         );
+         
+  DEFINE (rotate, (lambda (n xs)
+                    (if (= (car xs) nil)
+                      ()
+                      (append (drop n xs) (take n xs))
+                    )
+                  )    
+  );         
+
+
+//  check if pin4 is 1 - if so put light on
+//        if pin4 is 0   put light off
+
+  DEFINE (flkr, (lambda ()
+                     (cond
+                       ((eq (in 2) 0) (quote(1 2 3)))
+                       ((eq (in 2) 1) (quote(a b c)))
+                       (t             (quote(x)))   
+                     )
+                   )
+         );
+
+  // (interrupt 0 2)
+// (at -5000 (lambda () (princ (flkr))))
+// (at -5000 (lambda () (updateClicks)))
+
+//  (at -7000 (lambda () (princ buttonClickCount)))
+
+  DEFINE (zs, (quote(0 1 2 3 4 5 6 7 8 9)));
+  //(at -10000 (lambda () (princ (take buttonClickCount zs))))
+
+  //(at -5000 (lambda () (princ (rotate buttonClickCount zs))))
+
+  // (at 5000 (lambda () (pp (rotate buttonClickCount zs))))
+//  DEFINE (rot1,
+//
+//	  (at -5000 (lambda () ((
+//			  	  	  	  	  // princ
+//							  pp (rotate buttonClickCount zs)
+//							)
+//			  //(terpri)
+//			  	  	  	   )
+//				)
+//	  )
+//  );
+
+//  DEFINE (rots,
+//		  	  (lambda ()
+//		  	    (at -5000 (lambda ()
+//		  	    			(
+//		  	    			  (princ (rotate buttonClickCount zs))
+//							  //(terpri)
+//							)
+//		  	    		  )
+//		  	    )
+//		  	  )
+//	     );
+
+
+  // prints multiple items (or not!)
+  // (mapcar eval '((princ "2") (terpri)))
+
+  //(at 5000 (lambda () (pp (rotate buttonClickCount zs))))
+
+// take head of xs, cons to append of tail xs and ys, recurse ...
+
+//  DEFINE("*bc00*", 0);
+//  DEFINE("*bc02*", 0);
+//  DEFINE("*bc04*", 0);
+//
+//  DEFINE("*ie00*", 0);
+//  DEFINE("*ie02*", 0);
+//  DEFINE("*ie04*", 0);
+
+//check for button click value and
+//  display line1 using button click value as rotate
+
+//  DEFINE(setupInterrupts,
+//		  (lambda ()
+//			(cond ((eq *bc00* nil)
+//				   (list (set! *bc00* 0)
+//						 (set! *bc02* 0)
+//						 (set! *bc04* 0)
+//						 (set! *ie00* 0)
+//						 (set! *ie02* 0)
+//						 (set! *ie04* 0)
+//						 (interrupt 4 3)
+//				   )
+//				  )
+//			)
+//	      )
+//	    );
+
+//  DEFINE(setupInterrupts,
+//		  (lambda (n)
+//			(cond ((eq *bc00* nil)
+//				   (list (set! *bc00* 0)
+//						 (set! *bc02* 0)
+//						 (set! *bc04* 0)
+//						 (set! *ie00* 0)
+//						 (set! *ie02* 0)
+//						 (set! *ie04* 0)
+//						 (interrupt 4 n)
+//				   )
+//				  )
+//			)
+//	      )
+//	    );
+
+  // revised to use define
+  DEFINE(setupInterrupts,
+		  (lambda ()
+			(cond ((eq *bc00* nil)
+				   (list (define *bc00* 0)
+						 (define *bc02* 0)
+						 (define *bc04* 0)
+						 (define *ie00* 0)
+						 (define *ie02* 0)
+						 (define *ie04* 0)
+						 (interrupt 4 3)
+				   )
+				  )
+			)
+	      )
+	    );
+
+  // (progn (define *bc00* 0) (define *bc02* 0) (define *bc04* 0) (define *ie00* 0) (define *ie02* 0) (define *ie04* 0) (interrupt 4 3))
+
+  // initialises int vars
+  // (list (set! *bc00* 0) (set! *bc02* 0) (set! *bc04* 0) (set! *ie00* 0) (set! *ie02* 0) (set! *ie04* 0))
+
+  // errors - can paste them in one by one without error, though
+  DEFINE(setupIntFns,
+		  (lambda ()
+		    (
+		      (list
+		    	(define ies  (lambda ()  (list *ie00* *ie02* *ie04*)))
+				(define bcs  (lambda ()  (list *bc00* *bc02* *bc04*)))
+				(define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*))))
+				(define clks (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*))))
+			  )
+			)));
+
+  //  set up fns in lisp env
+  //  (list (define ies  (lambda ()  (list *ie00* *ie02* *ie04*))) (define bcs  (lambda ()  (list *bc00* *bc02* *bc04*))) (define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*)))) (define clks (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*)))))
+  //  (progn (define ies  (lambda ()  (list *ie00* *ie02* *ie04*))) (define bcs  (lambda ()  (list *bc00* *bc02* *bc04*))) (define ie   (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*)))) (define clks (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*)))))
+
+
+  // COPIES for convenience
+  // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (intChange n 0))))))
+
+  // test
+  // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (princ n) (intChange n 0))))))
+  // (define rota1 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (pp (rotate (clks n) zs)) (intChange n 0))))))
+  // (define rota2 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (intChange n 0) (pp (rotate (clks n) zs)) )))))
+
+  //
+  //
+  // alternative version of PRIM intChange
+   // (define intChg (lambda (n v) (cond ((eq n 0) (set! *ie00* v)) ((eq n 2) (set! *ie02* v)) ((eq n 4) (set! *ie04* v)))))
+
+  // (define rota3 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (intChg n 0) (pp (rotate (clks n) zs)) )))))
+
+  // progn version
+  // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
+
+  // (at -10000 (lambda () (rota 4)))
+  // (at -10000 (lambda () (rota1 4)))
+  // (at -10000 (lambda () (rota2 4)))
+  // (at -10000 (lambda () (rota3 4)))
+
+
+  //  DEFINE (ies, (lambda () (list *ie00* *ie02* *ie04*)));
+  //  DEFINE (bcs, (lambda () (list *bc00* *bc02* *bc04*)));
+
+      //(define ies (lambda () (list *ie00* *ie02* *ie04*)))
+      //(define bcs (lambda () (list *bc00* *bc02* *bc04*)))
+
+  //(define ies (lambda () (mapcar princ (list *ie00* *ie02* *ie04*))))
+
+
+
+  // works - changes result as var changes
+//  DEFINE (ie, (lambda (n)
+//                     (cond
+ //                      ((eq n 0) *ie00*)
+  //                     ((eq n 2) *ie02*)
+   //                    (t        *ie04*)
+    //                 )
+     //              )
+      //   );
+  // (define ie (lambda (n) (cond ((eq n 0) *ie00*) ((eq n 2) *ie02*) (t *ie04*))))
+
+//  (define cks (lambda (n) (cond ((eq n 0) (eval *bc00*)))))
+//  (define cks (lambda (n) (cond ((eq n 0) (eval 1)))))
+//  (define cks2 (lambda (n) (cond ((eq n 0) (eval 1)))))
+
+  // works
+//  DEFINE (clks, (lambda (n)
+ //                     (cond
+    //                    ((eq n 0) *bc00*)
+       //                 ((eq n 2) *bc02*)
+          //              (t        *bc04*)
+             //         )
+                //    )
+ //         );
+
+// (define clks (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*))))
+
+  // (lambda (n) (cond ((eq n 0) *bc00*) ((eq n 2) *bc02*) (t *bc04*)))
+
+  // short test version
+//   (define ck4 (lambda (n) (cond (eq n 0) (eval *bc00*))))
+
+  //(define cks (lambda (n) (cond ((eq n 0) *bc00*))))
+
+
+  //(cond ((not(eq ie00 0)) (rotate buttonClickCount zs)))
+
+  // NOTE need to merge two fns below
+  // on timer, show rotate if button clicked
+//  (at -10000 (lambda () (cond ((not(eq ie00 0)) (pp (rotate buttonClickCount zs))))))
+
+  // show rotate then turn off change flag
+  //(cond ((not (eq (pp (rotate buttonClick00Count zs)) 0)) (intChange 0 0)))
+
+// NOTE revised as ie00 starts at nil, not zero
+  // works
+    //(at -10000 (lambda () (cond ((not(eq ie00 0)) (cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange 0 0)))))))
+
+  // works, uses list to initiate multiple events sequentially
+  // (rather than always true conditional above
+//  DEFINE(rotateOnClick,
+//		  (lambda ()
+//			(cond ((not(eq *ie00* 0)) (list (pp (rotate *bc00* zs))
+//					                            (intChange 0 0)
+//					                      )
+//				  )
+//			)
+//	      )
+//	    );
+
+  // (at -1000 rotateOnClick)
+  // (at -10000 (lambda () (cond ((not(eq *ie00* 0)) (list (pp (rotate *bc00* zs)) (intChange 0 0))))))
+
+  // currently causes a reset (run out of conses) if no clicks
+  //	resolved, caused by guard clause succeeding if
+  //	relevant var is not initialised
+  DEFINE(rota,
+		  (lambda (n)
+			(cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))
+					                            (intChange n 0)
+					                      )
+				  )
+				  (t nil)
+			)
+	      )
+	    );
+
+  // test code - also fails to reset correct pin
+  // (define ic (lambda (n) (intChange n 0)))
+  // (at -20000 (lambda () (ic 4)))
+
+  // ISSUE
+
+  // misc tests
+  // (define ic (lambda (m n o) (intChange m n o)))
+  // (define ic2 (lambda (m n o) (intChange *ie04* n o)))
+  // (define ic3 (lambda (m n o) (intChange *ie04* 1 2)))
+
+  // works
+  // (define sb  (lambda (n) (set! *ie04* n))) - hard-coded global
+  // (define sb4 (lambda (s n) (set! *ie04* n))) - hard-coded global
+  // (define ic5 (lambda (n) (intChange 4 n))) - hard-coded param
+
+  //fails (first param seems to be envp - not so sure now)
+  // (define sb2 (lambda (s n) (set! s n)))
+
+  // guessing
+  // (define sb3 (lambda (x s n) (intChange x s n)))
+
+
+  // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
+
+  // progn version
+  // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
+
+  // (at -1000 (lambda () (rota 4)))
+
+
+  // pass *ie0x* as param
+		// (define ie (lambda (i0) (eq i0 0)))
+
+  //(define ie4 (ie  *ie04*))
+
+  //  DEFINE("*bc00*", 0);
+  //  DEFINE("*bc02*", 0);
+  //  DEFINE("*bc04*", 0);
+
+  //  SET("*bc00*", 0);
+  //  SETQc("*bc02*", 0);
+  //  SETQ("*bc04*", 0);
+
+
+
+//  (cons line1 ((rotate buttonClickCount line1)))
+  // creates - (don't know if 2 3 1 is a list)
+//		((1 2 3) 2 3 1)
+
+//  (list line1  (rotate buttonClickCount line1))
+//		  creates
+//		((1 2 3) (2 3 1))
+
+  // create loop - works
+  DEFINE(buildLoop,
+		  (lambda (xs xxs n)
+			(cond ((eq n 0) (cons xs xxs))
+				  (t 		(cons (rotate n xs) (buildLoop xs xxs (- n 1)) ))
+			)
+		  )
+		);
+
+  // works
+//  (define buildLoop (lambda (xs xxs n) (cond ((eq n 0) (cons xs xxs)) (t (cons (rotate n xs) (buildLoop line1 xxs (- n 1)) )))))
+
+
+//		(buildLoop line1 () 0)
+  //(buildLoop line1 () ( - (length line1) 1))
+
+  //
+  //traffic light, repeat pattern
+  //
+
+    // pins
+    // d2 - set with gpio 4
+    // led - set with gpio 2
+
+    
+>>>>>>> origin/int-refactor
 // POSSIBLE encodings to save memory:
     // symbol: fibo
     // "fibo" 

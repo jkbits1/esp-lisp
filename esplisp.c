@@ -222,6 +222,8 @@ int clock_ms() {
 // issue:
 //   https://github.com/SuperHouse/esp-open-rtos/issues/75
 
+void interrupt_init(int pins[], int changeType);
+
 void user_init(void) {
     lastTick = xTaskGetTickCount();
     startMem = lastMem = xPortGetFreeHeapSize();
@@ -234,10 +236,24 @@ void user_init(void) {
     // this doesn't have enough stack!
     //lispTask(NULL); return;
 
+ //if (tsqueue == NULL ) {
+  //        tsqueue = xQueueCreate(2, sizeof(uint32_t));
+  //}
+
     // for now run in a task, in order to allocate a bigger stack
     // 1024 --> (fibo 13)
     // 2048 --> (fibo 30) ???
-    xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 2, NULL);
+//    interrupt_init(4, 1);
+ //   interrupt_init(2, 2);
+    xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 3, NULL);
+    //interrupt_init(0, 2);
+//    xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 5, NULL);
+    //xTaskCreate(lispTask, (signed char *)"lispTask", 2048, NULL, 2, NULL);
+    //xTaskCreate(&int02Taska, (signed char *)"int02Taska", 256, &tsqueue, 1, NULL);
+//    xTaskCreate(&int04Taska, (signed char *)"int04Taska", 256, &tsqueue, 2, NULL);
+
+    //interrupt_init(0, 2);
+
 }
 
 int process_file(char* filename, process_input process) {
