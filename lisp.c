@@ -3257,6 +3257,18 @@ void maybeGC() {
 extern int gpioPinCount;
 void checkInterruptQueue();
 
+// lisp vars exist at global level, so passing C global env ptr
+// (like idle does with atrun)
+void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
+
+	updateButtonClickCount(global_envp, buttonNum);
+
+	lisp pin = mkint(buttonNum);
+	lisp val = mkint(buttonCountChanged);
+
+	intChange(global_envp, pin, val);
+}
+
 void handleButtonEvents() {
 
 	checkInterruptQueue();
@@ -3269,18 +3281,6 @@ void handleButtonEvents() {
 			buttonCountChanged[pin] = 0;
 		}
 	}
-}
-
-// lisp vars exist at global level, so passing C global env ptr
-// (like idle does with atrun)
-void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
-
-	updateButtonClickCount(global_envp, buttonNum);
-
-	lisp pin = mkint(buttonNum);
-	lisp val = mkint(buttonCountChanged);
-
-	intChange(global_envp, pin, val);
 }
 
 PRIM atrun(lisp* envp);
