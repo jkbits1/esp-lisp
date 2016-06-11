@@ -784,8 +784,18 @@ PRIM in(lisp pin) {
     return mkint(gpio_read(getint(pin)));
 }
 
-// NOTE pin param is currently redundant
 PRIM interrupt(lisp pin, lisp changeType) {
+	int pins[16] = {0};
+
+	pins[getint(pin)] = 1;
+
+	interrupt_init(pins, getint(changeType));
+
+    return pin;
+}
+
+// pin group is hard-coded for now
+PRIM interruptGroup(lisp changeType) {
 	int pins[16] = {0};
 
 	pins[0] = 1;
@@ -794,10 +804,8 @@ PRIM interrupt(lisp pin, lisp changeType) {
 
 	interrupt_init(pins, getint(changeType));
 
-    return pin;
+    return changeType;
 }
-
-//    gpio_set_interrupt(gpio, int_type);
 
 // flags and counts declared in interrupt.c
 extern int buttonCountChanged[];
@@ -834,11 +842,9 @@ void createSymbolName(
 }
 
 void setButtonClickSymbolValue(lisp* envp, int pin, lisp count) {
-
 	char  symbolName[symbolNameLen];
 
 	createSymbolName(symbolName, "*bc0", pin);
-
 	_setbang(envp, symbol(symbolName), count);
 }
 
@@ -848,11 +854,15 @@ void updateButtonClickCount(lisp* envp, int pin) {
   setButtonClickSymbolValue(envp, pin, count);
 }
 
+// NOTE this has the side effect of resetting
+// 		the C var for buttonclickcount to zero
 PRIM resetButtonClickCount(lisp* envp, lisp pin) {
   int  pinNum = getint(eval(pin, envp));
   lisp zero = mkint(0);
 
   setButtonClickSymbolValue(envp, pinNum, zero);
+
+  buttonClickCount[pinNum] = 0;
 
   return zero;
 }
@@ -3058,6 +3068,7 @@ lisp lisp_init() {
 
     // interrupts support
     DEFPRIM(interrupt, 2, interrupt);
+    DEFPRIM(interruptGroup, 1, interruptGroup);
     DEFPRIM(resetClicks, -1, resetButtonClickCount);
     DEFPRIM(intChange, -2, intChange);
 
@@ -3206,7 +3217,8 @@ void handleButtonEvents() {
 
 	checkInterruptQueue();
 
-	for (int pin = 0; pin < gpioPinCount; pin++) {
+	int pin;
+	for (pin = 0; pin < gpioPinCount; pin++) {
 
 		if (buttonCountChanged[pin] != 0) {
 			updateButtonEnvVars(pin, buttonCountChanged[pin]);

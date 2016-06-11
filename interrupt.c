@@ -56,7 +56,6 @@ const int gpioPinCount = 16;
 
 static xQueueHandle tsqueue = NULL;
 
-
 // flags for count change, reset when lisp env var is updated
 int buttonCountChanged[16] = {0};
 int buttonClickCount  [16] = {0};
@@ -100,8 +99,6 @@ void checkInterruptQueue()
 
 void interrupt_init(int pins[gpioPinCount], int changeType)
 {
-	// printf("pin %d chgType %d", pin, changeType);
-
 	// in effect, this is a no-op - the default cannot be changed,
     // but may expand on this code later
 	if (changeType == 2) {
@@ -116,6 +113,8 @@ void interrupt_init(int pins[gpioPinCount], int changeType)
 	}
 
     if (tsqueue == NULL ) {
+    	// queue size of 2 items is arbitrary,
+    	// but has been adequate so far
 	    tsqueue = xQueueCreate(2, sizeof(struct ButtonMessage));
 	}
 }
