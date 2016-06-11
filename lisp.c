@@ -849,10 +849,15 @@ void updateButtonClickCount(lisp* envp, int pin) {
 }
 
 PRIM resetButtonClickCount(lisp* envp, lisp pin) {
+	printf("raw pin %u ", pin);
   int  pinNum = getint(eval(pin, envp));
+	printf ("pin %d ", pinNum);
+	printf("PIN"); princ(pin);
   lisp zero = mkint(0);
 
   setButtonClickSymbolValue(envp, pinNum, zero);
+
+  buttonClickCount[pinNum] = 0;
 
   return zero;
 }
@@ -3206,7 +3211,8 @@ void handleButtonEvents() {
 
 	checkInterruptQueue();
 
-	for (int pin = 0; pin < gpioPinCount; pin++) {
+        int pin;
+	for (pin = 0; pin < gpioPinCount; pin++) {
 
 		if (buttonCountChanged[pin] != 0) {
 			updateButtonEnvVars(pin, buttonCountChanged[pin]);
