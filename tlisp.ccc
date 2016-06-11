@@ -25,8 +25,8 @@ void interrupt_init(int pins[], int changeType) {}
 
 void checkInterruptQueue();
 
-int buttonCountChanged = 0;
-int buttonPressCount = 0;
+int buttonCountChanged[16] = {0};
+int buttonClickCount  [16] = {0};
 
 unsigned int lastClock = 0;
 int lastMem = 0;
