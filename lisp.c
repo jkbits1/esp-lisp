@@ -860,10 +860,10 @@ void updateButtonClickCount(lisp* envp, int pin) {
 // NOTE this has the side effect of resetting
 // 		the C var for buttonclickcount to zero
 PRIM resetButtonClickCount(lisp* envp, lisp pin) {
-	printf("raw pin %u ", pin);
+//	printf("raw pin %u ", pin);
   int  pinNum = getint(eval(pin, envp));
-	printf ("pin %d ", pinNum);
-	printf("PIN"); princ(pin);
+//	printf ("pin %d ", pinNum);
+//	printf("PIN"); princ(pin);
   lisp zero = mkint(0);
 
   setButtonClickSymbolValue(envp, pinNum, zero);
@@ -877,19 +877,19 @@ PRIM print(lisp x);
 
 // changes lisp var only
 PRIM intChange(lisp* envp, lisp pin, lisp v) {
-	printf("raw pin %u raw v %u ", pin, v);
+	// printf("raw pin %u raw v %u ", pin, v);
 		  int pinNum = getint(eval(pin, envp));
-	int val = getint(v);
-	printf ("pin %d val %d ", pinNum, val);
+	// int val = getint(v);
+	//printf ("pin %d val %d ", pinNum, val);
 
-	printf("PIN"); princ(pin);
-	printf("v"); print(v);
+//	printf("PIN"); princ(pin);
+//	printf("v"); print(v);
 
 	char  symbolName[symbolNameLen];
 
 	createSymbolName(symbolName, "*ie0", pinNum);
 
-	printf("ic - sym name %s", symbolName);
+//	printf("ic - sym name %s", symbolName);
 
 	_setbang(envp, symbol(symbolName), v);
 
