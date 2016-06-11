@@ -82,6 +82,9 @@
 #include <errno.h>
 #include <setjmp.h>
 
+// added for interrupt handling
+// #include "queue.h"
+
 #ifndef UNIX
   #include "FreeRTOS.h"
 
@@ -869,7 +872,6 @@ PRIM resetButtonClickCount(lisp* envp, lisp pin) {
 
 PRIM print(lisp x);
 
-// changes lisp var only
 PRIM intChange(lisp* envp, lisp pin, lisp v) {
 	printf("raw pin %u raw v %u ", pin, v);
 		  int pinNum = getint(eval(pin, envp));
@@ -969,8 +971,6 @@ static void response(int req, char* method, char* path) {
 // (web 8080 (lambda (r w s m p) (princ w) (princ " ") (princ s) (princ " ") (princ m) (princ " ") (princ p) (terpri) "FISH-42"))
 // ' | ./run
 
-PRIM _setbang(lisp* envp, lisp name, lisp v);
-
 int web_socket = 0;
 
 int web_one() {
@@ -1039,6 +1039,7 @@ PRIM primapply(lisp ff, lisp args, lisp* envp, lisp all, int noeval) {
     // these special cases are redundant, can be done at general solution
     // but for optimization we extracted them, it improves speed quite a lot
     if (n == 2) { // eq/plus etc
+// printf("fn 2");
         lisp (*fp)(lisp,lisp) = GETPRIMFUNC(ff);
         return (*fp)(e(car(args), envp), e(car(cdr(args)), envp)); // safe!
     }
@@ -1322,6 +1323,20 @@ lisp _setqqbind(lisp* envp, lisp name, lisp v, int create);
     
 inline PRIM _setqq(lisp* envp, lisp name, lisp v) {
     _setqqbind(envp, name, nil, 0);
+
+    // NOTE - this code has been added to fully support scheduled tasks    
+    if (eq (symbol("*at*"), name) ) {
+        lisp bind = assoc(name, *envp);
+
+        if (!bind) {
+          bind = cons(name, nil);
+
+          *envp = cons(bind, *envp);
+        }
+
+        setcdr(bind, v);
+    }
+
     return v;
 }
 // magic, this "instantiates" an inline function!
@@ -2440,6 +2455,7 @@ PRIM atrun(lisp* envp) {
         }
         prev = lst;
         lst = cdr(lst);
+
         //if (!lst) terpri();
     }
     return nil;
@@ -3228,6 +3244,35 @@ void handleButtonEvents() {
 }
 
 PRIM atrun(lisp* envp);
+
+// lisp vars exist at global level,
+// so passing C global env ptr (like
+void updateButtonEnvVars(int buttonNum, int buttonCountChanged) {
+
+	updateButtonClickCount(global_envp, buttonNum);
+
+	lisp pin = mkint(buttonNum);
+	lisp val = mkint(buttonCountChanged);
+
+	intChange(global_envp, pin, val);
+}
+
+void checkInterruptQueue();
+
+extern int gpioPinCount;
+
+void checkButtonClickCounts() {
+
+	checkInterruptQueue();
+
+	for (int pin = 0; pin < gpioPinCount; pin++) {
+
+		if (buttonCountChanged[pin] != 0) {
+			updateButtonEnvVars(pin, buttonCountChanged[pin]);
+			buttonCountChanged[pin] = 0;
+		}
+	}
+}
 
 PRIM idle(int lticks) {
     // 1 000 000 == 1s for x61 laptop
