@@ -23,7 +23,9 @@ int  gpio_read(int pin) { return 0; }
 
 void interrupt_init(int pins[], int changeType) {}
 
-void checkInterruptQueue();
+void checkInterruptQueue() {}
+
+const int gpioPinCount = 16;
 
 int buttonCountChanged[16] = {0};
 int buttonClickCount  [16] = {0};
