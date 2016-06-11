@@ -810,45 +810,11 @@ PRIM interruptGroup(lisp changeType) {
     return changeType;
 }
 
-// flags and counts declared in interrupt.c
-extern int buttonCountChanged[];
-extern int buttonClickCount  [];
-
 PRIM _setbang(lisp* envp, lisp name, lisp v);
-
-const char symbolNameLen = 25;
-
-void createSymbolName(
-		char symbolName[symbolNameLen],
-		char *pSymbolNameStub,
-		int pinNum) {
-
-	int len = strlen(pSymbolNameStub);
-
-	char numChar = 0;
-	char asciiOffset = 0;
-
-	memset(symbolName, '\0', symbolNameLen);
-
-	strcpy(symbolName, pSymbolNameStub);
-
-	if (pinNum >= 10) {
-	    asciiOffset = 10;
-
-		symbolName[len-1] = '1';
-	}
-
-	numChar = '0' + (pinNum - asciiOffset);
-
-	symbolName[len] = numChar;
-	symbolName[len + 1] = '*';
-}
 
 // flags and counts declared in interrupt.c
 extern int buttonCountChanged[];
 extern int buttonClickCount  [];
-
-PRIM _setbang(lisp* envp, lisp name, lisp v);
 
 const char symbolNameLen = 25;
 
