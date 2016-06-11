@@ -3442,7 +3442,7 @@ void init_library(lisp* envp) {
     //
     // NOTE *ie0x* vars are interrupt event flags
     //      *bc0x* vars are button click counts
-    DEFINE(setupInterrupts,
+    DEFINE(setupInterrupt,
   		  (lambda ()
   			(cond ((eq *bc00* nil)
   				   (list (define *bc00* 0)
