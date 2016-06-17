@@ -3469,8 +3469,18 @@ void init_library(lisp* envp) {
   // (define rc (lambda (n)   (resetClicks n)))
 
   // example use of interrupt behaviour
-  // (define testInt (lambda (n) (cond ((not(eq (ie n) 0)) (list (print (clks n)) (ic n 0))))))
+  // (define testInt (lambda (n) (cond ((not(eq (ie n) 0)) (list (princ "pin") (print n) (print (clks n)) (ic n 0))))))
   // (at -10000 (lambda () (testInt 4)))
+
+  // (define red   (lambda (n) (out 12 n)))
+  // (define amber (lambda (n) (out 0 n)))
+  // (define green (lambda (n) (out 5 n)))
+
+  // (define lights (lambda (m n o) (list (red m) (amber n) (green o))))
+
+  // (define stopp (lambda () (lights 1 0 0)))
+  // (define ready (lambda () (lights 1 1 0)))
+  // (define go    (lambda () (lights 0 0 1)))
 
 // POSSIBLE encodings to save memory:
     // symbol: fibo
