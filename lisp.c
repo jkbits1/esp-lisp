@@ -3245,22 +3245,23 @@ int lispreadchar(char *chp) {
 int libLoaded = 0;
 
 int currentDefine = 0;
-int defineCount = 34;
+int defineCount = 35;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
-  "(define redl   (lambda (n) (out 12 n)))",
-  "(define amberl (lambda (n) (out 0 n)))",
-  "(define greenl (lambda (n) (out 5 n)))",
+  "(define redl   (lambda () (out 12 1)))",
+  "(define amberl (lambda () (out 0 1)))",
+  "(define greenl (lambda () (out 5 1)))",
+  "(define clearl (lambda () (list (redl 0) (amberl 0) (greenl 0) )))",
   "(define lights (lambda (m n o) (list (red m) (amber n) (green o))))",
   "(define stopl  (lambda () (lights 1 0 0)))",
   "(define readyl (lambda () (lights 1 1 0)))",
   "(define gol    (lambda () (lights 0 0 1)))",
   "(define slowl  (lambda () (lights 0 0 1)))",
-  "(define stopc  '(red))",
-  "(define readyc '(red amber))",
-  "(define goc    '(green))",
-  "(define slowc  '(amber))",
+  "(define stopc  '(redl))",
+  "(define readyc '(redl amberl))",
+  "(define goc    '(greenl))",
+  "(define slowc  '(amberl))",
   "(define states '(stopc readyc goc slowc))",
   "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
   "(define fst (lambda (xs) (car xs)) )",
@@ -3286,6 +3287,11 @@ char *pDefines[] = {
 
 int noFree = 0;
 
+//  "(define redl   (lambda (n) (out 12 n)))",
+//  "(define amberl (lambda (n) (out 0 n)))",
+//  "(define greenl (lambda (n) (out 5 n)))",
+
+
 //(define incf (lambda (m n) (set s (+ n 1))))
 //(define incf (lambda (m) (set m (+ m 1))))
 //(define showf (lambda (m) (princ m)))
@@ -3307,8 +3313,14 @@ int noFree = 0;
 
 //NOTES
 //on interrupt increment stNum
+//  "(define (int02 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
+//  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
+
+//  "(define (int02 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
+//  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
 
 //(define changeLights (lambda () (list (incf stNum) (showlights))))
+
 
 //get cols for stNum and set lights
 
