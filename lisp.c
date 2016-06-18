@@ -3245,7 +3245,7 @@ int lispreadchar(char *chp) {
 int libLoaded = 0;
 
 int currentDefine = 0;
-int defineCount = 19;
+int defineCount = 20;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
