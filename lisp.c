@@ -3245,15 +3245,23 @@ int lispreadchar(char *chp) {
 int libLoaded = 0;
 
 int currentDefine = 0;
-int defineCount = 26;
+int defineCount = 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
-  "(define stopp '(red))",
-  "(define ready '(red amber))",
-  "(define go    '(green))",
-  "(define slow  '(amber))",
-  "(define states '(stopp ready go slow))",
+  "(define redl   (lambda (n) (out 12 n)))",
+  "(define amberl (lambda (n) (out 0 n)))",
+  "(define greenl (lambda (n) (out 5 n)))",
+  "(define lights (lambda (m n o) (list (red m) (amber n) (green o))))",
+  "(define stopl  (lambda () (lights 1 0 0)))",
+  "(define readyl (lambda () (lights 1 1 0)))",
+  "(define gol    (lambda () (lights 0 0 1)))",
+  "(define slowl  (lambda () (lights 0 0 1)))",
+  "(define stopc  '(red))",
+  "(define readyc '(red amber))",
+  "(define goc    '(green))",
+  "(define slowc  '(amber))",
+  "(define states '(stopc readyc goc slowc))",
   "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
   "(define fst (lambda (xs) (car xs)) )",
   "(define snd (lambda (xs) (car (cdr xs))) )",
@@ -3297,9 +3305,13 @@ int noFree = 0;
 // (define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))
 
 
+//NOTES
+//on interrupt increment stNum
 
-// (define incf (lambda (m n) (set m n)))
-// (incf 'stNum 4)
+//(define changeLights (lambda () (list (incf stNum) (showlights))))
+
+//get cols for stNum and set lights
+
 
 //(define lightsByStateItem (lambda (n) (
 //  (cond
@@ -3308,15 +3320,16 @@ int noFree = 0;
 //  )
 //)))
 
-  // (define red   (lambda (n) (out 12 n)))
-  // (define amber (lambda (n) (out 0 n)))
-  // (define green (lambda (n) (out 5 n)))
+  // (define redl   (lambda (n) (out 12 n)))
+  // (define amberl (lambda (n) (out 0 n)))
+  // (define greenl (lambda (n) (out 5 n)))
 
   // (define lights (lambda (m n o) (list (red m) (amber n) (green o))))
 
-  // (define stopp (lambda () (lights 1 0 0)))
-  // (define ready (lambda () (lights 1 1 0)))
-  // (define go    (lambda () (lights 0 0 1)))
+  // (define stopl  (lambda () (lights 1 0 0)))
+  // (define readyl (lambda () (lights 1 1 0)))
+  // (define gol    (lambda () (lights 0 0 1)))
+  // (define slowl  (lambda () (lights 0 0 1)))
 
   // experiments with converting haskell/elm adts
 
