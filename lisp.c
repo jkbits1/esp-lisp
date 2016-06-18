@@ -3373,6 +3373,29 @@ void init_library(lisp* envp) {
 
 // snd - (define snd (lambda (xs) (car (cdr xs))) )
 
+// tst -
+(define tst (lambda (x) ( if (< 0 x) t nil )))
+(define tt (lambda (x) t ))
+
+//(filter tst '(1 2 3) ())
+(define filterH (lambda (f xs ys)
+(if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))
+))
+
+(define rev (lambda (xs) (filterH tt xs ())))
+
+(define filter (lambda (f xs) (rev (filterH f xs ())) ))
+
+
+(filter tt '(1 2 3) ())
+
+filter
+f xs == nil, nil
+f (x : xs) = (cond ((f x) (cons x nil) ) )
+
+
+
+
 
 // POSSIBLE encodings to save memory:
     // symbol: fibo
