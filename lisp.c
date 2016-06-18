@@ -3247,13 +3247,14 @@ int libLoaded = 0;
 int currentDefine = 0;
 int defineCount = 35;
 
+
 char *pDefines[] = {
   "(define cols '(red amber green))",
   "(define redl   (lambda () (out 12 1)))",
   "(define amberl (lambda () (out 0 1)))",
   "(define greenl (lambda () (out 5 1)))",
-  "(define clearl (lambda () (list (redl 0) (amberl 0) (greenl 0) )))",
   "(define lights (lambda (m n o) (list (red m) (amber n) (green o))))",
+  "(define clearl (lambda () (lights 0 0 0 )))",
   "(define stopl  (lambda () (lights 1 0 0)))",
   "(define readyl (lambda () (lights 1 1 0)))",
   "(define gol    (lambda () (lights 0 0 1)))",
@@ -3290,6 +3291,7 @@ int noFree = 0;
 //  "(define redl   (lambda (n) (out 12 n)))",
 //  "(define amberl (lambda (n) (out 0 n)))",
 //  "(define greenl (lambda (n) (out 5 n)))",
+//  "(define clearl (lambda () (list (redl 0) (amberl 0) (greenl 0) )))",
 
 
 //(define incf (lambda (m n) (set s (+ n 1))))
