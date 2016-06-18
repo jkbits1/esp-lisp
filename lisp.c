@@ -3245,7 +3245,7 @@ int lispreadchar(char *chp) {
 int libLoaded = 0;
 
 int currentDefine = 0;
-int defineCount = 20;
+int defineCount = 22;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3268,10 +3268,18 @@ char *pDefines[] = {
   "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
   "(define initialStateNum 1)",
   "(define stNum initialStateNum)",
-  "(define red   (lambda (n) (out 12 n)))"
+  "(define red   (lambda (n) (out 12 n)))",
+  "(define (int02 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
 };
 
 int noFree = 0;
+
+//(define lightsByStateItem (lambda (n) (
+//  (cond
+//    ()
+//    (t red)
+//  )
+//)))
 
   // (define red   (lambda (n) (out 12 n)))
   // (define amber (lambda (n) (out 0 n)))
