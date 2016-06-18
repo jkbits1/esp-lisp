@@ -3272,6 +3272,7 @@ char *pDefines[] = {
   "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
   "(define rev (lambda (xs) (filterH tt xs ())))",
   "(define filter (lambda (f xs) (rev (filterH f xs ()))))",
+  "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define getNlsNum (lambda (nls) (snd nls)))",
   "(define stateByNum (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))",
   "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
@@ -3284,8 +3285,7 @@ char *pDefines[] = {
   "(define showlights (lambda () (mapcar setl (stateItem stNum))))",
   "(define changeLights (lambda () (list (incf stNum) (showlights))))",
   "(define (int02 pin clicks count ms) (changeLights))",
-  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
-  "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))"
+  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
 };
 
 int noFree = 0;
