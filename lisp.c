@@ -3251,6 +3251,8 @@ char *p[] = {  "(define tst (lambda (n) (eq n 0)))",
                "(define tst2 (lambda (n) (eq n 0)))"
 };
 
+int noFree = 0;
+
 void readeval(lisp* envp) {
     help(envp);
 
@@ -3262,6 +3264,7 @@ void readeval(lisp* envp) {
           ln = p[0];
 
           libLoaded = 1;
+          noFree = 1;
         }
         else {
           ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
@@ -3326,7 +3329,12 @@ void readeval(lisp* envp) {
             //print_memory_info(1);
         }
 
-        free(ln);
+        if (noFree == 0) {
+          free(ln);
+        }
+        else {
+          noFree = 0;
+        }
     }
 
     printf("OK, bye!\n");
