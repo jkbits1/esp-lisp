@@ -3247,7 +3247,7 @@ int libLoaded = 0;
 int currentDefine = 0;
 int defineCount = 2;
 
-char *p[] = {  "(define tst (lambda (n) (eq n 0)))",
+char *pDefines[] = {  "(define tst (lambda (n) (eq n 0)))",
                "(define tst2 (lambda (n) (eq n 0)))"
 };
 
@@ -3260,10 +3260,14 @@ void readeval(lisp* envp) {
         global_envp = envp; // allow idle to gc
         char* ln = NULL;
 
+        // get items from
         if (libLoaded == 0) {
-          ln = p[0];
+          ln = pDefines[currentDefine++];
 
-          libLoaded = 1;
+          if (currentDefine == defineCount) {
+            libLoaded = 1;
+          }
+
           noFree = 1;
         }
         else {
