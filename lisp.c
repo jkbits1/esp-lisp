@@ -3252,7 +3252,7 @@ char *pDefines[] = {
   "(define redl   (lambda (n) (out 12 n)))",
   "(define amberl (lambda (n) (out 0 n)))",
   "(define greenl (lambda (n) (out 5 n)))",
-  "(define lights (lambda (m n o) (list (red m) (amber n) (green o))))",
+  "(define lights (lambda (m n o) (list (redl m) (amberl n) (greenl o))))",
   "(define clearl (lambda () (lights 0 0 0 )))",
   "(define stopl  (lambda () (lights 1 0 0)))",
   "(define readyl (lambda () (lights 1 1 0)))",
