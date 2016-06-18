@@ -3267,7 +3267,8 @@ char *pDefines[] = {
   "(define stateByNum (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))",
   "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
   "(define initialStateNum 1)",
-  "(define stNum initialStateNum)"
+  "(define stNum initialStateNum)",
+  "(define red   (lambda (n) (out 12 n)))"
 };
 
 int noFree = 0;
@@ -3310,7 +3311,6 @@ int noFree = 0;
 
 // (eq ( stateItem (stateByNum 2)) 'ready)
 
-// initialStateNum = 1
 // stNum = initialStateNum
 // buttonClick (fwd), increment stNum
 //   show lights for state
