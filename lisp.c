@@ -3242,6 +3242,8 @@ int lispreadchar(char *chp) {
     return c < 0 ? -1 : 1;
 }
 
+int libLoaded = 0;
+
 void readeval(lisp* envp) {
     help(envp);
 
@@ -3249,6 +3251,8 @@ void readeval(lisp* envp) {
         global_envp = envp; // allow idle to gc
         char* ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
         global_envp = NULL;
+
+        printf("ln %s", ln);
 
         if (!ln) {
             break;
