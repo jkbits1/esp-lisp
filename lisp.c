@@ -3283,7 +3283,7 @@ int noFree = 0;
 //(define showf (lambda (m) (princ m)))
 //(define showf (lambda (m) (princ (eval m))))
 
-(define showf (lambda (m) (princ (+ (eval m) 1))))
+//(define showf (lambda (m) (princ (+ (eval m) 1))))
 
 
 //(define incf (lambda (m) (+ m 1)))
@@ -3291,7 +3291,7 @@ int noFree = 0;
 
 
 // fails
-(define incf (lambda (m) (set m (+ (eval m) 1))))
+//(define incf (lambda (m) (set m (+ (eval m) 1))))
 
 // works - call as (inc 'a)
 // (define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))
