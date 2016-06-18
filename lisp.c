@@ -3244,12 +3244,30 @@ int lispreadchar(char *chp) {
 
 int libLoaded = 0;
 
+int currentDefine = 0;
+int defineCount = 2;
+
+char **p = [
+  "(define tst (lambda (n) (eq n 0)))",
+  "(define tst2 (lambda (n) (eq n 0)))"
+ ];
+
 void readeval(lisp* envp) {
     help(envp);
 
     while(1) {
         global_envp = envp; // allow idle to gc
-        char* ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+        char* ln = NULL;
+
+        if (libLoaded == 0) {
+          ln = p[0];
+
+          libLoaded = 1;
+        }
+        else {
+          ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+        }
+
         global_envp = NULL;
 
         printf("ln %s", ln);
