@@ -3245,7 +3245,7 @@ int lispreadchar(char *chp) {
 int libLoaded = 0;
 
 int currentDefine = 0;
-int defineCount = 35;
+int defineCount = 38;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3280,7 +3280,10 @@ char *pDefines[] = {
   "(define red   (lambda (n) (out 12 n)))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
-  "(define (int02 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
+  "(define setl (lambda (f) (f 1)))",
+  "(define showlights (lambda () (mapcar setl (stateItem stNum))))",
+  "(define changeLights (lambda () (list (incf stNum) (showlights))))",
+  "(define (int02 pin clicks count ms) (changeLights))",
   "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))"
 };
@@ -3311,13 +3314,16 @@ int noFree = 0;
 // works - call as (inc 'a)
 // (define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))
 
+//(define (int02 pin clicks count ms) (changeLights))
+//(define showlights (lambda () (mapcar setl (stateItem stNum))))
+//(define changeLights (lambda () (list (incf stNum) (showlights))))
 
 //NOTES
 //on interrupt increment stNum
 //  "(define (int02 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
 //  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
 
-//  "(define (int02 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
+//(define (int02 pin clicks count ms) (changeLights))
 //  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
 
 //(define changeLights (lambda () (list (incf stNum) (showlights))))
