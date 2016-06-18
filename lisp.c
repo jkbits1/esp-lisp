@@ -3247,10 +3247,9 @@ int libLoaded = 0;
 int currentDefine = 0;
 int defineCount = 2;
 
-char **p = [
-  "(define tst (lambda (n) (eq n 0)))",
-  "(define tst2 (lambda (n) (eq n 0)))"
- ];
+char *p[] = {  "(define tst (lambda (n) (eq n 0)))",
+               "(define tst2 (lambda (n) (eq n 0)))"
+};
 
 void readeval(lisp* envp) {
     help(envp);
