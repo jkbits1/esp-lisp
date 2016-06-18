@@ -3245,7 +3245,7 @@ int lispreadchar(char *chp) {
 int libLoaded = 0;
 
 int currentDefine = 0;
-int defineCount = 2;
+int defineCount = 12;
 
 char *pDefines[] = {
   "(define tst (lambda (n) (eq n 0)))",
