@@ -3242,13 +3242,41 @@ int lispreadchar(char *chp) {
     return c < 0 ? -1 : 1;
 }
 
+int libLoaded = 0;
+
+int currentDefine = 0;
+int defineCount = 2;
+
+char *pDefines[] = {  "(define tst (lambda (n) (eq n 0)))",
+               "(define tst2 (lambda (n) (eq n 0)))"
+};
+
+int noFree = 0;
+
 void readeval(lisp* envp) {
     help(envp);
 
     while(1) {
         global_envp = envp; // allow idle to gc
-        char* ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+        char* ln = NULL;
+
+        // get items from
+        if (libLoaded == 0) {
+          ln = pDefines[currentDefine++];
+
+          if (currentDefine == defineCount) {
+            libLoaded = 1;
+          }
+
+          noFree = 1;
+        }
+        else {
+          ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+        }
+
         global_envp = NULL;
+
+        printf("ln %s", ln);
 
         if (!ln) {
             break;
@@ -3305,7 +3333,12 @@ void readeval(lisp* envp) {
             //print_memory_info(1);
         }
 
-        free(ln);
+        if (noFree == 0) {
+          free(ln);
+        }
+        else {
+          noFree = 0;
+        }
     }
 
     printf("OK, bye!\n");
