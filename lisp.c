@@ -3247,11 +3247,86 @@ int libLoaded = 0;
 int currentDefine = 0;
 int defineCount = 2;
 
-char *pDefines[] = {  "(define tst (lambda (n) (eq n 0)))",
-               "(define tst2 (lambda (n) (eq n 0)))"
+char *pDefines[] = {
+  "(define tst (lambda (n) (eq n 0)))",
+  "(define tst2 (lambda (n) (eq n 0)))",
+  "(define states '(stopp ready go slow))",
+  "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
+  "(define fst (lambda (xs) (car xs)) )",
+  "(define snd (lambda (xs) (car (cdr xs))) )",
+  "(define statesNumbered (zip states '(1 2 3 4)) )",
+  "(define tst (lambda (x) ( if (< 0 x) t nil )))",
+  "(define tt (lambda (x) t ))",
+  "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
+  "(define rev (lambda (xs) (filterH tt xs ())))",
+  "(define filter (lambda (f xs) (rev (filterH f xs ()))))"
 };
 
 int noFree = 0;
+
+  // (define red   (lambda (n) (out 12 n)))
+  // (define amber (lambda (n) (out 0 n)))
+  // (define green (lambda (n) (out 5 n)))
+
+  // (define lights (lambda (m n o) (list (red m) (amber n) (green o))))
+
+  // (define stopp (lambda () (lights 1 0 0)))
+  // (define ready (lambda () (lights 1 1 0)))
+  // (define go    (lambda () (lights 0 0 1)))
+
+  // experiments with converting haskell/elm adts
+
+// any benefit to numbers instead of symbols?
+// ditto fn names
+// (define cols '(red amber green))
+// (car cols) // red
+// (eq (car cols) 'red) //t
+
+
+// (define stopp '(red))
+// (define ready '(red amber))
+// (define go    '(green))
+// (define slow  '(amber))
+
+// stopp // (red)
+// (car stopp) // red
+// (eq (car stopp) 'red) // equal works
+
+// (define states '(stopp ready go slow))
+
+// test code
+// (define zip (lambda (xs)
+// (cond ((eq (car xs) nil) nil)
+//       (t (cons (car xs) (zip (cdr xs)) )))
+// ))
+
+//filter (uses if for pattern matching)
+//f xs == nil, nil
+//f (x : xs) = (cond ((f x) (cons x nil) ) )
+//(filter tst '(1 2 3) ())
+//
+// (define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))
+// (define rev (lambda (xs) (filterH tt xs ())))
+// (define filter (lambda (f xs) (rev (filterH f xs ()))))
+
+// test version of stateByNum filter, uses hard-coded value
+// (define fstate (lambda (nls) (eq (getNlsNum nls) 1)))
+
+// (define getNlsNum (lambda (nls) (snd nls)))
+
+// (define stateByNum (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))
+
+//(eq (car (car (stateByNum 2))) 'ready)
+
+// (define stateItem (lambda (s) (car (car (stateByNum 2)))))
+
+// (eq ( stateItem (stateByNum 2)) 'ready)
+
+// initialStateNum = 1
+// stNum = initialStateNum
+// buttonClick (fwd), increment stNum
+//   show lights for state
+
 
 void readeval(lisp* envp) {
     help(envp);
