@@ -3245,7 +3245,7 @@ int lispreadchar(char *chp) {
 int libLoaded = 0;
 
 int currentDefine = 0;
-int defineCount = 22;
+int defineCount = 26;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3272,10 +3272,34 @@ char *pDefines[] = {
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
-  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
+  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
+  "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))"
 };
 
 int noFree = 0;
+
+//(define incf (lambda (m n) (set s (+ n 1))))
+//(define incf (lambda (m) (set m (+ m 1))))
+//(define showf (lambda (m) (princ m)))
+//(define showf (lambda (m) (princ (eval m))))
+
+(define showf (lambda (m) (princ (+ (eval m) 1))))
+
+
+//(define incf (lambda (m) (+ m 1)))
+//(define incf (lambda (m) (set m (+ m 1))))
+
+
+// fails
+(define incf (lambda (m) (set m (+ (eval m) 1))))
+
+// works - call as (inc 'a)
+// (define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))
+
+
+
+// (define incf (lambda (m n) (set m n)))
+// (incf 'stNum 4)
 
 //(define lightsByStateItem (lambda (n) (
 //  (cond
