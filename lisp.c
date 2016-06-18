@@ -3245,11 +3245,14 @@ int lispreadchar(char *chp) {
 int libLoaded = 0;
 
 int currentDefine = 0;
-int defineCount = 12;
+int defineCount = 19;
 
 char *pDefines[] = {
-  "(define tst (lambda (n) (eq n 0)))",
-  "(define tst2 (lambda (n) (eq n 0)))",
+  "(define cols '(red amber green))",
+  "(define stopp '(red))",
+  "(define ready '(red amber))",
+  "(define go    '(green))",
+  "(define slow  '(amber))",
   "(define states '(stopp ready go slow))",
   "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
   "(define fst (lambda (xs) (car xs)) )",
@@ -3259,7 +3262,12 @@ char *pDefines[] = {
   "(define tt (lambda (x) t ))",
   "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
   "(define rev (lambda (xs) (filterH tt xs ())))",
-  "(define filter (lambda (f xs) (rev (filterH f xs ()))))"
+  "(define filter (lambda (f xs) (rev (filterH f xs ()))))",
+  "(define getNlsNum (lambda (nls) (snd nls)))",
+  "(define stateByNum (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))",
+  "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
+  "(define initialStateNum 1)",
+  "(define stNum initialStateNum)"
 };
 
 int noFree = 0;
@@ -3282,23 +3290,9 @@ int noFree = 0;
 // (car cols) // red
 // (eq (car cols) 'red) //t
 
-
-// (define stopp '(red))
-// (define ready '(red amber))
-// (define go    '(green))
-// (define slow  '(amber))
-
 // stopp // (red)
 // (car stopp) // red
 // (eq (car stopp) 'red) // equal works
-
-// (define states '(stopp ready go slow))
-
-// test code
-// (define zip (lambda (xs)
-// (cond ((eq (car xs) nil) nil)
-//       (t (cons (car xs) (zip (cdr xs)) )))
-// ))
 
 //filter (uses if for pattern matching)
 //f xs == nil, nil
@@ -3312,13 +3306,7 @@ int noFree = 0;
 // test version of stateByNum filter, uses hard-coded value
 // (define fstate (lambda (nls) (eq (getNlsNum nls) 1)))
 
-// (define getNlsNum (lambda (nls) (snd nls)))
-
-// (define stateByNum (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))
-
 //(eq (car (car (stateByNum 2))) 'ready)
-
-// (define stateItem (lambda (s) (car (car (stateByNum 2)))))
 
 // (eq ( stateItem (stateByNum 2)) 'ready)
 
@@ -3326,7 +3314,6 @@ int noFree = 0;
 // stNum = initialStateNum
 // buttonClick (fwd), increment stNum
 //   show lights for state
-
 
 void readeval(lisp* envp) {
     help(envp);
