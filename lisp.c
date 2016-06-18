@@ -3339,6 +3339,41 @@ void init_library(lisp* envp) {
   // (define ready (lambda () (lights 1 1 0)))
   // (define go    (lambda () (lights 0 0 1)))
 
+  // experiments with converting haskell/elm adts
+
+// any benefit to numbers instead of symbols?
+// ditto fn names
+// (define cols '(red amber green))
+// (car cols) // red
+// (eq (car cols) 'red) //t
+
+
+// (define stopp '(red))
+// (define ready '(red amber))
+// (define go    '(green))
+// (define slow  '(amber))
+
+// stopp // (red)
+// (car stopp) // red
+// (eq (car stopp) 'red) // equal works
+
+// (define states '(stopp, ready, go, slow))
+
+// (define zip (lambda (xs)
+// (cond ((eq (car xs) nil) nil)
+//       (t (cons (car xs) (zip (cdr xs)) )))
+//
+// ))
+
+// zip - (define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))
+// fst - (define fst (lambda (xs) (car xs)) )
+// snd - (define snd (lambda (xs) (car (cdr xs))) )
+
+// (define statesNumbered (zip states '(1 2 3 4)) )
+
+// snd - (define snd (lambda (xs) (car (cdr xs))) )
+
+
 // POSSIBLE encodings to save memory:
     // symbol: fibo
     // "fibo" 
