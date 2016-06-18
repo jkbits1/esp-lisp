@@ -3269,7 +3269,10 @@ char *pDefines[] = {
   "(define initialStateNum 1)",
   "(define stNum initialStateNum)",
   "(define red   (lambda (n) (out 12 n)))",
-  "(define (int02 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
+  "(interrupt 2 2)",
+  "(interrupt 4 2)",
+  "(define (int02 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
+  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
 };
 
 int noFree = 0;
