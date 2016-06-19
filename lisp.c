@@ -3331,12 +3331,75 @@ int lispreadchar(char *chp) {
     return c < 0 ? -1 : 1;
 }
 
+int libLoaded = 0;
+
+int currentDefine = 0;
+int defineCount = 38;
+
+char *pDefines[] = {
+  "(define cols '(red amber green))",
+  "(define redl   (lambda (n) (out 12 n)))",
+  "(define amberl (lambda (n) (out 0 n)))",
+  "(define greenl (lambda (n) (out 5 n)))",
+  "(define lights (lambda (m n o) (list (redl m) (amberl n) (greenl o))))",
+  "(define clearl (lambda () (lights 0 0 0 )))",
+  "(define stopl  (lambda () (lights 1 0 0)))",
+  "(define readyl (lambda () (lights 1 1 0)))",
+  "(define gol    (lambda () (lights 0 0 1)))",
+  "(define slowl  (lambda () (lights 0 0 1)))",
+  "(define stopc  '(redl))",
+  "(define readyc '(redl amberl))",
+  "(define goc    '(greenl))",
+  "(define slowc  '(amberl))",
+  "(define states '(stopc readyc goc slowc))",
+  "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
+  "(define fst (lambda (xs) (car xs)) )",
+  "(define snd (lambda (xs) (car (cdr xs))) )",
+  "(define statesNumbered (zip states '(1 2 3 4)) )",
+  "(define tst (lambda (x) ( if (< 0 x) t nil )))",
+  "(define tt (lambda (x) t ))",
+  "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
+  "(define rev (lambda (xs) (filterH tt xs ())))",
+  "(define filter (lambda (f xs) (rev (filterH f xs ()))))",
+  "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
+  "(define getNlsNum (lambda (nls) (snd nls)))",
+  "(define stateByNum (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))",
+  "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
+  "(define initialStateNum 1)",
+  "(define stNum initialStateNum)",
+  "(define red   (lambda (n) (out 12 n)))",
+//  "(interrupt 2 2)",
+//  "(interrupt 4 2)",
+  "(define setl (lambda (f) (f 1)))",
+  "(define showlights (lambda () (mapcar setl (stateItem stNum))))",
+  "(define changeLights (lambda () (list (incf 'stNum) (showlights))))"
+//  "(define (int02 pin clicks count ms) (changeLights))",
+//  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
+};
+
+int noFree = 0;
+
 void readeval(lisp* envp) {
     help(envp);
 
     while(1) {
         global_envp = envp; // allow idle to gc
-        char* ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+        char* ln = NULL;
+
+        // get items from
+        if (libLoaded == 0) {
+          ln = pDefines[currentDefine++];
+
+          if (currentDefine == defineCount) {
+            libLoaded = 1;
+          }
+
+          noFree = 1;
+        }
+        else {
+          ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+        }
+
         global_envp = NULL;
 
         if (!ln) {
@@ -3394,7 +3457,12 @@ void readeval(lisp* envp) {
             //print_memory_info(1);
         }
 
-        free(ln);
+        if (noFree == 0) {
+          free(ln);
+        }
+        else {
+          noFree = 0;
+        }
     }
 
     printf("OK, bye!\n");
