@@ -3283,7 +3283,7 @@ char *pDefines[] = {
   "(interrupt 4 2)",
   "(define setl (lambda (f) (f 1)))",
   "(define showlights (lambda () (mapcar setl (stateItem stNum))))",
-  "(define changeLights (lambda () (list (incf stNum) (showlights))))",
+  "(define changeLights (lambda () (list (incf 'stNum) (showlights))))",
   "(define (int02 pin clicks count ms) (changeLights))",
   "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
 };
@@ -3330,6 +3330,17 @@ int noFree = 0;
 
 
 //get cols for stNum and set lights
+
+ (define stateByNum2 (lambda (n) (filter (lambda (nls) (eq (snd nls) n)) statesNumbered)))
+(define stateByNum3 (lambda (n) (filter (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))
+(define stateByNum4 (lambda (n) (filter (lambda (nls) (eq (car (cdr nls)) 1)) statesNumbered)))
+
+(define stateByNum5 (lambda (n) (mapcar (lambda (nls) (eq (car (cdr nls)) 1)) statesNumbered)))
+(define stateByNum6 (lambda (n) (mapcar (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))
+(define stateByNum7 (lambda (n) (mapcar (lambda (nls) (eq (getNlsNum nls) stNum)) statesNumbered)))
+(define stateByNum8 (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) stNum)) statesNumbered)))
+
+(define stateByNum9 (lambda (n) (filter (lambda (nls) (eq (car (cdr nls)) stNum)) statesNumbered)))
 
 
 //(define lightsByStateItem (lambda (n) (
