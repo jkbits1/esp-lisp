@@ -3363,7 +3363,7 @@ char *pDefines[] = {
   "(define filter (lambda (f xs) (rev (filterH f xs ()))))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define getNlsNum (lambda (nls) (snd nls)))",
-  "(define stateByNum (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))",
+  "(define stateByNum (lambda (n) (filter (lambda (nls) (eq (getNlsNum 'nls) n)) statesNumbered)))",
   "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
   "(define initialStateNum 1)",
   "(define stNum initialStateNum)",
@@ -3378,6 +3378,8 @@ char *pDefines[] = {
 };
 
 int noFree = 0;
+
+//(filter (lambda (x) (eq x 2)) (mapcar getNlsNum statesNumbered))
 
 void readeval(lisp* envp) {
     help(envp);
