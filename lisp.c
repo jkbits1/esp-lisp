@@ -3368,11 +3368,11 @@ char *pDefines[] = {
   "(define initialStateNum 1)",
   "(define stNum initialStateNum)",
   "(define red   (lambda (n) (out 12 n)))",
-//  "(interrupt 2 2)",
-//  "(interrupt 4 2)",
   "(define setl (lambda (f) (f 1)))",
   "(define showlights (lambda () (mapcar setl (stateItem stNum))))",
   "(define changeLights (lambda () (list (incf 'stNum) (showlights))))"
+  //  "(interrupt 2 2)",
+  //  "(interrupt 4 2)",
 //  "(define (int02 pin clicks count ms) (changeLights))",
 //  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
 };
