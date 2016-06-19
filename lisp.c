@@ -3331,7 +3331,7 @@ int lispreadchar(char *chp) {
     return c < 0 ? -1 : 1;
 }
 
-int libLoaded = 0;
+int libLoaded = 1; //0;
 
 int currentDefine = 0;
 int defineCount = 34;
