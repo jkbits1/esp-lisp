@@ -3357,7 +3357,7 @@ char *pDefines[] = {
   "(define tst (lambda (x) ( if (< 0 x) t nil )))",
   "(define tt (lambda (x) t ))",
   "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
-  "(define filter2 (lambda (f xs) (filterH f xs ())))"
+  "(define filter2 (lambda (f xs) (filterH f xs ())))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define stateByNum (lambda (n) (filter2 (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))",
   "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
@@ -3410,6 +3410,38 @@ int noFree = 0;
 //
 //(define sl7 (lambda (m) (mapcar (lambda (f) (f 1)) m)))
 //(define sl8 (lambda (m) (mapcar setl m)))
+
+(cons? readyc)
+t
+
+(mapcar symbol? readyc)
+t t
+(mapcar (lambda (s) (func? (eval s))) readyc)
+t t
+(mapcar (lambda (s) ((eval s) 1)) readyc)
+
+(define sl9 (lambda (si) (mapcar (lambda (s) ((eval s) 1)) si)))
+
+def stfn si 2
+(symbol? stfn)
+t
+(cons? (eval stfn))
+t
+// works
+(sl9 (eval stfn))
+
+(symbol? (stateItem 2))
+t
+
+(cons? (eval (stateItem 2)))
+t
+
+// works
+(sl9 (eval (stateItem 2)))
+
+(define setl (lambda (s) ((eval s) 1)))
+(define showLights (lambda () (mapcar setl (eval (stateItem stNum)))))
+(define changeLights (lambda () (list (incf 'stNum) (clearl) (showLights))))
 
 void readeval(lisp* envp) {
     help(envp);
