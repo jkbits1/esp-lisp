@@ -3353,21 +3353,22 @@ char *pDefines[] = {
   "(define slowc  '(amberl))",
   "(define states '(stopc readyc goc slowc))",
   "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
-  "(define fst (lambda (xs) (car xs)) )",
-  "(define snd (lambda (xs) (car (cdr xs))) )",
   "(define statesNumbered (zip states '(1 2 3 4)) )",
   "(define tst (lambda (x) ( if (< 0 x) t nil )))",
   "(define tt (lambda (x) t ))",
   "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
   "(define filter2 (lambda (f xs) (filterH f xs ())))"
-  "(define rev (lambda (xs) (filterH tt xs ())))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
-  "(define getNlsNum (lambda (nls) (snd nls)))",
   "(define stateByNum (lambda (n) (filter2 (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))",
   "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
   "(define initialStateNum 1)",
   "(define stNum initialStateNum)"
-//  "(define red   (lambda (n) (out 12 n)))",
+//  "(define rev (lambda (xs) (filterH tt xs ())))",
+//  "(define getNlsNum (lambda (nls) (snd nls)))",
+//  "(define fst (lambda (xs) (car xs)) )",
+//  "(define snd (lambda (xs) (car (cdr xs))) )",
+
+  //  "(define red   (lambda (n) (out 12 n)))",
 //  "(define setl (lambda (f) (f 1)))",
 //  "(define showlights (lambda () (mapcar setl (stateItem stNum))))",
 //  "(define changeLights (lambda () (list (incf 'stNum) (showlights))))"
@@ -3396,6 +3397,19 @@ int noFree = 0;
 //(filter2 (lambda (x) (eq x 2)) (mapcar getNlsNum statesNumbered))
 
 //(filter2 (lambda (x) (eq x 2)) (mapcar (lambda (nls) (car (cdr nls))) statesNumbered))
+
+
+//  "(define setl (lambda (f) (f 1)))",
+
+//(define sl2 (lambda (m) (let ((si (stateItem 1) )) (mapcar setl si))))
+//(define sl3 (lambda (m) (let ((si (stateItem 1) )) (pp si))))
+//(define sl4 (lambda (m) (let ((si (stateItem 1) )) (mapcar (lambda (f) (f 1)) si))))
+//(define sl4a (lambda (m) (let (si (stateItem 1)) (mapcar (lambda (f) (f 1)) si))))
+//(define sl5 (lambda (m) (let ((si readyc )) (mapcar (lambda (f) (f 1)) si))))
+//(define sl6 (lambda (m) (let (si readyc ) (mapcar (lambda (f) (f 1)) si))))
+//
+//(define sl7 (lambda (m) (mapcar (lambda (f) (f 1)) m)))
+//(define sl8 (lambda (m) (mapcar setl m)))
 
 void readeval(lisp* envp) {
     help(envp);
