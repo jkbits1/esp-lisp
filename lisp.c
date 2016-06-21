@@ -3242,10 +3242,10 @@ int lispreadchar(char *chp) {
     return c < 0 ? -1 : 1;
 }
 
-int libLoaded = 0;
+int libLoaded = 0; //1; //0;
 
 int currentDefine = 0;
-int defineCount = 38;
+int defineCount = 27; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3264,31 +3264,40 @@ char *pDefines[] = {
   "(define slowc  '(amberl))",
   "(define states '(stopc readyc goc slowc))",
   "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
-  "(define fst (lambda (xs) (car xs)) )",
-  "(define snd (lambda (xs) (car (cdr xs))) )",
   "(define statesNumbered (zip states '(1 2 3 4)) )",
   "(define tst (lambda (x) ( if (< 0 x) t nil )))",
   "(define tt (lambda (x) t ))",
   "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
-  "(define rev (lambda (xs) (filterH tt xs ())))",
-  "(define filter (lambda (f xs) (rev (filterH f xs ()))))",
+  "(define filter2 (lambda (f xs) (filterH f xs ())))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
-  "(define getNlsNum (lambda (nls) (snd nls)))",
-  "(define stateByNum (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))",
-  "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
+  "(define stateByNum (lambda (n) (filter2 (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))",
+  "(define nth (lambda (n xs) (cond ((eq n 1) (car xs)) (t (nth (- n 1) (cdr xs))))))",
+  "(define stateItem (lambda (n) (nth n states)))",
   "(define initialStateNum 1)",
   "(define stNum initialStateNum)",
-  "(define red   (lambda (n) (out 12 n)))",
+  "(define setl (lambda (s) ((eval s) 1)))",
+  "(define showLights (lambda () (mapcar setl (eval (stateItem stNum)))))",
+  "(define changeLights (lambda () (list (incf 'stNum) (clearl) (showLights))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
-  "(define setl (lambda (f) (f 1)))",
-  "(define showlights (lambda () (mapcar setl (stateItem stNum))))",
-  "(define changeLights (lambda () (list (incf 'stNum) (showlights))))",
   "(define (int02 pin clicks count ms) (changeLights))",
   "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
+//  "(define rev (lambda (xs) (filterH tt xs ())))",
+//  "(define getNlsNum (lambda (nls) (snd nls)))",
+//  "(define fst (lambda (xs) (car xs)) )",
+//  "(define snd (lambda (xs) (car (cdr xs))) )",
 };
 
 int noFree = 0;
+
+//  "(define filter (lambda (f xs) (rev (filterH f xs ()))))",
+
+//  "(define getNlsNum (lambda (nls) (snd nls)))",
+//  "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
+
+// (define setlTest (lambda (s) (func? (eval s))))
+// (define showLightsT (lambda () (mapcar setlTest (eval (stateItem stNum)))))
+
 
 //  "(define redl   (lambda (n) (out 12 n)))",
 //  "(define amberl (lambda (n) (out 0 n)))",
@@ -3331,7 +3340,7 @@ int noFree = 0;
 
 //get cols for stNum and set lights
 
-// (define stateByNum2 (lambda (n) (filter (lambda (nls) (eq (snd nls) n)) statesNumbered)))
+//(define stateByNum2 (lambda (n) (filter (lambda (nls) (eq (snd nls) n)) statesNumbered)))
 //(define stateByNum3 (lambda (n) (filter (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))
 //(define stateByNum4 (lambda (n) (filter (lambda (nls) (eq (car (cdr nls)) 1)) statesNumbered)))
 //
