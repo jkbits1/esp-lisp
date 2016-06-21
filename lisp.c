@@ -3443,6 +3443,11 @@ int noFree = 0;
 // (define showLights (lambda () (mapcar setl (eval (stateItem stNum)))))
 // (define changeLights (lambda () (list (incf 'stNum) (clearl) (showLights))))
 
+
+
+// (define setlTest (lambda (s) (func? (eval s))))
+// (define showLightsT (lambda () (mapcar setlTest (eval (stateItem stNum)))))
+
 void readeval(lisp* envp) {
     help(envp);
 
