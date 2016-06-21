@@ -3245,7 +3245,7 @@ int lispreadchar(char *chp) {
 int libLoaded = 0; //1; //0;
 
 int currentDefine = 0;
-int defineCount = 34; //30; // 34;
+int defineCount = 35; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3275,9 +3275,10 @@ char *pDefines[] = {
   "(define stateItem (lambda (n) (nth n states)))",
   "(define initialStateNum 1)",
   "(define stNum initialStateNum)",
+  "(define loopStNum (lambda () (cond ((eq stNum (length states)) (set 'stNum 0)) (t (incf 'stNum)))))",
   "(define setl (lambda (s) ((eval s) 1)))",
   "(define showLights (lambda () (mapcar setl (eval (stateItem stNum)))))",
-  "(define changeLights (lambda () (list (incf 'stNum) (clearl) (showLights))))",
+  "(define changeLights (lambda () (list (loopStNum) (clearl) (showLights))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (changeLights))",
@@ -3289,6 +3290,8 @@ char *pDefines[] = {
 };
 
 int noFree = 0;
+
+
 
 //  "(define filter (lambda (f xs) (rev (filterH f xs ()))))",
 
