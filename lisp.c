@@ -3359,11 +3359,19 @@ char *pDefines[] = {
   "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
   "(define filter2 (lambda (f xs) (filterH f xs ())))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
+  "(define decf (lambda (m) (let ((xx (- (eval m) 1))) (set m xx))))",
   "(define stateByNum (lambda (n) (filter2 (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))",
   "(define nth (lambda (n xs) (cond ((eq n 1) (car xs)) (t (nth (- n 1) (cdr xs))))))",
   "(define stateItem (lambda (n) (nth n states)))",
   "(define initialStateNum 1)",
-  "(define stNum initialStateNum)"
+  "(define stNum initialStateNum)",
+  "(define loopStNum (lambda () (cond ((eq stNum (length states)) (set 'stNum 1)) (t (incf 'stNum)))))",
+  "(define backStNum (lambda () (cond ((eq stNum 1) (set 'stNum (length states))) (t (decf 'stNum)))))",
+  "(define setl (lambda (s) ((eval s) 1)))",
+  "(define showLights (lambda () (mapcar setl (eval (stateItem stNum)))))",
+  "(define changeLights (lambda () (list (loopStNum) (clearl) (showLights))))",
+  "(define backLights (lambda () (list (backStNum) (clearl) (showLights))))"
+
 //  "(define rev (lambda (xs) (filterH tt xs ())))",
 //  "(define getNlsNum (lambda (nls) (snd nls)))",
 //  "(define fst (lambda (xs) (car xs)) )",
