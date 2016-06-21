@@ -3245,7 +3245,7 @@ int lispreadchar(char *chp) {
 int libLoaded = 0; //1; //0;
 
 int currentDefine = 0;
-int defineCount = 38; //30; // 34;
+int defineCount = 36; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3285,7 +3285,7 @@ char *pDefines[] = {
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (changeLights))",
-  "(define (int04 pin clicks count ms) (backLights))",
+  "(define (int04 pin clicks count ms) (backLights))"
 //  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
 //  "(define rev (lambda (xs) (filterH tt xs ())))",
 //  "(define getNlsNum (lambda (nls) (snd nls)))",
