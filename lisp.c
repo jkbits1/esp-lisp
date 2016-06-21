@@ -3245,7 +3245,7 @@ int lispreadchar(char *chp) {
 int libLoaded = 0; //1; //0;
 
 int currentDefine = 0;
-int defineCount = 34; //30; // 34;
+int defineCount = 31; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3263,15 +3263,8 @@ char *pDefines[] = {
   "(define goc    '(greenl))",
   "(define slowc  '(amberl))",
   "(define states '(stopc readyc goc slowc))",
-  "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
-  "(define statesNumbered (zip states '(1 2 3 4)) )",
-  "(define tst (lambda (x) ( if (< 0 x) t nil )))",
-  "(define tt (lambda (x) t ))",
-  "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
-  "(define filter2 (lambda (f xs) (filterH f xs ())))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define decf (lambda (m) (let ((xx (- (eval m) 1))) (set m xx))))",
-  "(define stateByNum (lambda (n) (filter2 (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))",
   "(define nth (lambda (n xs) (cond ((eq n 1) (car xs)) (t (nth (- n 1) (cdr xs))))))",
   "(define stateItem (lambda (n) (nth n states)))",
   "(define initialStateNum 1)",
@@ -3286,6 +3279,15 @@ char *pDefines[] = {
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (changeLights))",
   "(define (int04 pin clicks count ms) (backLights))"
+
+//    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
+//    "(define statesNumbered (zip states '(1 2 3 4)) )",
+//    "(define tst (lambda (x) ( if (< 0 x) t nil )))",
+//    "(define tt (lambda (x) t ))",
+//    "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
+//    "(define filter2 (lambda (f xs) (filterH f xs ())))",
+//    "(define stateByNum (lambda (n) (filter2 (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))",
+
 //  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
 //  "(define rev (lambda (xs) (filterH tt xs ())))",
 //  "(define getNlsNum (lambda (nls) (snd nls)))",
