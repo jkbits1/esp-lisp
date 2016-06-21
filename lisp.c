@@ -3275,7 +3275,7 @@ char *pDefines[] = {
   "(define stateItem (lambda (n) (nth n states)))",
   "(define initialStateNum 1)",
   "(define stNum initialStateNum)",
-  "(define loopStNum (lambda () (cond ((eq stNum (length states)) (set 'stNum 0)) (t (incf 'stNum)))))",
+  "(define loopStNum (lambda () (cond ((eq stNum (length states)) (set 'stNum 1)) (t (incf 'stNum)))))",
   "(define setl (lambda (s) ((eval s) 1)))",
   "(define showLights (lambda () (mapcar setl (eval (stateItem stNum)))))",
   "(define changeLights (lambda () (list (loopStNum) (clearl) (showLights))))",
