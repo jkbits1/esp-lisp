@@ -3360,7 +3360,8 @@ char *pDefines[] = {
   "(define filter2 (lambda (f xs) (filterH f xs ())))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define stateByNum (lambda (n) (filter2 (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))",
-  "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
+  "(define nth (lambda (n xs) (cond ((eq n 1) (car xs)) (t (nth (- n 1) (cdr xs))))))",
+  "(define stateItem (lambda (n) (nth n states)))",
   "(define initialStateNum 1)",
   "(define stNum initialStateNum)"
 //  "(define rev (lambda (xs) (filterH tt xs ())))",
@@ -3379,6 +3380,9 @@ char *pDefines[] = {
 };
 
 int noFree = 0;
+
+//  "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
+
 
 //  "(define filter (lambda (f xs) (rev (filterH f xs ()))))",
 
