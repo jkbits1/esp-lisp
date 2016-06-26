@@ -3862,8 +3862,8 @@ int data_pin = 4;
 //#define byte unsigned char
 
 //void shiftOutFast(byte[] data);
-void shiftOutFast(char* data);
-void sendByte(char data);
+void shiftOutFast(unsigned char* data);
+void sendByte(unsigned char data);
 
 void test_spi()
 {
