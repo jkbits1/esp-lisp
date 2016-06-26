@@ -3861,11 +3861,11 @@ int data_pin = 4;
 
 //#define byte unsigned char
 
-#define MAXREG_DECODEMODE = 0x09
-#define MAXREG_INTENSITY  = 0x0a
-#define MAXREG_SCANLIMIT  = 0x0b
-#define MAXREG_SHUTDOWN   = 0x0c
-#define MAXREG_DISPTEST   = 0x0f
+#define MAXREG_DECODEMODE 0x09
+#define MAXREG_INTENSITY  0x0a
+#define MAXREG_SCANLIMIT  0x0b
+#define MAXREG_SHUTDOWN   0x0c
+#define MAXREG_DISPTEST   0x0f
 
 //void shiftOutFast(byte[] data);
 void shiftOutFast(unsigned char* data);
