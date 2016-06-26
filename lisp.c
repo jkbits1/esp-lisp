@@ -3853,7 +3853,7 @@ void lisp_run(lisp* envp) {
 int clk_pin = 14;
 int data_pin = 15;
 
-void shiftOutFast(chr data);
+void shiftOutFast(char data);
 
 void test_spi()
 {
