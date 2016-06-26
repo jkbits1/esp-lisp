@@ -3862,7 +3862,7 @@ int data_pin = 4;
 //#define byte unsigned char
 
 //void shiftOutFast(byte[] data);
-void shiftOutFast(char[] data);
+void shiftOutFast(char* data);
 
 void test_spi()
 {
@@ -3885,7 +3885,7 @@ void test_spi()
 //	D3 D2 D1 D0
 //	MSB DATA LSB
 
-	byte bytes[2];
+	char bytes[2];
 
 	bytes[0] = 1;
 	bytes[1] = 1;
@@ -3898,7 +3898,7 @@ void test_spi()
 // http://www.instructables.com/id/MAX7219-8-Digit-LED-Display-Module-Driver-for-ESP8/step4/MAX7219-Driver-Implementation/
 // also
 // https://github.com/wayoda/LedControl/blob/master/src/LedControl.cpp
-void shiftOutFast(char[] data)
+void shiftOutFast(char* data)
 {
     gpio_write(cs_pin, 0);
 
