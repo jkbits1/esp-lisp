@@ -3904,28 +3904,33 @@ void test_spi()
 	bytes[1] = 0x00;
 	shiftOutFast(bytes);
 
+	vTaskDelay(1000 / portTICK_RATE_MS);
 //	delay(500);
 //
 	bytes[0] = MAXREG_SCANLIMIT;
 	bytes[1] = 0x07;
 	shiftOutFast(bytes);
 
+	vTaskDelay(1000 / portTICK_RATE_MS);
 //	delay(500);
 //
 //	bytes[0] = MAXREG_DECODEMODE;
 //	bytes[1] = 0xFF;
 //	shiftOutFast(bytes);
 
+	vTaskDelay(1000 / portTICK_RATE_MS);
 	bytes[0] = MAXREG_DECODEMODE;
 	bytes[1] = 0x0;
 	shiftOutFast(bytes);
-//
+
+	vTaskDelay(1000 / portTICK_RATE_MS);
 //	delay(500);
 //
 	bytes[0] = MAXREG_SHUTDOWN;
 	bytes[1] = 0x01;
 	shiftOutFast(bytes);
-//
+
+	vTaskDelay(1000 / portTICK_RATE_MS);
 //	delay(500);
 //
 //	bytes[0] = MAXREG_INTENSITY;
@@ -3937,6 +3942,8 @@ void test_spi()
 		bytes[1] = 0x01;
 
 		shiftOutFast(bytes);
+
+		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
 }
 
