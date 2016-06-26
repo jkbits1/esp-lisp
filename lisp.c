@@ -822,6 +822,8 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
+void test_spi();
+
 PRIM spi_test(lisp pin) {
 	test_spi();
 
