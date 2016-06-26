@@ -3900,22 +3900,22 @@ void test_spi()
 //	shiftOutFast(bytes);
 //	shiftOutFast(12);
 
-	bytes[0] = MAXREG_DISPTEST;
-	bytes[1] = 0x00;
-	shiftOutFast(bytes);
+//	bytes[0] = MAXREG_DISPTEST;
+//	bytes[1] = 0x00;
+//	shiftOutFast(bytes);
+//
+//	bytes[0] = MAXREG_SCANLIMIT;
+//	bytes[1] = 0x07;
+//	shiftOutFast(bytes);
 
-	bytes[0] = MAXREG_SCANLIMIT;
-	bytes[1] = 0x07;
-	shiftOutFast(bytes);
-
-	bytes[0] = MAXREG_DECODEMODE;
-	bytes[1] = 0xFF;
-	shiftOutFast(bytes);
+//	bytes[0] = MAXREG_DECODEMODE;
+//	bytes[1] = 0xFF;
+//	shiftOutFast(bytes);
 
 //	bytes[0] = MAXREG_DECODEMODE;
 //	bytes[1] = 0x0;
 //	shiftOutFast(bytes);
-
+//
 //	bytes[0] = MAXREG_SHUTDOWN;
 //	bytes[1] = 0x01;
 //	shiftOutFast(bytes);
