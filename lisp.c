@@ -3886,9 +3886,9 @@ void test_spi()
 //	D3 D2 D1 D0
 //	MSB DATA LSB
 
-	char bytes[2];
+	unsigned char bytes[2];
 
-	bytes[0] = 1;
+	bytes[0] = 15;
 	bytes[1] = 1;
 
 	shiftOutFast(bytes);
@@ -3899,7 +3899,7 @@ void test_spi()
 // http://www.instructables.com/id/MAX7219-8-Digit-LED-Display-Module-Driver-for-ESP8/step4/MAX7219-Driver-Implementation/
 // also
 // https://github.com/wayoda/LedControl/blob/master/src/LedControl.cpp
-void shiftOutFast(char* data)
+void shiftOutFast(unsigned char* data)
 {
     gpio_write(cs_pin, 0);
 
@@ -3911,7 +3911,7 @@ void shiftOutFast(char* data)
     return;
 }
 
-void sendByte(char data) {
+void sendByte(unsigned char data) {
     char i = 8;
 
     do{
