@@ -3878,7 +3878,7 @@ void shiftOutFast(char data)
 
 //      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << CLOCK);
 
-      gpio_write(clk_pin, 0);
+      gpio_write(clk_pin, 1);
 
       data <<= 1;
     }while(--i);
