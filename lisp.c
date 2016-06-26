@@ -3904,13 +3904,13 @@ void test_spi()
 	bytes[1] = 0x00;
 	shiftOutFast(bytes);
 
-	delay(500);
+//	delay(500);
 //
 	bytes[0] = MAXREG_SCANLIMIT;
 	bytes[1] = 0x07;
 	shiftOutFast(bytes);
 
-	delay(500);
+//	delay(500);
 //
 //	bytes[0] = MAXREG_DECODEMODE;
 //	bytes[1] = 0xFF;
@@ -3920,13 +3920,13 @@ void test_spi()
 	bytes[1] = 0x0;
 	shiftOutFast(bytes);
 //
-	delay(500);
+//	delay(500);
 //
 	bytes[0] = MAXREG_SHUTDOWN;
 	bytes[1] = 0x01;
 	shiftOutFast(bytes);
 //
-	delay(500);
+//	delay(500);
 //
 //	bytes[0] = MAXREG_INTENSITY;
 //	bytes[1] = 0x00;
