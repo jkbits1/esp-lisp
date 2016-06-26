@@ -3890,8 +3890,8 @@ void test_spi()
 	bytes[0] = 1;
 	bytes[1] = 1;
 
-	shiftOutFast(12);
-	shiftOutFast(12);
+	shiftOutFast(bytes);
+//	shiftOutFast(12);
 }
 
 // check this page
