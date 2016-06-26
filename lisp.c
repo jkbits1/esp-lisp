@@ -3850,13 +3850,15 @@ void lisp_run(lisp* envp) {
 // useful? , in esp_spi
 //spi_init
 
+int cs_pin = 15;
 int clk_pin = 14;
-int data_pin = 15;
+int data_pin = 1;
 
 void shiftOutFast(char data);
 
 void test_spi()
 {
+	gpio_enable(cs_pin, GPIO_OUTPUT);
 	gpio_enable(clk_pin, GPIO_OUTPUT);
 	gpio_enable(data_pin, GPIO_OUTPUT);
 
@@ -3866,6 +3868,9 @@ void test_spi()
 void shiftOutFast(char data)
 {
     char i = 8;
+
+    gpio_write(cs_pin, 0);
+
     do{
         gpio_write(clk_pin, 0);
                 //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
@@ -3882,6 +3887,9 @@ void shiftOutFast(char data)
 
       data <<= 1;
     }while(--i);
+
+    gpio_write(cs_pin, 1);
+
     return;
 }
 
