@@ -3850,6 +3850,9 @@ void lisp_run(lisp* envp) {
 // useful? , in esp_spi
 //spi_init
 
+int clk_pin = 14;
+int data_pin = 15;
+
 void test_spi()
 {
 	gpio_enable(clk_pin, GPIO_OUTPUT);
@@ -3857,9 +3860,6 @@ void test_spi()
 
 	shiftOutFast(12);
 }
-
-int clk_pin = 14;
-int data_pin = 15;
 
 void shiftOutFast(byte data)
 {
