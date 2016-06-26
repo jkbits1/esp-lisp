@@ -3862,10 +3862,10 @@ int data_pin = 4;
 //#define byte unsigned char
 
 #define MAXREG_DECODEMODE 0x09
-#define MAXREG_INTENSITY  0x0a
-#define MAXREG_SCANLIMIT  0x0b
-#define MAXREG_SHUTDOWN   0x0c
-#define MAXREG_DISPTEST   0x0f
+#define MAXREG_INTENSITY  0x0A
+#define MAXREG_SCANLIMIT  0x0B
+#define MAXREG_SHUTDOWN   0x0C
+#define MAXREG_DISPTEST   0x0F
 
 //void shiftOutFast(byte[] data);
 void shiftOutFast(unsigned char* data);
@@ -3908,13 +3908,13 @@ void test_spi()
 	bytes[1] = 0x07;
 	shiftOutFast(bytes);
 
-//	bytes[0] = MAXREG_DECODEMODE;
-//	bytes[1] = 0xFF;
-//	shiftOutFast(bytes);
-
 	bytes[0] = MAXREG_DECODEMODE;
-	bytes[1] = 0x0;
+	bytes[1] = 0xFF;
 	shiftOutFast(bytes);
+
+//	bytes[0] = MAXREG_DECODEMODE;
+//	bytes[1] = 0x0;
+//	shiftOutFast(bytes);
 
 //	bytes[0] = MAXREG_SHUTDOWN;
 //	bytes[1] = 0x01;
@@ -3924,9 +3924,12 @@ void test_spi()
 //	bytes[1] = 0x00;
 //	shiftOutFast(bytes);
 
-	bytes[0] = 1;
-	bytes[1] = 0x00;
-	shiftOutFast(bytes);
+	for (int i =0; i < 8; i++) {
+		bytes[0] = i+ 1;
+		bytes[1] = 0x00;
+
+		shiftOutFast(bytes);
+	}
 }
 
 // check this page
