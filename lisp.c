@@ -823,6 +823,9 @@ PRIM interrupt(lisp pin, lisp changeType) {
 }
 
 PRIM spi_test(lisp pin) {
+	test_spi();
+
+	return mkint(1);
 }
 
 // wget functions...
