@@ -3956,15 +3956,19 @@ void sendByte(unsigned char data) {
     do{
         gpio_write(clk_pin, 0);
                 //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
-      if(data & 0x80)
+      if(data & 0x80) {
+printf("1");
         //GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << DATA);
-//      	  gpio_write(data_pin, 1 << data);
-  	  	  gpio_write(data_pin, 1);
-      else
+      	  gpio_write(data_pin, 1 << data);
+//  	  	  gpio_write(data_pin, 1);
+}
+      else {
+printf("0");
         //GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << DATA);
     	// ??
-//    	 gpio_write(data_pin, 1 << data);
-    	gpio_write(data_pin, 0);
+    	 gpio_write(data_pin, 1 << data);
+//    	gpio_write(data_pin, 0);
+}
 
 //      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << CLOCK);
 
