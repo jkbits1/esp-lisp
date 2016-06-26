@@ -3954,6 +3954,7 @@ void sendByte(unsigned char data) {
     char i = 8;
 
     do{
+// printf("\n");
         gpio_write(clk_pin, 0);
                 //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
       if(data & 0x80) {
@@ -3976,6 +3977,7 @@ printf("0");
 
       data <<= 1;
     }while(--i);
+printf("\n");
 }
 
 
