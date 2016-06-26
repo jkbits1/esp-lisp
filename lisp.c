@@ -3894,10 +3894,10 @@ void test_spi()
 
 	unsigned char bytes[2];
 
-	bytes[0] = 15;
-	bytes[1] = 0; //1;
-
-	shiftOutFast(bytes);
+//	bytes[0] = 15;
+//	bytes[1] = 0; //1;
+//
+//	shiftOutFast(bytes);
 //	shiftOutFast(12);
 
 	bytes[0] = MAXREG_DISPTEST;
