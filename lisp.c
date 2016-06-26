@@ -3857,9 +3857,11 @@ void lisp_run(lisp* envp) {
 
 int cs_pin = 15;
 int clk_pin = 14;
-int data_pin = 1;
+int data_pin = 4;
 
-void shiftOutFast(char data);
+#define byte unsigned char
+
+void shiftOutFast(byte[] data);
 
 void test_spi()
 {
@@ -3867,14 +3869,48 @@ void test_spi()
 	gpio_enable(clk_pin, GPIO_OUTPUT);
 	gpio_enable(data_pin, GPIO_OUTPUT);
 
+
+	// send two bytes, d15 first
+	//see pdf p6 for format
+//	Table 1. Serial-Data Format (16 Bits)
+//	D15 D14
+//	X
+//	D13 D12
+//	X X
+//	D11 D10 D9 D8
+//	ADDRESS
+//	D7 D6 D5 D4
+//	X
+//	D3 D2 D1 D0
+//	MSB DATA LSB
+
+	byte bytes[2];
+
+	bytes[0] = 1;
+	bytes[1] = 1;
+
+	shiftOutFast(12);
 	shiftOutFast(12);
 }
 
-void shiftOutFast(char data)
+// check this page
+// http://www.instructables.com/id/MAX7219-8-Digit-LED-Display-Module-Driver-for-ESP8/step4/MAX7219-Driver-Implementation/
+// also
+// https://github.com/wayoda/LedControl/blob/master/src/LedControl.cpp
+void shiftOutFast(byte[] data)
 {
-    char i = 8;
-
     gpio_write(cs_pin, 0);
+
+    sendByte(data[0]);
+    sendByte(data[1]);
+
+    gpio_write(cs_pin, 1);
+
+    return;
+}
+
+void sendByte(byte data) {
+    char i = 8;
 
     do{
         gpio_write(clk_pin, 0);
@@ -3884,6 +3920,7 @@ void shiftOutFast(char data)
       	  gpio_write(data_pin, 1 << data);
       else
         //GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << DATA);
+    	// ??
       	gpio_write(data_pin, 1 << data);
 
 //      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << CLOCK);
@@ -3892,10 +3929,6 @@ void shiftOutFast(char data)
 
       data <<= 1;
     }while(--i);
-
-    gpio_write(cs_pin, 1);
-
-    return;
 }
 
 
