@@ -3855,7 +3855,7 @@ void lisp_run(lisp* envp) {
 // useful? , in esp_spi
 //spi_init
 
-int cs_pin = 15;
+int cs_pin = 2;
 int clk_pin = 14;
 int data_pin = 4;
 
@@ -3876,7 +3876,6 @@ void test_spi()
 	gpio_enable(cs_pin, GPIO_OUTPUT);
 	gpio_enable(clk_pin, GPIO_OUTPUT);
 	gpio_enable(data_pin, GPIO_OUTPUT);
-
 
 	// send two bytes, d15 first
 	//see pdf p6 for format
