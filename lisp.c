@@ -3853,7 +3853,7 @@ void lisp_run(lisp* envp) {
 int clk_pin = 14;
 int data_pin = 15;
 
-void shiftOutFast(byte data);
+void shiftOutFast(chr data);
 
 void test_spi()
 {
@@ -3863,9 +3863,9 @@ void test_spi()
 	shiftOutFast(12);
 }
 
-void shiftOutFast(byte data)
+void shiftOutFast(char data)
 {
-    byte i = 8;
+    char i = 8;
     do{
         gpio_write(clk_pin, 0);
                 //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
