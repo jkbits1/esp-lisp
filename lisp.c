@@ -3957,9 +3957,12 @@ void shiftOutFast(unsigned char* data)
     gpio_write(cs_pin, 0);
 
     sendByte(data[0]);
+
+	vTaskDelay(1000 / portTICK_RATE_MS);
+
     sendByte(data[1]);
 
-//    gpio_write(cs_pin, 0);
+    gpio_write(cs_pin, 0);
     gpio_write(cs_pin, 1);
 
     return;
