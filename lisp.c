@@ -3903,33 +3903,33 @@ void test_spi()
 	bytes[1] = 0x00;
 	shiftOutFast(bytes);
 
-	vTaskDelay(1000 / portTICK_RATE_MS);
+	vTaskDelay(100 / portTICK_RATE_MS);
 //	delay(500);
 //
 	bytes[0] = MAXREG_SCANLIMIT;
 	bytes[1] = 0x07;
 	shiftOutFast(bytes);
 
-	vTaskDelay(1000 / portTICK_RATE_MS);
+	vTaskDelay(100 / portTICK_RATE_MS);
 //	delay(500);
 //
 //	bytes[0] = MAXREG_DECODEMODE;
 //	bytes[1] = 0xFF;
 //	shiftOutFast(bytes);
 
-	vTaskDelay(1000 / portTICK_RATE_MS);
+	vTaskDelay(100 / portTICK_RATE_MS);
 	bytes[0] = MAXREG_DECODEMODE;
-	bytes[1] = 0x0;
+	bytes[1] = 0xFF; //0x0;
 	shiftOutFast(bytes);
 
-	vTaskDelay(1000 / portTICK_RATE_MS);
+	vTaskDelay(100 / portTICK_RATE_MS);
 //	delay(500);
 //
 	bytes[0] = MAXREG_SHUTDOWN;
 	bytes[1] = 0x01;
 	shiftOutFast(bytes);
 
-	vTaskDelay(1000 / portTICK_RATE_MS);
+	vTaskDelay(100 / portTICK_RATE_MS);
 //	delay(500);
 //
 //	bytes[0] = MAXREG_INTENSITY;
@@ -3938,7 +3938,7 @@ void test_spi()
 
 	for (int i =0; i < 8; i++) {
 		bytes[0] = i+ 1;
-		bytes[1] = 0x01;
+		bytes[1] = i; //0x01;
 
 		shiftOutFast(bytes);
 
@@ -3977,15 +3977,15 @@ void sendByte(unsigned char data) {
       if(data & 0x80) {
 printf("1");
         //GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << DATA);
-      	  gpio_write(data_pin, 1 << data);
-//  	  	  gpio_write(data_pin, 1);
+    //  	  gpio_write(data_pin, 1 << data);
+  	  	  gpio_write(data_pin, 1);
 }
       else {
 printf("0");
         //GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << DATA);
     	// ??
-    	 gpio_write(data_pin, 1 << data);
-//    	gpio_write(data_pin, 0);
+//    	 gpio_write(data_pin, 1 << data);
+    	gpio_write(data_pin, 0);
 }
 
 //      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << CLOCK);
