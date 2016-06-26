@@ -3938,13 +3938,13 @@ void test_spi()
 // https://github.com/wayoda/LedControl/blob/master/src/LedControl.cpp
 void shiftOutFast(unsigned char* data)
 {
-    gpio_write(cs_pin, 1);
+//    gpio_write(cs_pin, 1);
     gpio_write(cs_pin, 0);
 
     sendByte(data[0]);
     sendByte(data[1]);
 
-    gpio_write(cs_pin, 0);
+//    gpio_write(cs_pin, 0);
     gpio_write(cs_pin, 1);
 
     return;
@@ -3958,13 +3958,13 @@ void sendByte(unsigned char data) {
                 //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
       if(data & 0x80)
         //GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << DATA);
-      	  //gpio_write(data_pin, 1 << data);
-  	  	  gpio_write(data_pin, 1);
+      	  gpio_write(data_pin, 1 << data);
+//  	  	  gpio_write(data_pin, 1);
       else
         //GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << DATA);
     	// ??
-    	// gpio_write(data_pin, 1 << data);
-    	gpio_write(data_pin, 0);
+    	 gpio_write(data_pin, 1 << data);
+//    	gpio_write(data_pin, 0);
 
 //      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << CLOCK);
 
