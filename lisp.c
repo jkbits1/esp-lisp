@@ -3863,6 +3863,7 @@ int data_pin = 4;
 
 //void shiftOutFast(byte[] data);
 void shiftOutFast(char* data);
+void sendByte(char data);
 
 void test_spi()
 {
