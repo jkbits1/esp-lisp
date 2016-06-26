@@ -822,6 +822,9 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
+PRIM spi_test(lisp pin) {
+}
+
 // wget functions...
 // echo '
 // (wget "yesco.org" "http://yesco.org/index.html" (lambda (t a v) (princ t) (cond (a (princ " ") (princ a) (princ "=") (princ v)(terpri)))))
@@ -2999,6 +3002,8 @@ lisp lisp_init() {
     DEFPRIM(in, 1, in);
     DEFPRIM(interrupt, 2, interrupt);
 
+    DEFPRIM (spi_test, 1, spi_test);
+
     // system stuff
     DEFPRIM(gc, -1, gc);
     DEFPRIM(test, -7, test);
@@ -3840,6 +3845,46 @@ void lisp_run(lisp* envp) {
     readeval(envp);
     return;
 }
+
+// spi test (bookmarks around 7/6)
+// useful? , in esp_spi
+//spi_init
+
+void test_spi()
+{
+	gpio_enable(clk_pin, GPIO_OUTPUT);
+	gpio_enable(data_pin, GPIO_OUTPUT);
+
+	shiftOutFast(12);
+}
+
+int clk_pin = 14;
+int data_pin = 15;
+
+void shiftOutFast(byte data)
+{
+    byte i = 8;
+    do{
+        gpio_write(clk_pin, 0);
+                //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
+      if(data & 0x80)
+        //GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << DATA);
+      	  gpio_write(data_pin, 1 << data);
+      else
+        //GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << DATA);
+      	gpio_write(data_pin, 1 << data);
+
+//      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << CLOCK);
+
+      gpio_write(clk_pin, 0);
+
+      data <<= 1;
+    }while(--i);
+    return;
+}
+
+
+
 
 // find this display for chinese price - http://digole.com/index.php?productID=1208 (17.89 USD)
 //
