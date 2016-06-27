@@ -3873,7 +3873,7 @@ void sendByte(unsigned char data);
 
 void test_spi()
 {
-	gpio_enable(cs_pin, GPIO_OUTPUT);
+//	gpio_enable(cs_pin, GPIO_OUTPUT);
 	gpio_enable(clk_pin, GPIO_OUTPUT);
 	gpio_enable(data_pin, GPIO_OUTPUT);
 
@@ -3935,7 +3935,7 @@ void test_spi()
 
 		shiftOutFast(bytes);
 
-		vTaskDelay(1000 / portTICK_RATE_MS);
+//		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
 }
 
@@ -3945,8 +3945,8 @@ void test_spi()
 // https://github.com/wayoda/LedControl/blob/master/src/LedControl.cpp
 void shiftOutFast(unsigned char* data)
 {
-//    gpio_write(cs_pin, 1);
-    gpio_write(cs_pin, 0);
+////    gpio_write(cs_pin, 1);
+//    gpio_write(cs_pin, 0);
 
     sendByte(data[0]);
 
@@ -3954,9 +3954,9 @@ void shiftOutFast(unsigned char* data)
 
     sendByte(data[1]);
 
-    gpio_write(cs_pin, 0);
+//    gpio_write(cs_pin, 0);
 	vTaskDelay(10);
-    gpio_write(cs_pin, 1);
+//    gpio_write(cs_pin, 1);
 
     return;
 }
