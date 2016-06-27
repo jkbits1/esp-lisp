@@ -3868,7 +3868,7 @@ int data_pin = 2; // 4;
 #define MAXREG_DISPTEST   0x0F
 
 //void shiftOutFast(byte[] data);
-void shiftOutFast(unsigned char* data);
+void shiftOutFast(unsigned char* data, int delay);
 void sendByte(unsigned char data);
 
 void test_spi(int init, int digit, int val, int decode, int delay)
@@ -3944,7 +3944,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 		bytes[0] = i+ 1;
 		bytes[1] = val; //0x01;
 
-		shiftOutFast(bytes);
+		shiftOutFast(bytes, delay);
 
 //		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
@@ -3954,19 +3954,19 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 // http://www.instructables.com/id/MAX7219-8-Digit-LED-Display-Module-Driver-for-ESP8/step4/MAX7219-Driver-Implementation/
 // also
 // https://github.com/wayoda/LedControl/blob/master/src/LedControl.cpp
-void shiftOutFast(unsigned char* data)
+void shiftOutFast(unsigned char* data, int delay)
 {
 ////    gpio_write(cs_pin, 1);
 //    gpio_write(cs_pin, 0);
 
     sendByte(data[0]);
 
-//	vTaskDelay(10);
+	vTaskDelay(delay);
 
     sendByte(data[1]);
 
 //    gpio_write(cs_pin, 0);
-//	vTaskDelay(10);
+	vTaskDelay(delay);
 //    gpio_write(cs_pin, 1);
 
     return;
