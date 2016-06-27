@@ -3902,7 +3902,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	if (init > 0) {
 		bytes[0] = MAXREG_SCANLIMIT;
 		bytes[1] = 0x07;
-		shiftOutFast(bytes);
+		shiftOutFast(bytes, delay);
 
 	//	vTaskDelay(100 / portTICK_RATE_MS);
 		vTaskDelay(delay);
@@ -3916,25 +3916,25 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 			bytes[1] = 0x0;
 		}
 
-		shiftOutFast(bytes);
+		shiftOutFast(bytes, delay);
 
 		vTaskDelay(delay);
 
 		bytes[0] = MAXREG_SHUTDOWN;
 		bytes[1] = 0x01;
-		shiftOutFast(bytes);
+		shiftOutFast(bytes, delay);
 
 		vTaskDelay(delay);
 
 		bytes[0] = MAXREG_DISPTEST;
 		bytes[1] = 0x00;
-		shiftOutFast(bytes);
+		shiftOutFast(bytes, delay);
 
 		vTaskDelay(delay);
 	//
 		bytes[0] = MAXREG_INTENSITY;
 		bytes[1] = 0x00;
-		shiftOutFast(bytes);
+		shiftOutFast(bytes, delay);
 
 		vTaskDelay(delay);
 	}
