@@ -3871,7 +3871,7 @@ int data_pin = 4;
 void shiftOutFast(unsigned char* data);
 void sendByte(unsigned char data);
 
-void test_spi(int digit, int decode, int delay)
+void test_spi(int digit, int val, int decode, int delay)
 {
 //	gpio_enable(cs_pin, GPIO_OUTPUT);
 	gpio_enable(clk_pin, GPIO_OUTPUT);
@@ -3931,14 +3931,16 @@ void test_spi(int digit, int decode, int delay)
 
 	vTaskDelay(delay);
 //
-//	bytes[0] = MAXREG_INTENSITY;
-//	bytes[1] = 0x00;
-//	shiftOutFast(bytes);
+	bytes[0] = MAXREG_INTENSITY;
+	bytes[1] = 0x00;
+	shiftOutFast(bytes);
+
+	vTaskDelay(delay);
 
 	for (int i = 0; i < digit; i++) {
 //	for (int i =0; i < 8; i++) {
 		bytes[0] = i+ 1;
-		bytes[1] = i; //0x01;
+		bytes[1] = val; //0x01;
 
 		shiftOutFast(bytes);
 
