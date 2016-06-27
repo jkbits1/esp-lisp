@@ -3911,7 +3911,7 @@ void test_spi(int digit, int decode, int delay)
 	if (decode > 0) {
 		bytes[1] = 0xFF;
 	}
-	else
+	else {
 		bytes[1] = 0x0;
 	}
 
