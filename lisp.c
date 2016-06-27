@@ -822,10 +822,10 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
-void test_spi(int, int, int, int);
+void test_spi(int, int, int, int, int);
 
-PRIM spi_test(lisp digit, lisp val, lisp decode, lisp delay) {
-	test_spi(getint(digit), getint(val), getint(decode), getint(delay));
+PRIM spi_test(lisp init, lisp digit, lisp val, lisp decode, lisp delay) {
+	test_spi(getint(init), getint(digit), getint(val), getint(decode), getint(delay));
 
 	return mkint(1);
 }
@@ -3007,7 +3007,7 @@ lisp lisp_init() {
     DEFPRIM(in, 1, in);
     DEFPRIM(interrupt, 2, interrupt);
 
-    DEFPRIM (spi_test, 3, spi_test);
+    DEFPRIM (spi_test, 5, spi_test);
 
     // system stuff
     DEFPRIM(gc, -1, gc);
@@ -3871,7 +3871,7 @@ int data_pin = 4;
 void shiftOutFast(unsigned char* data);
 void sendByte(unsigned char data);
 
-void test_spi(int digit, int val, int decode, int delay)
+void test_spi(int init, int digit, int val, int decode, int delay)
 {
 //	gpio_enable(cs_pin, GPIO_OUTPUT);
 	gpio_enable(clk_pin, GPIO_OUTPUT);
@@ -3899,43 +3899,45 @@ void test_spi(int digit, int val, int decode, int delay)
 //	shiftOutFast(bytes);
 //	shiftOutFast(12);
 
-	bytes[0] = MAXREG_SCANLIMIT;
-	bytes[1] = 0x07;
-	shiftOutFast(bytes);
+	if (init > 0) {
+		bytes[0] = MAXREG_SCANLIMIT;
+		bytes[1] = 0x07;
+		shiftOutFast(bytes);
 
-//	vTaskDelay(100 / portTICK_RATE_MS);
-	vTaskDelay(delay);
+	//	vTaskDelay(100 / portTICK_RATE_MS);
+		vTaskDelay(delay);
 
 
-	bytes[0] = MAXREG_DECODEMODE;
-	if (decode > 0) {
-		bytes[1] = 0xFF;
+		bytes[0] = MAXREG_DECODEMODE;
+		if (decode > 0) {
+			bytes[1] = 0xFF;
+		}
+		else {
+			bytes[1] = 0x0;
+		}
+
+		shiftOutFast(bytes);
+
+		vTaskDelay(delay);
+
+		bytes[0] = MAXREG_SHUTDOWN;
+		bytes[1] = 0x01;
+		shiftOutFast(bytes);
+
+		vTaskDelay(delay);
+
+		bytes[0] = MAXREG_DISPTEST;
+		bytes[1] = 0x00;
+		shiftOutFast(bytes);
+
+		vTaskDelay(delay);
+	//
+		bytes[0] = MAXREG_INTENSITY;
+		bytes[1] = 0x00;
+		shiftOutFast(bytes);
+
+		vTaskDelay(delay);
 	}
-	else {
-		bytes[1] = 0x0;
-	}
-
-	shiftOutFast(bytes);
-
-	vTaskDelay(delay);
-
-	bytes[0] = MAXREG_SHUTDOWN;
-	bytes[1] = 0x01;
-	shiftOutFast(bytes);
-
-	vTaskDelay(delay);
-
-	bytes[0] = MAXREG_DISPTEST;
-	bytes[1] = 0x00;
-	shiftOutFast(bytes);
-
-	vTaskDelay(delay);
-//
-	bytes[0] = MAXREG_INTENSITY;
-	bytes[1] = 0x00;
-	shiftOutFast(bytes);
-
-	vTaskDelay(delay);
 
 	for (int i = 0; i < digit; i++) {
 //	for (int i =0; i < 8; i++) {
