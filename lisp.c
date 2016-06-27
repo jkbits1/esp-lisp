@@ -822,10 +822,10 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
-void test_spi(int, int, int);
+void test_spi(int, int, int, int);
 
-PRIM spi_test(lisp digit, lisp decode, lisp delay) {
-	test_spi(getint(digit), getint(decode), getint(delay));
+PRIM spi_test(lisp digit, lisp val, lisp decode, lisp delay) {
+	test_spi(getint(digit), getint(val), getint(decode), getint(delay));
 
 	return mkint(1);
 }
