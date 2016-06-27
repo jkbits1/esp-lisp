@@ -3855,7 +3855,7 @@ void lisp_run(lisp* envp) {
 // useful? , in esp_spi
 //spi_init
 
-// int cs_pin = 2;
+int cs_pin = 14 ;
 int clk_pin = 4; // 2; // 14;
 int data_pin = 2; // 4;
 
@@ -3902,10 +3902,10 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	if (init > 0) {
 		bytes[0] = MAXREG_SCANLIMIT;
 		bytes[1] = 0x07;
-		shiftOutFast(bytes, delay);
+		//shiftOutFast(bytes, delay);
 
 	//	vTaskDelay(100 / portTICK_RATE_MS);
-		vTaskDelay(delay);
+//		vTaskDelay(delay);
 
 
 		bytes[0] = MAXREG_DECODEMODE;
@@ -3928,26 +3928,30 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 
 		bytes[0] = MAXREG_DISPTEST;
 		bytes[1] = 0x00;
-		shiftOutFast(bytes, delay);
+//		shiftOutFast(bytes, delay);
 
-		vTaskDelay(delay);
+//		vTaskDelay(delay);
 	//
 		bytes[0] = MAXREG_INTENSITY;
 		bytes[1] = 0x00;
-		shiftOutFast(bytes, delay);
+//		shiftOutFast(bytes, delay);
 
-		vTaskDelay(delay);
+//		vTaskDelay(delay);
 	}
 
 	for (int i = 0; i < digit; i++) {
 //	for (int i =0; i < 8; i++) {
 		bytes[0] = i+ 1;
-		bytes[1] = val; //0x01;
+		bytes[1] = i; // val; //0x01;
 
 		shiftOutFast(bytes, delay);
 
 //		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
+
+		bytes[0] = MAXREG_SHUTDOWN;
+bytes[1] = 0x00;
+// shiftOutFast(bytes, delay);
 }
 
 // check this page
@@ -3956,18 +3960,18 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 // https://github.com/wayoda/LedControl/blob/master/src/LedControl.cpp
 void shiftOutFast(unsigned char* data, int delay)
 {
-////    gpio_write(cs_pin, 1);
-//    gpio_write(cs_pin, 0);
+    gpio_write(cs_pin, 1);
+    gpio_write(cs_pin, 0);
 
     sendByte(data[0]);
 
-	vTaskDelay(delay);
+	 vTaskDelay(delay);
 
     sendByte(data[1]);
 
 //    gpio_write(cs_pin, 0);
 	vTaskDelay(delay);
-//    gpio_write(cs_pin, 1);
+    gpio_write(cs_pin, 1);
 
     return;
 }
