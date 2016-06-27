@@ -822,10 +822,10 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
-void test_spi();
+void test_spi(int, int, int);
 
-PRIM spi_test(lisp pin) {
-	test_spi();
+PRIM spi_test(lisp digit, lisp decode, lisp delay) {
+	test_spi(getint(digit), getint(decode), getint(delay));
 
 	return mkint(1);
 }
@@ -3007,7 +3007,7 @@ lisp lisp_init() {
     DEFPRIM(in, 1, in);
     DEFPRIM(interrupt, 2, interrupt);
 
-    DEFPRIM (spi_test, 1, spi_test);
+    DEFPRIM (spi_test, 3, spi_test);
 
     // system stuff
     DEFPRIM(gc, -1, gc);
@@ -3871,7 +3871,7 @@ int data_pin = 4;
 void shiftOutFast(unsigned char* data);
 void sendByte(unsigned char data);
 
-void test_spi()
+void test_spi(int digit, int decode, int delay)
 {
 //	gpio_enable(cs_pin, GPIO_OUTPUT);
 	gpio_enable(clk_pin, GPIO_OUTPUT);
@@ -3904,32 +3904,39 @@ void test_spi()
 	shiftOutFast(bytes);
 
 //	vTaskDelay(100 / portTICK_RATE_MS);
-	vTaskDelay(100);
+	vTaskDelay(delay);
 
 
 	bytes[0] = MAXREG_DECODEMODE;
-	bytes[1] = 0xFF; //0x0;
+	if (decode > 0) {
+		bytes[1] = 0xFF;
+	}
+	else
+		bytes[1] = 0x0;
+	}
+
 	shiftOutFast(bytes);
 
-	vTaskDelay(100);
+	vTaskDelay(delay);
 
 	bytes[0] = MAXREG_SHUTDOWN;
 	bytes[1] = 0x01;
 	shiftOutFast(bytes);
 
-	vTaskDelay(100);
+	vTaskDelay(delay);
 
 	bytes[0] = MAXREG_DISPTEST;
 	bytes[1] = 0x00;
 	shiftOutFast(bytes);
 
-	vTaskDelay(100);
+	vTaskDelay(delay);
 //
 //	bytes[0] = MAXREG_INTENSITY;
 //	bytes[1] = 0x00;
 //	shiftOutFast(bytes);
 
-	for (int i =0; i < 8; i++) {
+	for (int i = 0; i < digit; i++) {
+//	for (int i =0; i < 8; i++) {
 		bytes[0] = i+ 1;
 		bytes[1] = i; //0x01;
 
