@@ -3855,9 +3855,9 @@ void lisp_run(lisp* envp) {
 // useful? , in esp_spi
 //spi_init
 
-int cs_pin = 2;
-int clk_pin = 14;
-int data_pin = 4;
+// int cs_pin = 2;
+int clk_pin = 4; // 2; // 14;
+int data_pin = 2; // 4;
 
 //#define byte unsigned char
 
@@ -3961,12 +3961,12 @@ void shiftOutFast(unsigned char* data)
 
     sendByte(data[0]);
 
-	vTaskDelay(10);
+//	vTaskDelay(10);
 
     sendByte(data[1]);
 
 //    gpio_write(cs_pin, 0);
-	vTaskDelay(10);
+//	vTaskDelay(10);
 //    gpio_write(cs_pin, 1);
 
     return;
@@ -3980,13 +3980,13 @@ void sendByte(unsigned char data) {
         gpio_write(clk_pin, 0);
                 //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
       if(data & 0x80) {
-printf("1 %d", i);
+// printf("1 %d", i);
         //GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << DATA);
     //  	  gpio_write(data_pin, 1 << data);
   	  	  gpio_write(data_pin, 1);
 }
       else {
-printf("0 %d", i);
+// printf("0 %d", i);
         //GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << DATA);
     	// ??
 //    	 gpio_write(data_pin, 1 << data);
@@ -3999,7 +3999,7 @@ printf("0 %d", i);
 
       data <<= 1;
     }while(--i);
-printf("\n");
+// printf("\n");
 }
 
 
