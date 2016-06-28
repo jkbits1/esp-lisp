@@ -824,12 +824,29 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
+
+
 void test_spi(int, int, int, int, int);
 
 PRIM spi_test(lisp init, lisp digit, lisp val, lisp decode, lisp delay) {
 	test_spi(getint(init), getint(digit), getint(val), getint(decode), getint(delay));
 
 	return mkint(1);
+}
+
+int spiData[] = { 0,0,0,0, 0,0,0,0 };
+
+PRIM spi_data(lisp data) {
+
+	int i = 0;
+
+	while (data) {
+		spiData[i] = car(data);
+
+        data = cdr(data);
+    }
+
+	return nil;
 }
 
 // wget functions...
@@ -3009,6 +3026,7 @@ lisp lisp_init() {
     DEFPRIM(in, 1, in);
     DEFPRIM(interrupt, 2, interrupt);
 
+    DEFPRIM (spi_data, 1, spi_data);
     DEFPRIM (spi_test, 5, spi_test);
 
     // system stuff
@@ -3991,7 +4009,9 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	for (unsigned char i = 0; i < digit; i++) {
 //	for (int i =0; i < 8; i++) {
 		bytes[0] = i+ 1;
-		bytes[1] = i; // val; //0x01;
+//		bytes[1] = i; // val; //0x01;
+
+		bytes[1] = spiData[i]; // val; //0x01;
 
 		shiftOutFast(bytes, delay);
 
