@@ -3967,12 +3967,21 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 //			vTaskDelay(delay);
 		}
 
-		if (initC & 0x40) {
-			bytes[0] = MAXREG_DISPTEST;
-			bytes[1] = 0x00;
-			shiftOutFast(bytes, delay);
+//		if (initC & 0x400) {
+//			bytes[0] = MAXREG_DISPTEST;
+//			bytes[1] = 0x00;
+//			shiftOutFast(bytes, delay);
+//
+////			vTaskDelay(10000);
+//		}
 
-			vTaskDelay(10000);
+		if (initC & 0x20) {
+			for (unsigned char i = 0; i < 8; i++) {
+				bytes[0] = i + 1;
+				bytes[1] = 0;
+
+				shiftOutFast(bytes, delay);
+			}
 		}
 	}
 
@@ -3986,16 +3995,16 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 //		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
 
-	if (init > 0) {
-		if (initC & 0x20) {
-
-			bytes[0] = MAXREG_SHUTDOWN;
-			bytes[1] = 0x00;
-			shiftOutFast(bytes, delay);
-
-//			vTaskDelay(delay);
-		}
-	}
+//	if (init > 0) {
+//		if (initC & 0x20) {
+//
+//			bytes[0] = MAXREG_SHUTDOWN;
+//			bytes[1] = 0x00;
+//			shiftOutFast(bytes, delay);
+//
+////			vTaskDelay(delay);
+//		}
+//	}
 }
 
 void send2Byte(unsigned char reg, unsigned char data);
