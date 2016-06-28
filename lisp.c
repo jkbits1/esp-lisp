@@ -82,6 +82,8 @@
 #include <errno.h>
 #include <setjmp.h>
 
+#include "esp/spi.h"
+
 #ifndef UNIX
   #include "FreeRTOS.h"
 
@@ -3879,12 +3881,12 @@ void sendByte(unsigned char data);
 
 void test_spi(int init, int digit, int val, int decode, int delay)
 {
-//	gpio_enable(cs_pin, GPIO_OUTPUT);
+	gpio_enable(cs_pin, GPIO_OUTPUT);
 	gpio_enable(clk_pin, GPIO_OUTPUT);
 	gpio_enable(data_pin, GPIO_OUTPUT);
 
 //	bool bSpi = spi_init(0, 2, 4, true, SPI_BIG_ENDIAN, true);
-	bool bSpi = spi_init(0, 0, 4, true, SPI_BIG_ENDIAN, true);
+//	bool bSpi = spi_init(0, 0, 4, true, SPI_BIG_ENDIAN, true);
 
 	// send two bytes, d15 first
 	//see pdf p6 for format
