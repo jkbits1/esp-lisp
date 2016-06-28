@@ -841,7 +841,7 @@ PRIM spi_data(lisp data) {
 	int i = 0;
 
 	while (data) {
-		spiData[i] = car(data);
+		spiData[i] = getint(car(data));
 
         data = cdr(data);
     }
