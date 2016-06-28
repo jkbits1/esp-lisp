@@ -4010,7 +4010,7 @@ void shiftOutFast(unsigned char* data, int delay)
 
 void send2Byte(unsigned char reg, unsigned char data) {
 
-	 uint16_t = reg*256+data;
+	 uint16_t info = reg*256+data;
 
     	    char i = 16;
 
@@ -4019,7 +4019,7 @@ void send2Byte(unsigned char reg, unsigned char data) {
     	        gpio_write(clk_pin, 0);
     	                //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
 //    	      if(data & 0x80) {
-        	      if(data & 0x8000) {
+        	      if(info & 0x8000) {
     	// printf("1 %d", i);
     	        //GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << DATA);
     	    //  	  gpio_write(data_pin, 1 << data);
@@ -4037,7 +4037,7 @@ void send2Byte(unsigned char reg, unsigned char data) {
 
     	      gpio_write(clk_pin, 1);
 
-    	      data <<= 1;
+    	      info <<= 1;
     	    }while(--i);
 }
 
