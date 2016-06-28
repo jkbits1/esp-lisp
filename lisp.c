@@ -3899,6 +3899,8 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 
 	unsigned char bytes[2];
 
+	unsigned char initC = (unsigned char)init;
+
 //	bytes[0] = 15;
 //	bytes[1] = 0; //1;
 //
@@ -3906,45 +3908,57 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 //	shiftOutFast(12);
 
 	if (init > 0) {
-		bytes[0] = MAXREG_SCANLIMIT;
-		bytes[1] = 0x07;
-		shiftOutFast(bytes, delay);
 
-	//	vTaskDelay(100 / portTICK_RATE_MS);
-		vTaskDelay(delay);
+		if (initC & 0x01) {
+			bytes[0] = MAXREG_SCANLIMIT;
+			bytes[1] = 0x07;
+			shiftOutFast(bytes, delay);
 
-		bytes[0] = MAXREG_DECODEMODE;
-		if (decode > 0) {
-			bytes[1] = 0xFF;
-		}
-		else {
-			bytes[1] = 0x0;
+		//	vTaskDelay(100 / portTICK_RATE_MS);
+			vTaskDelay(delay);
 		}
 
-		shiftOutFast(bytes, delay);
+		if (initC & 0x02) {
+			bytes[0] = MAXREG_DECODEMODE;
 
-		vTaskDelay(delay);
+			if (decode > 0) {
+				bytes[1] = 0xFF;
+			}
+			else {
+				bytes[1] = 0x0;
+			}
 
-		bytes[0] = MAXREG_SHUTDOWN;
-		bytes[1] = 0x01;
-		shiftOutFast(bytes, delay);
+			shiftOutFast(bytes, delay);
 
-		vTaskDelay(delay);
+			vTaskDelay(delay);
+		}
 
-		bytes[0] = MAXREG_DISPTEST;
-		bytes[1] = 0x00;
-		shiftOutFast(bytes, delay);
+		if (initC & 0x04) {
+			bytes[0] = MAXREG_SHUTDOWN;
+			bytes[1] = 0x01;
+			shiftOutFast(bytes, delay);
 
-		vTaskDelay(delay);
-	//
-		bytes[0] = MAXREG_INTENSITY;
-		bytes[1] = 0x02;
-		shiftOutFast(bytes, delay);
+			vTaskDelay(delay);
+		}
 
-		vTaskDelay(delay);
+		if (initC & 0x08) {
+			bytes[0] = MAXREG_DISPTEST;
+			bytes[1] = 0x00;
+			shiftOutFast(bytes, delay);
+
+			vTaskDelay(delay);
+		}
+
+		if (initC & 0x10) {
+			bytes[0] = MAXREG_INTENSITY;
+			bytes[1] = 0x02;
+			shiftOutFast(bytes, delay);
+
+			vTaskDelay(delay);
+		}
 	}
 
-	for (int i = 0; i < digit; i++) {
+	for (unsigned char i = 0; i < digit; i++) {
 //	for (int i =0; i < 8; i++) {
 		bytes[0] = i+ 1;
 		bytes[1] = i; // val; //0x01;
@@ -3954,9 +3968,16 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 //		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
 
-		bytes[0] = MAXREG_SHUTDOWN;
-bytes[1] = 0x00;
-// shiftOutFast(bytes, delay);
+	if (init > 0) {
+		if (initC & 0x20) {
+
+			bytes[0] = MAXREG_SHUTDOWN;
+			bytes[1] = 0x00;
+			shiftOutFast(bytes, delay);
+
+			vTaskDelay(delay);
+		}
+	}
 }
 
 // check this page
