@@ -3982,6 +3982,8 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	}
 }
 
+void send2Byte(unsigned char reg, unsigned char data);
+
 // check this page
 // http://www.instructables.com/id/MAX7219-8-Digit-LED-Display-Module-Driver-for-ESP8/step4/MAX7219-Driver-Implementation/
 // also
