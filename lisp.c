@@ -3886,7 +3886,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	gpio_enable(data_pin, GPIO_OUTPUT);
 
 //	bool bSpi = spi_init(0, 2, 4, true, SPI_BIG_ENDIAN, true);
-//	bool bSpi = spi_init(0, 0, 4, true, SPI_BIG_ENDIAN, true);
+//	bool bSpi = spi_init(1, 0, 4, true, SPI_BIG_ENDIAN, true);
 
 	// send two bytes, d15 first
 	//see pdf p6 for format
@@ -4018,7 +4018,7 @@ void send2Byte(unsigned char reg, unsigned char data);
 // https://github.com/wayoda/LedControl/blob/master/src/LedControl.cpp
 void shiftOutFast(unsigned char* data, int delay)
 {
-    gpio_write(cs_pin, 1);
+//    gpio_write(cs_pin, 1);
     gpio_write(cs_pin, 0);
 
     send2Byte(data[0], data[1]);
