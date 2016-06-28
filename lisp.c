@@ -3911,13 +3911,21 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 
 	if (init > 0) {
 
+		if (initC & 0x04) {
+			bytes[0] = MAXREG_SHUTDOWN;
+			bytes[1] = 0x01;
+			shiftOutFast(bytes, delay);
+
+//			vTaskDelay(delay);
+		}
+
 		if (initC & 0x01) {
 			bytes[0] = MAXREG_SCANLIMIT;
 			bytes[1] = 0x07;
 			shiftOutFast(bytes, delay);
 
 		//	vTaskDelay(100 / portTICK_RATE_MS);
-			vTaskDelay(delay);
+//			vTaskDelay(delay);
 		}
 
 		if (initC & 0x02) {
@@ -3932,15 +3940,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 
 			shiftOutFast(bytes, delay);
 
-			vTaskDelay(delay);
-		}
-
-		if (initC & 0x04) {
-			bytes[0] = MAXREG_SHUTDOWN;
-			bytes[1] = 0x01;
-			shiftOutFast(bytes, delay);
-
-			vTaskDelay(delay);
+//			vTaskDelay(delay);
 		}
 
 		if (initC & 0x08) {
@@ -3948,7 +3948,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 			bytes[1] = 0x00;
 			shiftOutFast(bytes, delay);
 
-			vTaskDelay(delay);
+//			vTaskDelay(delay);
 		}
 
 		if (initC & 0x10) {
@@ -3956,7 +3956,23 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 			bytes[1] = 0x02;
 			shiftOutFast(bytes, delay);
 
-			vTaskDelay(delay);
+//			vTaskDelay(delay);
+		}
+
+		if (initC & 0x04) {
+			bytes[0] = MAXREG_SHUTDOWN;
+			bytes[1] = 0x01;
+			shiftOutFast(bytes, delay);
+
+//			vTaskDelay(delay);
+		}
+
+		if (initC & 0x40) {
+			bytes[0] = MAXREG_DISPTEST;
+			bytes[1] = 0x00;
+			shiftOutFast(bytes, delay);
+
+			vTaskDelay(10000);
 		}
 	}
 
@@ -3977,7 +3993,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 			bytes[1] = 0x00;
 			shiftOutFast(bytes, delay);
 
-			vTaskDelay(delay);
+//			vTaskDelay(delay);
 		}
 	}
 }
