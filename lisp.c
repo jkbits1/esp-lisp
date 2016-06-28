@@ -3883,6 +3883,8 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	gpio_enable(clk_pin, GPIO_OUTPUT);
 	gpio_enable(data_pin, GPIO_OUTPUT);
 
+//	bool bSpi = spi_init(0, 2, 4, true, SPI_BIG_ENDIAN, true);
+
 	// send two bytes, d15 first
 	//see pdf p6 for format
 //	Table 1. Serial-Data Format (16 Bits)
@@ -3989,17 +3991,52 @@ void shiftOutFast(unsigned char* data, int delay)
     gpio_write(cs_pin, 1);
     gpio_write(cs_pin, 0);
 
-    sendByte(data[0]);
+    send2Byte(data[0], data[1]);
 
-	 vTaskDelay(delay);
-
-    sendByte(data[1]);
-
+//    sendByte(data[0]);
+//
+//	 vTaskDelay(delay);
+//
+//    sendByte(data[1]);
+//
 //    gpio_write(cs_pin, 0);
-	vTaskDelay(delay);
     gpio_write(cs_pin, 1);
 
+	vTaskDelay(delay);
     return;
+}
+
+void send2Byte(unsigned char reg, unsigned char data) {
+
+	 uint16_t = reg*256+data;
+
+    	    char i = 16;
+
+    	    do{
+    	// printf("\n");
+    	        gpio_write(clk_pin, 0);
+    	                //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
+//    	      if(data & 0x80) {
+        	      if(data & 0x8000) {
+    	// printf("1 %d", i);
+    	        //GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << DATA);
+    	    //  	  gpio_write(data_pin, 1 << data);
+    	  	  	  gpio_write(data_pin, 1);
+    	}
+    	      else {
+    	// printf("0 %d", i);
+    	        //GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << DATA);
+    	    	// ??
+    	//    	 gpio_write(data_pin, 1 << data);
+    	    	gpio_write(data_pin, 0);
+    	}
+
+    	//      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << CLOCK);
+
+    	      gpio_write(clk_pin, 1);
+
+    	      data <<= 1;
+    	    }while(--i);
 }
 
 void sendByte(unsigned char data) {
