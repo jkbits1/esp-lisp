@@ -3855,9 +3855,15 @@ void lisp_run(lisp* envp) {
 // useful? , in esp_spi
 //spi_init
 
-int cs_pin = 14 ;
-int clk_pin = 4; // 2; // 14;
-int data_pin = 2; // 4;
+//int cs_pin = 14 ;
+//int clk_pin = 4; // 2; // 14;
+//int data_pin = 2; // 4;
+
+// hardware spi pins
+int cs_pin = 12 ; // 15?
+int clk_pin = 14;
+int data_pin = 13;
+
 
 //#define byte unsigned char
 
