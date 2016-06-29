@@ -3926,7 +3926,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	// useful comments in this code re cpol, cpha
 	//https://github.com/MetalPhreak/ESP8266_SPI_Driver/blob/master/driver/spi.c
 	// settings from spi.h, look reasonable
-	spi_init(1, SPI_MODE0, SPI_FREQ_DIV_10M, true, SPI_LITTLE_ENDIAN, false ); //true);
+//	spi_init(1, SPI_MODE0, SPI_FREQ_DIV_10M, true, SPI_LITTLE_ENDIAN, false ); //true);
 
 	// send two bytes, d15 first
 	//see pdf p6 for format
@@ -4051,7 +4051,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 //		}
 //	}
 
-	spi_set_settings(1, &old); // restore saved settings
+//	spi_set_settings(1, &old); // restore saved settings
 }
 
 void send2Byte(unsigned char reg, unsigned char data);
@@ -4063,7 +4063,7 @@ void send2Byte(unsigned char reg, unsigned char data);
 void shiftOutFast(unsigned char* data, int delay)
 {
 //    gpio_write(cs_pin, 1);
-//    gpio_write(cs_pin, 0);
+    gpio_write(cs_pin, 0);
 
     send2Byte(data[0], data[1]);
 
@@ -4074,7 +4074,7 @@ void shiftOutFast(unsigned char* data, int delay)
 //    sendByte(data[1]);
 //
 //    gpio_write(cs_pin, 0);
- //   gpio_write(cs_pin, 1);
+   gpio_write(cs_pin, 1);
 
 	vTaskDelay(delay);
     return;
@@ -4084,11 +4084,11 @@ void send2Byte(unsigned char reg, unsigned char data) {
 
 	 uint16_t info = reg*256+data;
 
-	    uint16_t retVal = spi_transfer_16(1, info);
-
-	    printf("rv %d ", retVal);
-
-	    return;
+//	    uint16_t retVal = spi_transfer_16(1, info);
+//
+//	    printf("rv %d ", retVal);
+//
+//	    return;
 
 
     	    char i = 16;
