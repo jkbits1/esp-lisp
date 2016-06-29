@@ -3924,7 +3924,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	printf("min %d ", old.minimal_pins);
 
 	// settings from spi.h, look reasonable
-	spi_init(1, SPI_MODE0, SPI_FREQ_DIV_4M, true, SPI_LITTLE_ENDIAN, true);
+	spi_init(1, SPI_MODE0, SPI_FREQ_DIV_10M, true, SPI_LITTLE_ENDIAN, false ); //true);
 
 	// send two bytes, d15 first
 	//see pdf p6 for format
@@ -4061,7 +4061,7 @@ void send2Byte(unsigned char reg, unsigned char data);
 void shiftOutFast(unsigned char* data, int delay)
 {
 //    gpio_write(cs_pin, 1);
-    gpio_write(cs_pin, 0);
+//    gpio_write(cs_pin, 0);
 
     send2Byte(data[0], data[1]);
 
@@ -4072,7 +4072,7 @@ void shiftOutFast(unsigned char* data, int delay)
 //    sendByte(data[1]);
 //
 //    gpio_write(cs_pin, 0);
-    gpio_write(cs_pin, 1);
+ //   gpio_write(cs_pin, 1);
 
 	vTaskDelay(delay);
     return;
