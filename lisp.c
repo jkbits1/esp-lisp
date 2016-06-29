@@ -3274,8 +3274,13 @@ int lispreadchar(char *chp) {
 
 int libLoaded = 0; //1; //0;
 
-int currentDefine = 0;
-int defineCount = 31; //30; // 34;
+// traffic lights
+//int currentDefine = 0;
+//int defineCount = 31; //30; // 34;
+
+// display
+int currentDefine = 31;
+int defineCount = 32; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3308,8 +3313,10 @@ char *pDefines[] = {
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (changeLights))",
-  "(define (int04 pin clicks count ms) (backLights))"
-
+  "(define (int04 pin clicks count ms) (backLights))",
+  "(define spt (lambda () (spi_test 15 8 1 1 5)))",
+  "(define ledd (lambda () (list (spi_data '( 1 3 5 7 9 2 4 6 8)) (spi_test 4 0 0 0 5) (spi_test 1 0 0 0 5) (spi_test 2 0 0 1 5) (spt) )))",
+  ""
 //    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
 //    "(define statesNumbered (zip states '(1 2 3 4)) )",
 //    "(define tst (lambda (x) ( if (< 0 x) t nil )))",
