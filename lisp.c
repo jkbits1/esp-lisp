@@ -98,6 +98,8 @@
   #define LOOPTAIL "(tail 2999999 0)"
 #endif
 
+#include "MAX7219_font.h"
+
 // use pointer to store some tag data, use this for exteded types
 // last bits (3 as it allocates in at least 8 bytes boundaries):
 // ----------
@@ -3906,6 +3908,8 @@ int data_pin = 13;
 void shiftOutFast(unsigned char* data, int delay);
 void sendByte(unsigned char data);
 
+unsigned char decodeMode = 1;
+
 void test_spi(int init, int digit, int val, int decode, int delay)
 {
 	gpio_enable(cs_pin, GPIO_OUTPUT);
@@ -4001,17 +4005,12 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 			bytes[0] = MAXREG_SHUTDOWN;
 			bytes[1] = 0x01;
 			shiftOutFast(bytes, delay);
-
-//			vTaskDelay(delay);
 		}
 
 		if (initC & 0x01) {
 			bytes[0] = MAXREG_SCANLIMIT;
 			bytes[1] = 0x07;
 			shiftOutFast(bytes, delay);
-
-		//	vTaskDelay(100 / portTICK_RATE_MS);
-//			vTaskDelay(delay);
 		}
 
 		if (initC & 0x02) {
@@ -4019,47 +4018,38 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 
 			if (decode > 0) {
 				bytes[1] = 0xFF;
+				decodeMode = 1;
 			}
 			else {
 				bytes[1] = 0x0;
+				decodeMode = 0;
 			}
 
 			shiftOutFast(bytes, delay);
-
-//			vTaskDelay(delay);
 		}
 
 		if (initC & 0x08) {
 			bytes[0] = MAXREG_DISPTEST;
 			bytes[1] = 0x00;
 			shiftOutFast(bytes, delay);
-
-//			vTaskDelay(delay);
 		}
 
 		if (initC & 0x10) {
 			bytes[0] = MAXREG_INTENSITY;
-//			bytes[1] = 0x02;
 			bytes[1] = (unsigned char)val;
 			shiftOutFast(bytes, delay);
-
-//			vTaskDelay(delay);
 		}
 
 //		if (initC & 0x04) {
 //			bytes[0] = MAXREG_SHUTDOWN;
 //			bytes[1] = 0x01;
 //			shiftOutFast(bytes, delay);
-//
-////			vTaskDelay(delay);
 //		}
 
 //		if (initC & 0x400) {
 //			bytes[0] = MAXREG_DISPTEST;
 //			bytes[1] = 0x00;
 //			shiftOutFast(bytes, delay);
-//
-////			vTaskDelay(10000);
 //		}
 
 		if (initC & 0x20) {
@@ -4077,11 +4067,14 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 		bytes[0] = i+ 1;
 //		bytes[1] = i; // val; //0x01;
 
-		bytes[1] = spiData[i]; // val; //0x01;
+		if (decodeMode == 1) {
+			bytes[1] = spiData[i]; // val; //0x01;
+		}
+		else {
+			bytes[1] = sendChar(spiData[i], false);
+		}
 
 		shiftOutFast(bytes, delay);
-
-//		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
 
 //	if (init > 0) {
@@ -4194,8 +4187,20 @@ void sendByte(unsigned char data) {
 // printf("\n");
 }
 
+unsigned char sendChar(const char data, const bool dp)
+{
+	unsigned char converted = 0b0000001;    // hyphen as default
 
+  // look up bit pattern if possible
+  if (data >= ' ' && data <= 'z')
+    converted = &MAX7219_font[data - ' '];
 
+  // 'or' in the decimal point if required
+  if (dp)
+    converted |= 0b10000000;
+
+  return converted;
+}
 
 // find this display for chinese price - http://digole.com/index.php?productID=1208 (17.89 USD)
 //
