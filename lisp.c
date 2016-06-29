@@ -841,7 +841,7 @@ PRIM spi_data(lisp data) {
 	int i = 0;
 
 	while (data) {
-		spiData[i] = getint(car(data));
+		spiData[i++] = getint(car(data));
 
         data = cdr(data);
     }
@@ -3905,6 +3905,23 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 
 //	bool bSpi = spi_init(0, 2, 4, true, SPI_BIG_ENDIAN, true);
 //	bool bSpi = spi_init(1, 0, 4, true, SPI_BIG_ENDIAN, true);
+
+	const spi_settings_t my_settings = {
+	.mode = SPI_MODE0,
+	.freq_divider = SPI_FREQ_DIV_4M,
+	.msb = true,
+	.endianness = SPI_LITTLE_ENDIAN,
+	.minimal_pins = true
+	}
+
+	spi_settings_t old;
+	spi_get_settings(1, &old); // save current settings
+
+	printf("mode %d ", old.mode);
+	printf("dvd %d ", old.freq_divider);
+	printf("msb %d ", old.msb);
+	printf("end %d ", old.endianness);
+	printf("min %d ", old.minimal_pins);
 
 	// send two bytes, d15 first
 	//see pdf p6 for format
