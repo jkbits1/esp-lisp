@@ -4044,13 +4044,13 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 //			vTaskDelay(delay);
 		}
 
-		if (initC & 0x04) {
-			bytes[0] = MAXREG_SHUTDOWN;
-			bytes[1] = 0x01;
-			shiftOutFast(bytes, delay);
-
-//			vTaskDelay(delay);
-		}
+//		if (initC & 0x04) {
+//			bytes[0] = MAXREG_SHUTDOWN;
+//			bytes[1] = 0x01;
+//			shiftOutFast(bytes, delay);
+//
+////			vTaskDelay(delay);
+//		}
 
 //		if (initC & 0x400) {
 //			bytes[0] = MAXREG_DISPTEST;
