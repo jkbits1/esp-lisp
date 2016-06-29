@@ -3903,6 +3903,16 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	gpio_enable(clk_pin, GPIO_OUTPUT);
 	gpio_enable(data_pin, GPIO_OUTPUT);
 
+//	(spi_data '( 1 3 5 7 9 2 4 6 8))
+//	(spi_data '( 3 5 7 9 2 4 6 8 1))
+//	(spi_data '( 5 7 9 2 4 6 8 1 3))
+//
+//	(spi_data '(1 2 3 4 5 6 7 8 9))
+//	(spi_data '(2 3 4 5 6 7 8 9 10))
+//
+//
+//	(define spt (lambda () (spi_test 15 8 1 1 5)))
+
 //	bool bSpi = spi_init(0, 2, 4, true, SPI_BIG_ENDIAN, true);
 //	bool bSpi = spi_init(1, 0, 4, true, SPI_BIG_ENDIAN, true);
 
