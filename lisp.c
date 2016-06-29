@@ -3912,7 +3912,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	.msb = true,
 	.endianness = SPI_LITTLE_ENDIAN,
 	.minimal_pins = true
-	}
+	};
 
 	spi_settings_t old;
 	spi_get_settings(1, &old); // save current settings
@@ -3922,6 +3922,9 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 	printf("msb %d ", old.msb);
 	printf("end %d ", old.endianness);
 	printf("min %d ", old.minimal_pins);
+
+	// settings from spi.h, look reasonable
+	spi_init(1, SPI_MODE0, SPI_FREQ_DIV_4M, true, SPI_LITTLE_ENDIAN, true);
 
 	// send two bytes, d15 first
 	//see pdf p6 for format
@@ -4045,6 +4048,8 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 ////			vTaskDelay(delay);
 //		}
 //	}
+
+	spi_set_settings(1, &old); // restore saved settings
 }
 
 void send2Byte(unsigned char reg, unsigned char data);
@@ -4076,6 +4081,13 @@ void shiftOutFast(unsigned char* data, int delay)
 void send2Byte(unsigned char reg, unsigned char data) {
 
 	 uint16_t info = reg*256+data;
+
+	    uint16_t retVal = spi_transfer_16(1, info);
+
+	    printf("rv %d ", retVal);
+
+	    return;
+
 
     	    char i = 16;
 
