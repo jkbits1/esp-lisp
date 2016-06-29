@@ -21,7 +21,7 @@
 
 static const unsigned char  HYPHEN = 0b0000001;
 
-const unsigned char MAX7219_font [91] = {
+unsigned char MAX7219_font [91] = {
    0b0000000, // ' '
    HYPHEN, // '!'
    HYPHEN, // '"'
