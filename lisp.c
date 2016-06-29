@@ -3952,6 +3952,30 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 //	D3 D2 D1 D0
 //	MSB DATA LSB
 
+//	(spi_data '( 12 11 13 13 0 15 10 6 8))
+
+	// (define spt (lambda () (spi_test 15 8 1 1 5)))
+	// (define ledd (lambda () (list (spi_data '( 1 3 5 7 9 2 4 6 8)) (spi_test 4 0 0 0 5) (spi_test 1 0 0 0 5) (spi_test 2 0 0 1 5) (spt) )))
+
+	// font page
+	// http://www.gammon.com.au/forum/?id=11516
+
+//	ln lisp> (spi_data '( 1 3 5 7 9 2 4 6 8))
+//	ln (spi_data '( 1 3 5 7 9 2 4 6 8))nil
+//	lisp>  (spi_test 4 0 0 0 10)
+//	ln  (spi_test 4 0 0 0 10)1
+//	lisp>  (spi_test 1 0 0 0 10)
+//	ln  (spi_test 1 0 0 0 10)1
+//	lisp>
+//	nil
+//	lisp>  (spi_test 2 0 0 1 10)
+//	ln  (spi_test 2 0 0 1 10)1
+//	lisp> (define spt (lambda () (spi_test 15 8 1 1 5)))
+//	ln (define spt (lambda () (spi_test 15 8 1 1 5)))#spt
+//	lisp> (spt)
+//	ln (spt)1
+//	lisp>
+
 	unsigned char bytes[2];
 
 	unsigned char initC = (unsigned char)init;
