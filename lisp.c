@@ -3917,11 +3917,11 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 //	spi_settings_t old;
 //	spi_get_settings(1, &old); // save current settings
 
-	printf("mode %d ", old.mode);
-	printf("dvd %d ", old.freq_divider);
-	printf("msb %d ", old.msb);
-	printf("end %d ", old.endianness);
-	printf("min %d ", old.minimal_pins);
+//	printf("mode %d ", old.mode);
+//	printf("dvd %d ", old.freq_divider);
+//	printf("msb %d ", old.msb);
+//	printf("end %d ", old.endianness);
+//	printf("min %d ", old.minimal_pins);
 
 	// useful comments in this code re cpol, cpha
 	//https://github.com/MetalPhreak/ESP8266_SPI_Driver/blob/master/driver/spi.c
