@@ -4006,7 +4006,8 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 
 		if (initC & 0x10) {
 			bytes[0] = MAXREG_INTENSITY;
-			bytes[1] = 0x02;
+//			bytes[1] = 0x02;
+			bytes[1] = (unsigned char)val;
 			shiftOutFast(bytes, delay);
 
 //			vTaskDelay(delay);
