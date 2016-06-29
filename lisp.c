@@ -3907,6 +3907,7 @@ int data_pin = 13;
 //void shiftOutFast(byte[] data);
 void shiftOutFast(unsigned char* data, int delay);
 void sendByte(unsigned char data);
+unsigned char sendChar(const char data, const bool dp);
 
 unsigned char decodeMode = 1;
 
