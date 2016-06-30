@@ -3282,7 +3282,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 31;
-int defineCount = 41; //30; // 34;
+int defineCount = 45; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3325,6 +3325,11 @@ char *pDefines[] = {
   "(define take (lambda (x xs) (cond ((eq x 0) nil) (t (cons (car xs) (take (- x 1) (cdr xs)))))))",
   "(define append (lambda (xs ys) (if (= (car xs) nil) ys (cons (car xs) (append (cdr xs) ys) ))))",
   "(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))",
+  "(define initDisp '( 97 98 99 100 101 102 103 104 ))",
+  "(define rotDisp (lambda () (let ((xx (rotate 1 initDisp))) (set 'initDisp xx))))",
+  "(define showDisp (lambda () (list (spi_data initDisp) (sptt))))",
+  "(interrupt 2 2)",
+  "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
   ""
 //    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
 //    "(define statesNumbered (zip states '(1 2 3 4)) )",
@@ -3343,6 +3348,9 @@ char *pDefines[] = {
 
 int noFree = 0;
 
+//(define initDisp '(97 98 99))
+//(define rotDisp (lambda (n) (spi_data (rotate n initDisp))))
+
 
 // (define drop (lambda (x xs) (cond ((eq x 0) xs) (t (drop (- x 1) (cdr xs))))))
 // (define take (lambda (x xs) (cond ((eq x 0) nil) (t (cons (car xs) (take (- x 1) (cdr xs)))))))
@@ -3351,6 +3359,10 @@ int noFree = 0;
 //
 //(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))
 
+// (define rotDisp (lambda () (let ((xx (rotate 1 initDisp))) (set 'initDisp xx))))
+
+// needs to use a let clause
+//(define rotDisp (lambda () (list (set 'initDisp (rotate 1 initDisp)) (spi_data initDisp))))",
 
     //define some lists to work with
 //    DEFINE (xs, (quote(a b c)));
