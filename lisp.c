@@ -4194,7 +4194,7 @@ unsigned char sendChar(const char data, const bool dp)
 
   // look up bit pattern if possible
   if (data >= ' ' && data <= 'z')
-    converted = &MAX7219_font[data - ' '];
+    converted = MAX7219_font[data - ' '];
 
   // 'or' in the decimal point if required
   if (dp)
