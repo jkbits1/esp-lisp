@@ -1,12 +1,9 @@
 // From https://github.com/nickgammon/MAX7219/MAX7219_font.h
-// Part of :
 // MAX7219 class
 // Author: Nick Gammon
 // Date:   17 March 2015
 //
-//
 // PERMISSION TO DISTRIBUTE
-//
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software
 // and associated documentation files (the "Software"), to deal in the Software without restriction,
 // including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -17,8 +14,18 @@
 // all copies or substantial portions of the Software.
 
 
-// bit patterns for the letters / digits
 
+
+// NOTE blanks ensure line count matches calculated index in code
+
+
+
+
+
+
+
+
+// bit patterns for the letters / digits
 static const unsigned char  HYPHEN = 0b0000001;
 
 unsigned char MAX7219_font [91] = {
@@ -87,7 +94,6 @@ unsigned char MAX7219_font [91] = {
    0b0000001, // '^'
    0b0001000,       // '_'
    0b0000001, // '`'
-//   0b1110111,       // 'a'
    0b1111101,       // 'a'
    0b0011111,       // 'b'
    0b0001101,       // 'c'
@@ -104,10 +110,10 @@ unsigned char MAX7219_font [91] = {
    0b0010101,       // 'n'
    0b1111110,       // 'o' - same as 0
    0b1100111,       // 'p'
-   0b0000001, // 'q'
+   0b1110011, // 'q'
    0b0000101,       // 'r'
    0b1011011,       // 's'
-   0b0000111,       // 't'
+   0b0001111,       // 't'
    0b0011100,       // 'u'
    0b0000001, // 'v'
    0b0000001, // 'w'

@@ -3282,7 +3282,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 31;
-int defineCount = 36; //30; // 34;
+int defineCount = 37; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3318,6 +3318,7 @@ char *pDefines[] = {
   "(define (int04 pin clicks count ms) (backLights))",
   "(define spt (lambda () (spi_test 15 8 1 1 5)))",
   "(define ledd (lambda () (list (spi_data '( 1 3 5 7 9 2 4 6 8)) (spi_test 4 0 0 0 5) (spi_test 1 0 0 0 5) (spi_test 2 0 0 1 5) (spt) )))",
+  "(define sptt (lambda () (spi_test 15 8 1 0 5)))",
   "(ledd)",
   "(spt)",
   ""
@@ -3338,6 +3339,9 @@ char *pDefines[] = {
 
 int noFree = 0;
 
+
+// (define drop (lambda (x xs) (cond ((eq x 0) xs) (t (drop (- x 1) (cdr xs))))))|
+// (define take (lambda (x xs) (cond ((eq x 0) nil) (t (cons (car xs) (take (- x 1) (cdr xs)))))))|
 
 
 //  "(define filter (lambda (f xs) (rev (filterH f xs ()))))",
@@ -4065,7 +4069,7 @@ void test_spi(int init, int digit, int val, int decode, int delay)
 
 	for (unsigned char i = 0; i < digit; i++) {
 //	for (int i =0; i < 8; i++) {
-		bytes[0] = i+ 1;
+		bytes[0] = 8-i; // i+ 1;
 //		bytes[1] = i; // val; //0x01;
 
 		if (decodeMode == 1) {
