@@ -3282,7 +3282,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 31;
-int defineCount = 52; //30; // 34;
+int defineCount = 53; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3331,9 +3331,9 @@ char *pDefines[] = {
   "(define loopCurWheel (lambda () (cond ((eq curWheel 3) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotCount 0)",
   "(define rotDisp (lambda () (incf 'rotCount)))",
-  "(define wheels '( '( 97 98 99 100 101 102 103 104 ) '( 105 106 107 108 109 110 111 112 ) ( 113 114 115 116 117 118 119 120 ) )",
+  "(define wheels '( ( 97 98 99 100 101 102 103 104 ) ( 105 106 107 108 109 110 111 112 ) ( 113 114 115 116 117 118 119 120 ) )",
   "(define wheelDisp (lambda () (nth curWheel wheels)))",
-  "(define showDisp (lambda () (list (spi_data (rotate rotCount wheelDisp)) (sptt))))",
+  "(define showDisp (lambda () (list (spi_data (rotate rotCount (wheelDisp))) (sptt))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
