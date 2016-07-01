@@ -3327,11 +3327,12 @@ char *pDefines[] = {
   "(define append (lambda (xs ys) (if (= (car xs) nil) ys (cons (car xs) (append (cdr xs) ys) ))))",
   "(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
-  "(define wheels '( ( 97 98 99 100 101 102 103 104 ) ( 105 106 107 108 109 110 111 112 ) ( 113 114 115 116 117 118 119 120 ) )",
+  "(define wheels '( ( 6 5 5 6 5 4 5 4 ) ( 4 2 2 2 4 3 3 1 ) ( 1 3 2 3 3 2 4 3 ) (12 8 12 10 10 12 10 8) )",
   "(define curWheel 1)",
-  "(define rotCount 0)",
-  "(define loopRotDisp (lambda () (cond ((eq rotCount 7) (set 'rotCount 0)) (t (incf 'rotCount)))))",
-  "(define loopCurWheel (lambda () (cond ((eq curWheel 3) (set 'curWheel 1)) (t (incf 'curWheel)))))",
+  "(define rotCount '(0 0 0))",
+  "(define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (append (take 1 rotCount) (cons v (drop 2 rotCount)))) (t (append (take 2 rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
+  "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 7) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
+  "(define loopCurWheel (lambda () (cond ((eq curWheel 4) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
   "(define wheelDisp (lambda () (nth curWheel wheels)))",
   "(define showDisp (lambda () (list (spi_data (rotate rotCount (wheelDisp))) (sptt))))",
@@ -3339,7 +3340,11 @@ char *pDefines[] = {
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
   "(define (int04 pin clicks count ms) (list (set 'rotCount 0) (loopCurWheel) (showDisp)))",
+  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
+  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
+  "(define ans (lambda () (mapcar sum3 (zip2 (nth 1 wheels) (nth 2 wheels) (nth 3 wheels))) ))",
   ""
+//  "(define wheels '( ( 97 98 99 100 101 102 103 104 ) ( 105 106 107 108 109 110 111 112 ) ( 113 114 115 116 117 118 119 120 ) )",
   //  "(define rotDisp (lambda () (let ((xx (rotate 1 wheelDisp))) (set 'wheelDisp xx))))",
 //    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
 //    "(define statesNumbered (zip states '(1 2 3 4)) )",
@@ -3357,6 +3362,21 @@ char *pDefines[] = {
 };
 
 int noFree = 0;
+//rotCount
+//(setRotCount 1 1)
+(let ((xx (drop 1 rotCount)) (print xx)))
+		(define rotCount '(0 0 0))
+		(define ttt (lambda (n v) (let ((xx 'rotCount) (print xx)))))
+
+
+//    "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
+//(zip (ntn 1 wheels) (nth 2 wheels))
+//(zip2 (nth 1 wheels) (nth 2 wheels) (nth 3 wheels))
+// (define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))
+// (mapcar sum3 (zip2 (nth 1 wheels) (nth 2 wheels) (nth 3 wheels)))
+
+
+
 
 //(define initDisp '(97 98 99))
 //(define rotDisp (lambda (n) (spi_data (rotate n initDisp))))
