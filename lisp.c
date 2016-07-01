@@ -3282,7 +3282,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 31;
-int defineCount = 45; //30; // 34;
+int defineCount = 52; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3328,7 +3328,7 @@ char *pDefines[] = {
   "(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))",
   "(define curWheel 1)",
   "(define wheels '( '( 97 98 99 100 101 102 103 104 ) '( 105 106 107 108 109 110 111 112 ) ( 113 114 115 116 117 118 119 120 ) )",
-  "(define wheelDisp (nth curWheel wheels))",
+  "(define wheelDisp (lambda () (nth curWheel wheels)))",
   "(define rotDisp (lambda () (let ((xx (rotate 1 wheelDisp))) (set 'wheelDisp xx))))",
   "(define showDisp (lambda () (list (spi_data wheelDisp) (sptt))))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
