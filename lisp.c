@@ -3335,7 +3335,7 @@ char *pDefines[] = {
   "(define loopCurWheel (lambda () (cond ((eq curWheel 4) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
   "(define wheelDisp (lambda () (nth curWheel wheels)))",
-  "(define showDisp (lambda () (list (spi_data (rotate rotCount (wheelDisp))) (sptt))))",
+  "(define showDisp (lambda (n) (list (spi_data (rotate (nth curWheel rotCount) (wheelDisp))) (sptt))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
