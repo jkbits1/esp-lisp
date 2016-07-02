@@ -849,10 +849,16 @@ PRIM led_data(lisp data) {
 	while (data) {
 		val = getint(car(data));
 
-		// show hex
-		if (decodeMode == 0 && val > 9 && val < 16) {
-			// offset by space ascii and start of lowercase alphabet
-			val = val + 32 + 65;
+		// show nums and hex
+		if (decodeMode == 0) {
+			if (val > 9 && val < 16) {
+				// offset by space ascii and start of lowercase alphabet
+				val = val + 32 + 65 - 10;
+			}
+			else
+				if (val >= 0  && val < 10) {
+					val = val + 32 + 65 - 50;
+				}
 		}
 
 		spiData[i++] = val;
@@ -3352,7 +3358,7 @@ char *pDefines[] = {
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
-  "(define (int04 pin clicks count ms) (list (loopCurWheel) ))",
+  "(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
   "",
   "",
   ""
@@ -3377,7 +3383,11 @@ int noFree = 0;
 // uses let
 // (define showDisp (lambda () (let ((rc (nth curWheel rotCount)) (wd (wheelDisp)) ) (list (led_data (rotate rc wd)) (spt)))))
 
+//sptt version
+// (define showDisp (lambda () (list (led_data (rotate (nth curWheel rotCount) (wheelDisp))) (sptt))))
+
 // (showDisp)
+// (led_show 2 0 0 1 5) (led_show 2 0 0 0 5)
 // (define (int04 pin clicks count ms) (list (loopCurWheel) ))
 //"(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
 
