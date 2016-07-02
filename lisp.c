@@ -3282,7 +3282,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 31;
-int defineCount = 54; //30; // 34;
+int defineCount = 52; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3364,9 +3364,14 @@ char *pDefines[] = {
 int noFree = 0;
 //rotCount
 //(setRotCount 1 1)
-(let ((xx (drop 1 rotCount)) (print xx)))
-		(define rotCount '(0 0 0))
-		(define ttt (lambda (n v) (let ((xx 'rotCount) (print xx)))))
+//(let ((xx (drop 1 rotCount)) (print xx)))
+//		(define rotCount '(0 0 0))
+//		(define ttt (lambda (n v) (let ((xx 'rotCount) (print xx)))))
+
+
+//generate loop for ans circle, see haskell code
+//check list of sum3s for maych with ansLoop
+
 
 
 //    "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
