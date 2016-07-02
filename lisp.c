@@ -3354,7 +3354,7 @@ char *pDefines[] = {
   "(define wheelDisp (lambda () (nth curWheel wheels)))",
   "(define showDisp (lambda () (list (led_data (rotate (nth curWheel rotCount) (wheelDisp))) (sptt))))",
   "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n wheels))))",
-  "(define zip2 (lambda (xs ys zs) (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) )",
+//  "(define zip2 (lambda (xs ys zs) (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) )",
 //  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
 //  "(define ans (lambda () (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) ))",
   "(interrupt 2 2)",
