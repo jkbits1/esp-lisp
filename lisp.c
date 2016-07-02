@@ -828,22 +828,34 @@ PRIM interrupt(lisp pin, lisp changeType) {
 
 
 
-void test_spi(int, int, int, int, int);
+void spi_led(int, int, int, int, int);
 
-PRIM spi_test(lisp init, lisp digit, lisp val, lisp decode, lisp delay) {
-	test_spi(getint(init), getint(digit), getint(val), getint(decode), getint(delay));
+PRIM led_show(lisp init, lisp digit, lisp val, lisp decode, lisp delay) {
+	spi_led(getint(init), getint(digit), getint(val), getint(decode), getint(delay));
 
 	return mkint(1);
 }
 
 int spiData[] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 };
 
-PRIM spi_data(lisp data) {
+unsigned char decodeMode = 1;
+
+PRIM led_data(lisp data) {
 
 	int i = 0;
 
+	int val = 0;
+
 	while (data) {
-		spiData[i++] = getint(car(data));
+		val = getint(car(data));
+
+		// show hex
+		if (decodeMode == 0 && val > 9 && val < 16) {
+			// offset by space ascii and start of lowercase alphabet
+			val = val + 32 + 65;
+		}
+
+		spiData[i++] = val;
 
         data = cdr(data);
     }
@@ -3028,8 +3040,8 @@ lisp lisp_init() {
     DEFPRIM(in, 1, in);
     DEFPRIM(interrupt, 2, interrupt);
 
-    DEFPRIM (spi_data, 1, spi_data);
-    DEFPRIM (spi_test, 5, spi_test);
+    DEFPRIM (led_data, 1, led_data);
+    DEFPRIM (led_show, 5, led_show);
 
     // system stuff
     DEFPRIM(gc, -1, gc);
@@ -3316,9 +3328,9 @@ char *pDefines[] = {
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (changeLights))",
   "(define (int04 pin clicks count ms) (backLights))",
-  "(define spt (lambda () (spi_test 15 8 1 1 5)))",
-  "(define ledd (lambda () (list (spi_data '( 1 3 5 7 9 2 4 6 8)) (spi_test 4 0 0 0 5) (spi_test 1 0 0 0 5) (spi_test 2 0 0 1 5) (spt) )))",
-  "(define sptt (lambda () (spi_test 15 8 1 0 5)))",
+  "(define spt (lambda () (led_show 15 8 1 1 5)))",
+  "(define ledd (lambda () (list (led_data '( 1 3 5 7 9 2 4 6 8)) (led_show 4 0 0 0 5) (led_show 1 0 0 0 5) (led_show 2 0 0 1 5) (spt) )))",
+  "(define sptt (lambda () (led_show 15 8 1 0 5)))",
   "(ledd)",
   "(spt)",
   "(define nth (lambda (n xs) (cond ((eq n 1) (car xs)) (t (nth (- n 1) (cdr xs))))))",
@@ -3336,7 +3348,7 @@ char *pDefines[] = {
   "(define loopCurWheel (lambda () (cond ((eq curWheel 4) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
   "(define wheelDisp (lambda () (nth curWheel wheels)))",
-  "(define showDisp (lambda () (list (spi_data (rotate (nth curWheel rotCount) (wheelDisp))) (spt))))",
+  "(define showDisp (lambda () (list (led_data (rotate (nth curWheel rotCount) (wheelDisp))) (spt))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
@@ -3363,20 +3375,28 @@ char *pDefines[] = {
 int noFree = 0;
 
 // uses let
-// (define showDisp (lambda () (let ((rc (nth curWheel rotCount)) (wd (wheelDisp)) ) (list (spi_data (rotate rc wd)) (spt)))))
+// (define showDisp (lambda () (let ((rc (nth curWheel rotCount)) (wd (wheelDisp)) ) (list (led_data (rotate rc wd)) (spt)))))
 
 // (showDisp)
 // (define (int04 pin clicks count ms) (list (loopCurWheel) ))
-
 //"(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
+
 //"(define wheels '( ( 6 5 5 6 5 4 5 4 ) ( 4 2 2 2 4 3 3 1 ) ( 1 3 2 3 3 2 4 3 ) (12 8 12 10 10 12 10 8) ))",
+
+// (define wheels '( ( 1 2 3 4 ) ( 5 6 7 8 ) ( 1 3 2 3 ) (7 11 12 15) ))
 
 // (define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))
 // (define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (srcHelper n v)) ((eq n 3) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))
 
 
+// (define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))
+// (define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))
+// (define ans (lambda () (mapcar sum3 (zip2 (nth 1 wheels) (nth 2 wheels) (nth 3 wheels))) ))
+
+
+
 //(define initDisp '(97 98 99))
-//(define rotDisp (lambda (n) (spi_data (rotate n initDisp))))
+//(define rotDisp (lambda (n) (led_data (rotate n initDisp))))
 //"(define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (append (take 1 rotCount) (cons v (drop 2 rotCount)))) (t (append (take 2 rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
 
 
@@ -3390,7 +3410,7 @@ int noFree = 0;
 // (define rotDisp (lambda () (let ((xx (rotate 1 initDisp))) (set 'initDisp xx))))
 
 // needs to use a let clause
-//(define rotDisp (lambda () (list (set 'initDisp (rotate 1 initDisp)) (spi_data initDisp))))",
+//(define rotDisp (lambda () (list (set 'initDisp (rotate 1 initDisp)) (led_data initDisp))))",
 
     //define some lists to work with
 //    DEFINE (xs, (quote(a b c)));
@@ -4299,9 +4319,7 @@ void shiftOutFast(unsigned char* data, int delay);
 void sendByte(unsigned char data);
 unsigned char sendChar(const char data, const bool dp);
 
-unsigned char decodeMode = 1;
-
-void test_spi(int init, int digit, int val, int decode, int delay)
+void spi_led(int init, int digit, int val, int decode, int delay)
 {
 	gpio_enable(cs_pin, GPIO_OUTPUT);
 	gpio_enable(clk_pin, GPIO_OUTPUT);
