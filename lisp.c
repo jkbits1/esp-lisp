@@ -3359,10 +3359,10 @@ char *pDefines[] = {
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
   "(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
-//  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n wheels))))",
-//  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
-//  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
-//  "(define ans (lambda () (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) ))",
+  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n wheels))))",
+  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
+  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
+  "(define ans (lambda () (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) ))",
   "",
   "",
   ""
@@ -3564,6 +3564,8 @@ int noFree = 0;
 // buttonClick (fwd), increment stNum
 //   show lights for state
 
+int ign = 0;
+
 void readeval(lisp* envp) {
     help(envp);
 
@@ -3575,7 +3577,16 @@ void readeval(lisp* envp) {
 
         // get items from defines array
         if (libLoaded == 0 && ((clock_ms() - last) > 200 )) {
-          ln = pDefines[currentDefine++];
+
+          if (ign == 0) {
+           ln = pDefines[currentDefine++];
+          }
+          else {
+              currentDefine = currentDefine + 1;
+
+              ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+          }
+
 
           if (currentDefine == defineCount) {
             libLoaded = 1;
@@ -3595,6 +3606,10 @@ void readeval(lisp* envp) {
 
         if (!ln) {
             break;
+        } else if (strncmp(ln, "exc", 1) == 0) {
+        	ign = 0;
+        } else if (strncmp(ln, "ign", 1) == 0) {
+        	ign = 1;
         } else if (strncmp(ln, ";", 1) == 0) {
             ; // comment - ignore
         } else if (strcmp(ln, "help") == 0 || ln[0] == '?') {
