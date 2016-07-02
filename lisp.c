@@ -3567,12 +3567,14 @@ int noFree = 0;
 void readeval(lisp* envp) {
     help(envp);
 
+    int last = 0;
+
     while(1) {
         global_envp = envp; // allow idle to gc
         char* ln = NULL;
 
-        // get items from
-        if (libLoaded == 0) {
+        // get items from defines array
+        if (libLoaded == 0 && ((clock_ms() - last) > 200 )) {
           ln = pDefines[currentDefine++];
 
           if (currentDefine == defineCount) {
@@ -3580,6 +3582,8 @@ void readeval(lisp* envp) {
           }
 
           noFree = 1;
+
+          last = clock_ms();
         }
         else {
           ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
