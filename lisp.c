@@ -3282,7 +3282,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 31;
-int defineCount = 52; //30; // 34;
+int defineCount = 47; // 52; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3335,14 +3335,14 @@ char *pDefines[] = {
   "(define loopCurWheel (lambda () (cond ((eq curWheel 4) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
   "(define wheelDisp (lambda () (nth curWheel wheels)))",
-  "(define showDisp (lambda (n) (list (spi_data (rotate (nth curWheel rotCount) (wheelDisp))) (sptt))))",
-  "(interrupt 2 2)",
-  "(interrupt 4 2)",
-  "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
-  "(define (int04 pin clicks count ms) (list (set 'rotCount 0) (loopCurWheel) (showDisp)))",
-  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
-  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
-  "(define ans (lambda () (mapcar sum3 (zip2 (nth 1 wheels) (nth 2 wheels) (nth 3 wheels))) ))",
+//  "(define showDisp (lambda (n) (list (spi_data (rotate (nth curWheel rotCount) (wheelDisp))) (sptt))))",
+//  "(interrupt 2 2)",
+//  "(interrupt 4 2)",
+//  "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
+//  "(define (int04 pin clicks count ms) (list (set 'rotCount 0) (loopCurWheel) (showDisp)))",
+//  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
+//  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
+//  "(define ans (lambda () (mapcar sum3 (zip2 (nth 1 wheels) (nth 2 wheels) (nth 3 wheels))) ))",
   ""
 //  "(define wheels '( ( 97 98 99 100 101 102 103 104 ) ( 105 106 107 108 109 110 111 112 ) ( 113 114 115 116 117 118 119 120 ) )",
   //  "(define rotDisp (lambda () (let ((xx (rotate 1 wheelDisp))) (set 'wheelDisp xx))))",
