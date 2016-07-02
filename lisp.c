@@ -836,7 +836,7 @@ PRIM spi_test(lisp init, lisp digit, lisp val, lisp decode, lisp delay) {
 	return mkint(1);
 }
 
-int spiData[] = { 0,0,0,0, 0,0,0,0 };
+int spiData[] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 };
 
 PRIM spi_data(lisp data) {
 
@@ -3548,7 +3548,7 @@ void readeval(lisp* envp) {
         if (libLoaded == 0) {
           ln = pDefines[currentDefine++];
 
-          if (currentDefine == defineCount) {
+          if (currentDefine >= defineCount) {
             libLoaded = 1;
           }
 
