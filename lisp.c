@@ -3327,11 +3327,11 @@ char *pDefines[] = {
   "(define append (lambda (xs ys) (if (= (car xs) nil) ys (cons (car xs) (append (cdr xs) ys) ))))",
   "(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
-  "(define wheels '( ( 6 5 5 6 5 4 5 4 ) ( 4 2 2 2 4 3 3 1 ) ( 1 3 2 3 3 2 4 3 ) (12 8 12 10 10 12 10 8) ))",
+  "(define wheels '( ( 6 5 5 6 ) ( 4 2 2 2 ) ( 1 3 2 3 ) (12 8 12 10 ) ))",
   "(define curWheel 1)",
-  "(define rotCount '(0 0 0))",
+  "(define rotCount '(0 0 0 0))",
   "(define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (append (take 1 rotCount) (cons v (drop 2 rotCount)))) (t (append (take 2 rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
-  "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 7) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
+  "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 3) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
   "(define loopCurWheel (lambda () (cond ((eq curWheel 4) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
   "(define wheelDisp (lambda () (nth curWheel wheels)))",
@@ -3339,7 +3339,7 @@ char *pDefines[] = {
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
-  "(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
+  "(define (int04 pin clicks count ms) (list (loopCurWheel) ))",
   ""
   //  "(define rotDisp (lambda () (let ((xx (rotate 1 wheelDisp))) (set 'wheelDisp xx))))",
 //    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
@@ -3358,6 +3358,16 @@ char *pDefines[] = {
 };
 
 int noFree = 0;
+
+// uses let
+// (define showDisp (lambda () (let ((rc (nth curWheel rotCount)) (wd (wheelDisp)) ) (list (spi_data (rotate rc wd)) (spt)))))
+
+// (define (int04 pin clicks count ms) (list (loopCurWheel) ))
+
+//"(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
+//"(define wheels '( ( 6 5 5 6 5 4 5 4 ) ( 4 2 2 2 4 3 3 1 ) ( 1 3 2 3 3 2 4 3 ) (12 8 12 10 10 12 10 8) ))",
+
+
 
 //(define initDisp '(97 98 99))
 //(define rotDisp (lambda (n) (spi_data (rotate n initDisp))))
