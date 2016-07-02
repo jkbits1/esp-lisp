@@ -857,7 +857,7 @@ PRIM led_data(lisp data) {
 			}
 			else
 				if (val >= 0  && val < 10) {
-					val = val + 32 + 65 - 50;
+					val = val + 32 + 65 - 49;
 				}
 		}
 
@@ -3300,7 +3300,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 31;
-int defineCount = 56; //30; // 34;
+int defineCount = 60; //30; // 34;
 
 char *pDefines[] = {
   "(define cols '(red amber green))",
@@ -3354,11 +3354,15 @@ char *pDefines[] = {
   "(define loopCurWheel (lambda () (cond ((eq curWheel 4) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
   "(define wheelDisp (lambda () (nth curWheel wheels)))",
-  "(define showDisp (lambda () (list (led_data (rotate (nth curWheel rotCount) (wheelDisp))) (spt))))",
+  "(define showDisp (lambda () (list (led_data (rotate (nth curWheel rotCount) (wheelDisp))) (sptt))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
   "(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
+  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n wheels))))",
+  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
+  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
+  "(define ans (lambda () (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) ))",
   "",
   "",
   ""
@@ -3399,10 +3403,10 @@ int noFree = 0;
 // (define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (srcHelper n v)) ((eq n 3) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))
 
 
+// (define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n wheels))))
 // (define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))
 // (define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))
-// (define ans (lambda () (mapcar sum3 (zip2 (nth 1 wheels) (nth 2 wheels) (nth 3 wheels))) ))
-
+// (define ans (lambda () (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) ))
 
 
 //(define initDisp '(97 98 99))
