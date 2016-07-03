@@ -3617,9 +3617,15 @@ void readeval(lisp* envp) {
 
         global_envp = NULL;
 
-        printf("ln %s", ln);
+        if (ln !== NULL) {
+        	printf("ln %s", ln);
+        }
+        else {
+        	printf("ln == NULL", ln);
+        }
 
         if (!ln) {
+        	printf("break");
             break;
         } else if (strncmp(ln, "addd", 1) == 0) {
         	defineCount++;
