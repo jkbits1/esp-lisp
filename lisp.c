@@ -3350,7 +3350,7 @@ char *pDefines[] = {
   "(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define wheels 1)",
-  "(set! wheels '( ( 6 5 5 6 ) ( 4 2 2 2 ) ( 1 3 2 3 ) (10 12 8 11) ))",
+  "(set! wheels '( ( 6 6 5 5 ) ( 2 2 4 3 ) ( 2 3 3 5 ) (10 11 12 13) ))",
   "(define curWheel 1)",
   "(define rotCount '(0 0 0 0))",
   "(define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))",
@@ -3403,8 +3403,8 @@ int noFree = 0;
 //"(define wheels '( ( 6 5 5 6 5 4 5 4 ) ( 4 2 2 2 4 3 3 1 ) ( 1 3 2 3 3 2 4 3 ) (12 8 12 10 10 12 10 8) ))",
 
 // (define wheels '( ( 1 2 3 4 ) ( 5 6 7 8 ) ( 1 3 2 3 ) (7 11 12 15) ))
-// (set! wheels '( ( 6 5 5 6 ) ( 4 2 3 2 ) ( 5 3 2 3 ) (10 11 12 13) ))",
-//3132 5566 4222, 6655, 2243, 2335 10 12 13 11
+// (set! wheels '( ( 6 6 5 5 ) ( 2 2 4 3 ) ( 2 3 3 5 ) (10 11 12 13) ))",
+//3132 5566 4222, 6655, 2243, 2335 10 11 12 13
 
 // (define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))
 // (define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (srcHelper n v)) ((eq n 3) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))
