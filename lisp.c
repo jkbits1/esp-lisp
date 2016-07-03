@@ -3587,10 +3587,11 @@ void readeval(lisp* envp) {
         // stopping for readline
         if (libLoaded == 0) {
           if ((clock_ms() - last) > 200) {
+        	  noFree = 1;
+
 			  if (ign == 0) {
 			   ln = pDefines[currentDefine++];
 
-			   noFree = 1;
 			  }
 			  else {
 				  printf("ign - %s", pDefines[currentDefine]);
@@ -3598,6 +3599,8 @@ void readeval(lisp* envp) {
 				  currentDefine = currentDefine + 1;
 
 				  ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+
+				  noFree = 0;
 			  }
 
 			  if (currentDefine == defineCount) {
