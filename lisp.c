@@ -846,7 +846,7 @@ PRIM led_data(lisp data) {
 
 	int val = 0;
 
-	while (data) {
+	while (data && i < 15) {
 		val = getint(car(data));
 
 		// show nums and hex
@@ -3299,41 +3299,41 @@ int libLoaded = 0; //1; //0;
 //int defineCount = 31; //30; // 34;
 
 // display
-int currentDefine = 31;
-int defineCount = 56; // 60; //30; // 34;
+int currentDefine = 0; // 31;
+int defineCount = 28; // 56; // 60; //30; // 34;
 
 char *pDefines[] = {
-  "(define cols '(red amber green))",
-  "(define redl   (lambda (n) (out 12 n)))",
-  "(define amberl (lambda (n) (out 0 n)))",
-  "(define greenl (lambda (n) (out 5 n)))",
-  "(define lights (lambda (m n o) (list (redl m) (amberl n) (greenl o))))",
-  "(define clearl (lambda () (lights 0 0 0 )))",
-  "(define stopl  (lambda () (lights 1 0 0)))",
-  "(define readyl (lambda () (lights 1 1 0)))",
-  "(define gol    (lambda () (lights 0 0 1)))",
-  "(define slowl  (lambda () (lights 0 0 1)))",
-  "(define stopc  '(redl))",
-  "(define readyc '(redl amberl))",
-  "(define goc    '(greenl))",
-  "(define slowc  '(amberl))",
-  "(define states '(stopc readyc goc slowc))",
-  "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
-  "(define decf (lambda (m) (let ((xx (- (eval m) 1))) (set m xx))))",
-  "(define nth (lambda (n xs) (cond ((eq n 1) (car xs)) (t (nth (- n 1) (cdr xs))))))",
-  "(define stateItem (lambda (n) (nth n states)))",
-  "(define initialStateNum 1)",
-  "(define stNum initialStateNum)",
-  "(define loopStNum (lambda () (cond ((eq stNum (length states)) (set 'stNum 1)) (t (incf 'stNum)))))",
-  "(define backStNum (lambda () (cond ((eq stNum 1) (set 'stNum (length states))) (t (decf 'stNum)))))",
-  "(define setl (lambda (s) ((eval s) 1)))",
-  "(define showLights (lambda () (mapcar setl (eval (stateItem stNum)))))",
-  "(define changeLights (lambda () (list (loopStNum) (clearl) (showLights))))",
-  "(define backLights (lambda () (list (backStNum) (clearl) (showLights))))",
-  "(interrupt 2 2)",
-  "(interrupt 4 2)",
-  "(define (int02 pin clicks count ms) (changeLights))",
-  "(define (int04 pin clicks count ms) (backLights))",
+//  "(define cols '(red amber green))",
+//  "(define redl   (lambda (n) (out 12 n)))",
+//  "(define amberl (lambda (n) (out 0 n)))",
+//  "(define greenl (lambda (n) (out 5 n)))",
+//  "(define lights (lambda (m n o) (list (redl m) (amberl n) (greenl o))))",
+//  "(define clearl (lambda () (lights 0 0 0 )))",
+//  "(define stopl  (lambda () (lights 1 0 0)))",
+//  "(define readyl (lambda () (lights 1 1 0)))",
+//  "(define gol    (lambda () (lights 0 0 1)))",
+//  "(define slowl  (lambda () (lights 0 0 1)))",
+//  "(define stopc  '(redl))",
+//  "(define readyc '(redl amberl))",
+//  "(define goc    '(greenl))",
+//  "(define slowc  '(amberl))",
+//  "(define states '(stopc readyc goc slowc))",
+//  "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
+//  "(define decf (lambda (m) (let ((xx (- (eval m) 1))) (set m xx))))",
+//  "(define nth (lambda (n xs) (cond ((eq n 1) (car xs)) (t (nth (- n 1) (cdr xs))))))",
+//  "(define stateItem (lambda (n) (nth n states)))",
+//  "(define initialStateNum 1)",
+//  "(define stNum initialStateNum)",
+//  "(define loopStNum (lambda () (cond ((eq stNum (length states)) (set 'stNum 1)) (t (incf 'stNum)))))",
+//  "(define backStNum (lambda () (cond ((eq stNum 1) (set 'stNum (length states))) (t (decf 'stNum)))))",
+//  "(define setl (lambda (s) ((eval s) 1)))",
+//  "(define showLights (lambda () (mapcar setl (eval (stateItem stNum)))))",
+//  "(define changeLights (lambda () (list (loopStNum) (clearl) (showLights))))",
+//  "(define backLights (lambda () (list (backStNum) (clearl) (showLights))))",
+//  "(interrupt 2 2)",
+//  "(interrupt 4 2)",
+//  "(define (int02 pin clicks count ms) (changeLights))",
+//  "(define (int04 pin clicks count ms) (backLights))",
   "(define spt (lambda () (led_show 15 8 1 1 5)))",
 //  "(define ledd (lambda () (list (led_data '( 1 3 5 7 9 2 4 6 8)) (led_show 4 0 0 0 5) (led_show 1 0 0 0 5) (led_show 2 0 0 1 5) (spt) )))",
   "(define sptt (lambda () (led_show 15 8 1 0 5)))",
@@ -3361,9 +3361,9 @@ char *pDefines[] = {
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
   "(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
   "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n wheels))))",
-//  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
-//  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
-//  "(define ans (lambda () (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) ))",
+  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
+  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
+  "(define ans (lambda () (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) ))",
   "",
   "",
   ""
