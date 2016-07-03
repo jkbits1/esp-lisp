@@ -3617,7 +3617,7 @@ void readeval(lisp* envp) {
 
         global_envp = NULL;
 
-        if (ln !== NULL) {
+        if (ln != NULL) {
         	printf("ln %s", ln);
         }
         else {
