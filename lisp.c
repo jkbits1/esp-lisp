@@ -3593,22 +3593,23 @@ void readeval(lisp* envp) {
 			   ln = pDefines[currentDefine++];
 
 			  }
-			  else {
-				  printf("ign - %s", pDefines[currentDefine]);
-
-				  currentDefine = currentDefine + 1;
-
-				  ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
-
-				  noFree = 0;
-			  }
 
 			  if (currentDefine == defineCount) {
 				libLoaded = 1;
 			  }
 
 			  last = clock_ms();
-        	}
+          }
+		  else {
+			  printf("ign - %s", pDefines[currentDefine]);
+
+			  currentDefine = currentDefine + 1;
+
+			  ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+
+			  noFree = 0;
+		  }
+
         }
         else {
           ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
@@ -3680,6 +3681,7 @@ void readeval(lisp* envp) {
         }
 
         if (noFree == 0) {
+
           free(ln);
         }
         else {
