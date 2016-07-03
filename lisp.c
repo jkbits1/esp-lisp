@@ -3403,7 +3403,8 @@ int noFree = 0;
 //"(define wheels '( ( 6 5 5 6 5 4 5 4 ) ( 4 2 2 2 4 3 3 1 ) ( 1 3 2 3 3 2 4 3 ) (12 8 12 10 10 12 10 8) ))",
 
 // (define wheels '( ( 1 2 3 4 ) ( 5 6 7 8 ) ( 1 3 2 3 ) (7 11 12 15) ))
-// (set! wheels '( ( 6 5 5 6 ) ( 4 2 2 2 ) ( 1 3 2 3 ) (12 8 12 10 ) ))",
+// (set! wheels '( ( 6 5 5 6 ) ( 4 2 3 2 ) ( 5 3 2 3 ) (10 11 12 13) ))",
+//3132 5566 4222, 6655, 2243, 2335 10 12 13 11
 
 // (define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))
 // (define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (srcHelper n v)) ((eq n 3) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))
@@ -3582,6 +3583,8 @@ void readeval(lisp* envp) {
         char* ln = NULL;
 
         // get items from defines array
+        // ?? put clock check in loop, to avoid
+        // stopping for readline
         if (libLoaded == 0 && ((clock_ms() - last) > 200 )) {
 
           if (ign == 0) {
