@@ -3350,7 +3350,7 @@ char *pDefines[] = {
   "(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define wheels 1)",
-  "(set! wheels '( ( 6 5 5 6 ) ( 4 2 2 2 ) ( 1 3 2 3 ) (12 8 12 10 ) ))",
+  "(set! wheels '( ( 6 5 5 6 ) ( 4 2 2 2 ) ( 1 3 2 3 ) (10 12 8 11) ))",
   "(define curWheel 1)",
   "(define rotCount '(0 0 0 0))",
   "(define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))",
@@ -3359,7 +3359,7 @@ char *pDefines[] = {
   "(define loopCurWheel (lambda () (cond ((eq curWheel 4) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
   "(define wheelDisp (lambda () (nth curWheel wheels)))",
-  "(define showDisp (lambda () (list (led_data (rotate (nth curWheel rotCount) (wheelDisp)) 0) (sptt))))",
+  "(define showDisp (lambda () (list (led_data (rotate (nth curWheel rotCount) (wheelDisp)) 0) (ans) (sptt))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
@@ -3403,6 +3403,7 @@ int noFree = 0;
 //"(define wheels '( ( 6 5 5 6 5 4 5 4 ) ( 4 2 2 2 4 3 3 1 ) ( 1 3 2 3 3 2 4 3 ) (12 8 12 10 10 12 10 8) ))",
 
 // (define wheels '( ( 1 2 3 4 ) ( 5 6 7 8 ) ( 1 3 2 3 ) (7 11 12 15) ))
+// (set! wheels '( ( 6 5 5 6 ) ( 4 2 2 2 ) ( 1 3 2 3 ) (12 8 12 10 ) ))",
 
 // (define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))
 // (define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (srcHelper n v)) ((eq n 3) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))
