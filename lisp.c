@@ -840,13 +840,15 @@ int spiData[] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0 };
 
 unsigned char decodeMode = 1;
 
-PRIM led_data(lisp data) {
+PRIM led_data(lisp data, lisp offset) {
+
+	int pos = getint(offset);
 
 	int i = 0;
 
 	int val = 0;
 
-	while (data && i < 15) {
+	while (data && ((i + pos) < 15)) {
 		val = getint(car(data));
 
 		// show nums and hex
@@ -861,7 +863,9 @@ PRIM led_data(lisp data) {
 				}
 		}
 
-		spiData[i++] = val;
+		spiData[pos + i] = val;
+
+		i = i + 1;
 
         data = cdr(data);
     }
@@ -3046,7 +3050,7 @@ lisp lisp_init() {
     DEFPRIM(in, 1, in);
     DEFPRIM(interrupt, 2, interrupt);
 
-    DEFPRIM (led_data, 1, led_data);
+    DEFPRIM (led_data, 2, led_data);
     DEFPRIM (led_show, 5, led_show);
 
     // system stuff
@@ -3335,7 +3339,7 @@ char *pDefines[] = {
 //  "(define (int02 pin clicks count ms) (changeLights))",
 //  "(define (int04 pin clicks count ms) (backLights))",
   "(define spt (lambda () (led_show 15 8 1 1 5)))",
-//  "(define ledd (lambda () (list (led_data '( 1 3 5 7 9 2 4 6 8)) (led_show 4 0 0 0 5) (led_show 1 0 0 0 5) (led_show 2 0 0 1 5) (spt) )))",
+  "(define ledd (lambda () (list (led_data '( 1 3 5 7 9 2 4 6 8) 0) (led_show 4 0 0 0 5) (led_show 1 0 0 0 5) (led_show 2 0 0 1 5) (spt) )))",
   "(define sptt (lambda () (led_show 15 8 1 0 5)))",
   "(ledd)",
   "(spt)",
@@ -3355,7 +3359,7 @@ char *pDefines[] = {
   "(define loopCurWheel (lambda () (cond ((eq curWheel 4) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
   "(define wheelDisp (lambda () (nth curWheel wheels)))",
-  "(define showDisp (lambda () (list (led_data (rotate (nth curWheel rotCount) (wheelDisp))) (sptt))))",
+  "(define showDisp (lambda () (list (led_data (rotate (nth curWheel rotCount) (wheelDisp)) 0) (sptt))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
@@ -3363,7 +3367,7 @@ char *pDefines[] = {
   "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n wheels))))",
   "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
   "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
-  "(define ans (lambda () (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) ))",
+  "(define ans (lambda () (led_data (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) 4) ))",
   "",
   "",
   ""
