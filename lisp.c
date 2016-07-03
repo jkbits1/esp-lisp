@@ -3585,26 +3585,27 @@ void readeval(lisp* envp) {
         // get items from defines array
         // ?? put clock check in loop, to avoid
         // stopping for readline
-        if (libLoaded == 0 && ((clock_ms() - last) > 200 )) {
+        if (libLoaded == 0) {
+          if ((clock_ms() - last) > 200) {
+			  if (ign == 0) {
+			   ln = pDefines[currentDefine++];
 
-          if (ign == 0) {
-           ln = pDefines[currentDefine++];
-          }
-          else {
-        	  printf("ign - %s", pDefines[currentDefine]);
+			   noFree = 1;
+			  }
+			  else {
+				  printf("ign - %s", pDefines[currentDefine]);
 
-              currentDefine = currentDefine + 1;
+				  currentDefine = currentDefine + 1;
 
-              ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
-          }
+				  ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+			  }
 
-          if (currentDefine == defineCount) {
-            libLoaded = 1;
-          }
+			  if (currentDefine == defineCount) {
+				libLoaded = 1;
+			  }
 
-          noFree = 1;
-
-          last = clock_ms();
+			  last = clock_ms();
+        	}
         }
         else {
           ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
