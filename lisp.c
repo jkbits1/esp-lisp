@@ -3345,7 +3345,8 @@ char *pDefines[] = {
   "(define append (lambda (xs ys) (if (= (car xs) nil) ys (cons (car xs) (append (cdr xs) ys) ))))",
   "(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
-  "(define wheels '( ( 6 5 5 6 ) ( 4 2 2 2 ) ( 1 3 2 3 ) (12 8 12 10 ) ))",
+  "(define wheels 1)",
+  "(set! wheels '( ( 6 5 5 6 ) ( 4 2 2 2 ) ( 1 3 2 3 ) (12 8 12 10 ) ))",
   "(define curWheel 1)",
   "(define rotCount '(0 0 0 0))",
   "(define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))",
@@ -3582,11 +3583,12 @@ void readeval(lisp* envp) {
            ln = pDefines[currentDefine++];
           }
           else {
+        	  printf("ign - %s", pDefines[currentDefine]);
+
               currentDefine = currentDefine + 1;
 
               ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
           }
-
 
           if (currentDefine == defineCount) {
             libLoaded = 1;
