@@ -3304,7 +3304,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 0; // 31;
-int defineCount = 28; // 56; // 60; //30; // 34;
+int defineCount = 30; //28; // 56; // 60; //30; // 34;
 
 char *pDefines[] = {
 //  "(define cols '(red amber green))",
