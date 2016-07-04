@@ -3339,7 +3339,7 @@ char *pDefines[] = {
 //  "(define (int02 pin clicks count ms) (changeLights))",
 //  "(define (int04 pin clicks count ms) (backLights))",
   "(define spt (lambda () (led_show 15 8 1 1 5)))",
-  "(define ledd (lambda () (list (led_data '( 1 3 5 7 9 2 4 6 8) 0) (led_show 4 0 0 0 5) (led_show 1 0 0 0 5) (led_show 2 0 0 1 5) (spt) )))",
+  "(define ledd (lambda () (list (led_data '( 6 6 5 5 ) 0) (led_show 4 0 0 0 5) (led_show 1 0 0 0 5) (led_show 2 0 0 1 5) (spt) )))",
   "(define sptt (lambda () (led_show 15 8 1 0 5)))",
   "(ledd)",
   "(spt)",
