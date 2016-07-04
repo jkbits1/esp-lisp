@@ -3573,6 +3573,8 @@ int noFree = 0;
 
 int ign = 1; //0;
 
+char *pComment = ";";
+
 void readeval(lisp* envp) {
     help(envp);
 
@@ -3590,8 +3592,10 @@ void readeval(lisp* envp) {
         	  noFree = 1;
 
 			  if (ign == 0) {
-			   ln = pDefines[currentDefine++];
-
+				  ln = pDefines[currentDefine++];
+			  }
+			  else {
+				  ln = pComment;
 			  }
 
 			  if (currentDefine == defineCount) {
