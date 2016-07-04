@@ -3571,7 +3571,7 @@ int noFree = 0;
 // buttonClick (fwd), increment stNum
 //   show lights for state
 
-int ign = 1; //0;
+int ign = 0; //1; //0;
 int checkAfterIgn = 0;
 
 char *pComment = ";";
@@ -3623,7 +3623,7 @@ void readeval(lisp* envp) {
         global_envp = NULL;
 
         if (ln != NULL) {
-        	printf("ln %s", ln);
+//        	printf("ln %s", ln);
         }
         else {
         	printf("ln == NULL", ln);
