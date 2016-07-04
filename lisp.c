@@ -3405,6 +3405,7 @@ int noFree = 0;
 // (define wheels '( ( 1 2 3 4 ) ( 5 6 7 8 ) ( 1 3 2 3 ) (7 11 12 15) ))
 // (set! wheels '( ( 6 6 5 5 ) ( 2 2 4 3 ) ( 2 3 3 5 ) (10 11 12 13) ))",
 //3132 5566 4222, 6655, 2243, 2335 10 11 12 13
+// 6655, 2432, 3523
 
 // (define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))
 // (define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (srcHelper n v)) ((eq n 3) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))
@@ -3632,11 +3633,11 @@ void readeval(lisp* envp) {
         if (!ln) {
         	printf("break");
             break;
-        } else if (strncmp(ln, "addd", 1) == 0) {
+        } else if (strncmp(ln, "addd") == 0) {
         	defineCount++;
-        } else if (strncmp(ln, "exc", 1) == 0) {
+        } else if (strncmp(ln, "exc") == 0) {
         	ign = 0;
-        } else if (strncmp(ln, "ign", 1) == 0) {
+        } else if (strncmp(ln, "ign") == 0) {
         	ign = 1;
         } else if (strncmp(ln, ";", 1) == 0) {
             ; // comment - ignore
