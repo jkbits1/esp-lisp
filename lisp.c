@@ -3368,9 +3368,9 @@ char *pDefines[] = {
   "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
   "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
   "(define ans (lambda () (led_data (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) 4) ))",
-  "",
-  "",
-  ""
+  ";",
+  ";",
+  ";"
   //  "(define rotDisp (lambda () (let ((xx (rotate 1 wheelDisp))) (set 'wheelDisp xx))))",
 //    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
 //    "(define statesNumbered (zip states '(1 2 3 4)) )",
