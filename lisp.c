@@ -3572,6 +3572,7 @@ int noFree = 0;
 //   show lights for state
 
 int ign = 1; //0;
+int checkAfterIgn = 0;
 
 char *pComment = ";";
 
@@ -3588,15 +3589,25 @@ void readeval(lisp* envp) {
         // ?? put clock check in loop, to avoid
         // stopping for readline
         if (libLoaded == 0) {
-          if ((clock_ms() - last) > 200) {
-        	  noFree = 1;
 
+       	  // default value
+       	  ln = pComment;
+          noFree = 1;
+
+          if ((clock_ms() - last) > 200) {
 			  if (ign == 0) {
-				  ln = pDefines[currentDefine++];
+				  ln = pDefines[currentDefine];
 			  }
 			  else {
-				  ln = pComment;
+				  printf("ign - %s", pDefines[currentDefine]);
+
+				  if (checkAfterIgn == 1) {
+					  ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
+					  noFree = 0;
+				  }
 			  }
+
+			  currentDefine = currentDefine + 1;
 
 			  if (currentDefine == defineCount) {
 				libLoaded = 1;
@@ -3604,16 +3615,6 @@ void readeval(lisp* envp) {
 
 			  last = clock_ms();
           }
-		  else {
-			  printf("ign - %s", pDefines[currentDefine]);
-
-			  currentDefine = currentDefine + 1;
-
-			  ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
-
-			  noFree = 0;
-		  }
-
         }
         else {
           ln = readline_int("lisp> ", READLINE_MAXLEN, lispreadchar);
