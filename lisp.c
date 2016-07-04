@@ -3633,11 +3633,11 @@ void readeval(lisp* envp) {
         if (!ln) {
         	printf("break");
             break;
-        } else if (strncmp(ln, "addd") == 0) {
+        } else if (strcmp(ln, "addd") == 0) {
         	defineCount++;
-        } else if (strncmp(ln, "exc") == 0) {
+        } else if (strcmp(ln, "exc") == 0) {
         	ign = 0;
-        } else if (strncmp(ln, "ign") == 0) {
+        } else if (strcmp(ln, "ign") == 0) {
         	ign = 1;
         } else if (strncmp(ln, ";", 1) == 0) {
             ; // comment - ignore
