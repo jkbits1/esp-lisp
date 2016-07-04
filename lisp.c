@@ -3304,7 +3304,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 0; // 31;
-int defineCount = 30; //28; // 56; // 60; //30; // 34;
+int defineCount = 29; //30; //28; // 56; // 60; //30; // 34;
 
 char *pDefines[] = {
 //  "(define cols '(red amber green))",
@@ -3339,10 +3339,9 @@ char *pDefines[] = {
 //  "(define (int02 pin clicks count ms) (changeLights))",
 //  "(define (int04 pin clicks count ms) (backLights))",
   "(define spt (lambda () (led_show 15 8 1 1 5)))",
-  "(define ledd (lambda () (list (led_data '( 6 6 5 5 ) 0) (led_show 4 0 0 0 5) (led_show 1 0 0 0 5) (led_show 2 0 0 1 5) (spt) )))",
   "(define sptt (lambda () (led_show 15 8 1 0 5)))",
+  "(define ledd (lambda () (list (led_data '( 6 6 5 5 ) 0) (led_show 4 0 0 0 5) (led_show 1 0 0 0 5) (led_show 2 0 0 0 5) (sptt) )))",
   "(ledd)",
-  "(spt)",
   "(define nth (lambda (n xs) (cond ((eq n 1) (car xs)) (t (nth (- n 1) (cdr xs))))))",
   "(define drop (lambda (x xs) (cond ((eq x 0) xs) (t (drop (- x 1) (cdr xs))))))",
   "(define take (lambda (x xs) (cond ((eq x 0) nil) (t (cons (car xs) (take (- x 1) (cdr xs)))))))",
