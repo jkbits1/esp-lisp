@@ -826,7 +826,13 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
+PRIM delay(list ticks) {
+	int delayTime = getint(ticks);
 
+	vTaskDelay(delay);
+
+	return ticks;
+}
 
 void spi_led(int, int, int, int, int);
 
@@ -3050,6 +3056,7 @@ lisp lisp_init() {
     DEFPRIM(in, 1, in);
     DEFPRIM(interrupt, 2, interrupt);
 
+    DEFPRIM (delay, 1, delay);
     DEFPRIM (led_data, 2, led_data);
     DEFPRIM (led_show, 5, led_show);
 
@@ -3306,38 +3313,41 @@ int libLoaded = 0; //1; //0;
 int currentDefine = 0; // 31;
 int defineCount = 29; //30; //28; // 56; // 60; //30; // 34;
 
-char *pDefines[] = {
-//  "(define cols '(red amber green))",
-//  "(define redl   (lambda (n) (out 12 n)))",
-//  "(define amberl (lambda (n) (out 0 n)))",
-//  "(define greenl (lambda (n) (out 5 n)))",
-//  "(define lights (lambda (m n o) (list (redl m) (amberl n) (greenl o))))",
-//  "(define clearl (lambda () (lights 0 0 0 )))",
-//  "(define stopl  (lambda () (lights 1 0 0)))",
-//  "(define readyl (lambda () (lights 1 1 0)))",
-//  "(define gol    (lambda () (lights 0 0 1)))",
-//  "(define slowl  (lambda () (lights 0 0 1)))",
-//  "(define stopc  '(redl))",
-//  "(define readyc '(redl amberl))",
-//  "(define goc    '(greenl))",
-//  "(define slowc  '(amberl))",
-//  "(define states '(stopc readyc goc slowc))",
-//  "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
-//  "(define decf (lambda (m) (let ((xx (- (eval m) 1))) (set m xx))))",
-//  "(define nth (lambda (n xs) (cond ((eq n 1) (car xs)) (t (nth (- n 1) (cdr xs))))))",
-//  "(define stateItem (lambda (n) (nth n states)))",
-//  "(define initialStateNum 1)",
-//  "(define stNum initialStateNum)",
-//  "(define loopStNum (lambda () (cond ((eq stNum (length states)) (set 'stNum 1)) (t (incf 'stNum)))))",
-//  "(define backStNum (lambda () (cond ((eq stNum 1) (set 'stNum (length states))) (t (decf 'stNum)))))",
-//  "(define setl (lambda (s) ((eval s) 1)))",
-//  "(define showLights (lambda () (mapcar setl (eval (stateItem stNum)))))",
-//  "(define changeLights (lambda () (list (loopStNum) (clearl) (showLights))))",
-//  "(define backLights (lambda () (list (backStNum) (clearl) (showLights))))",
-//  "(interrupt 2 2)",
-//  "(interrupt 4 2)",
-//  "(define (int02 pin clicks count ms) (changeLights))",
-//  "(define (int04 pin clicks count ms) (backLights))",
+char *pLightsDefines[] = {
+  "(define cols '(red amber green))",
+  "(define redl   (lambda (n) (out 12 n)))",
+  "(define amberl (lambda (n) (out 0 n)))",
+  "(define greenl (lambda (n) (out 5 n)))",
+  "(define lights (lambda (m n o) (list (redl m) (amberl n) (greenl o))))",
+  "(define clearl (lambda () (lights 0 0 0 )))",
+  "(define stopl  (lambda () (lights 1 0 0)))",
+  "(define readyl (lambda () (lights 1 1 0)))",
+  "(define gol    (lambda () (lights 0 0 1)))",
+  "(define slowl  (lambda () (lights 0 0 1)))",
+  "(define stopc  '(redl))",
+  "(define readyc '(redl amberl))",
+  "(define goc    '(greenl))",
+  "(define slowc  '(amberl))",
+  "(define states '(stopc readyc goc slowc))",
+  "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
+  "(define decf (lambda (m) (let ((xx (- (eval m) 1))) (set m xx))))",
+  "(define nth (lambda (n xs) (cond ((eq n 1) (car xs)) (t (nth (- n 1) (cdr xs))))))",
+  "(define stateItem (lambda (n) (nth n states)))",
+  "(define initialStateNum 1)",
+  "(define stNum initialStateNum)",
+  "(define loopStNum (lambda () (cond ((eq stNum (length states)) (set 'stNum 1)) (t (incf 'stNum)))))",
+  "(define backStNum (lambda () (cond ((eq stNum 1) (set 'stNum (length states))) (t (decf 'stNum)))))",
+  "(define setl (lambda (s) ((eval s) 1)))",
+  "(define showLights (lambda () (mapcar setl (eval (stateItem stNum)))))",
+  "(define changeLights (lambda () (list (loopStNum) (clearl) (showLights))))",
+  "(define backLights (lambda () (list (backStNum) (clearl) (showLights))))",
+  "(interrupt 2 2)",
+  "(interrupt 4 2)",
+  "(define (int02 pin clicks count ms) (changeLights))",
+  "(define (int04 pin clicks count ms) (backLights))",
+};
+
+char *pWheelsDefines[] = {
   "(define spt (lambda () (led_show 15 8 1 1 5)))",
   "(define sptt (lambda () (led_show 15 8 1 0 5)))",
   "(define ledd (lambda () (list (led_data '( 6 6 5 5 ) 0) (led_show 4 0 0 0 5) (led_show 1 0 0 0 5) (led_show 2 0 0 0 5) (sptt) )))",
@@ -3385,6 +3395,8 @@ char *pDefines[] = {
 //  "(define fst (lambda (xs) (car xs)) )",
 //  "(define snd (lambda (xs) (car (cdr xs))) )",
 };
+
+char *pDefines[] = pWheelsDefines;
 
 int noFree = 0;
 
