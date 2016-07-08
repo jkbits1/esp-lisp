@@ -3327,7 +3327,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 0; // 31;
-int defineCount = 26; //29; //30; //28; // 56; // 60; //30; // 34;
+int defineCount = 27; //29; //30; //28; // 56; // 60; //30; // 34;
 
 char *pLightsDefines[] = {
 //  "(define cols '(red amber green))",
@@ -3428,24 +3428,7 @@ char *pWordsDefines[] = {
   "(define curWheel 1)",
   "(define rotCount '(0 0 0 0 0))",
   "(define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))",
-  "(define setRotCount (lambda (n v) (let ((xx (cond ((or (eq n 1) (eq n 2) (eq n 3)) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
-  "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 4) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
-  "(define loopCurWheel (lambda () (cond ((eq curWheel 5) (set 'curWheel 1)) (t (incf 'curWheel)))))",
-  "(define rotDisp (lambda () (loopRotDisp)))",
-  "(define wheelDisp (lambda () (nth curWheel words)))",
-  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth curWheel rotCount) 1) (wheelDisp)) ","))))",
-  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
-  "(interrupt 2 2)",
-  "(interrupt 4 2)",
-  "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
-  "(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
-  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n words))))",
-//  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
-//  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
-//  "(define ans (lambda () (led_data (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) 4) ))",
-  ";",
-  ";",
-  ";"
+  "(define setRotCount (lambda (n v) (let ((xx (cond ((or (eq n 1) (eq n 2) (eq n 3)) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))"
   //  "(define rotDisp (lambda () (let ((xx (rotate 1 wheelDisp))) (set 'wheelDisp xx))))",
 //    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
 //    "(define statesNumbered (zip states '(1 2 3 4)) )",
@@ -3461,6 +3444,27 @@ char *pWordsDefines[] = {
 //  "(define fst (lambda (xs) (car xs)) )",
 //  "(define snd (lambda (xs) (car (cdr xs))) )",
 };
+
+char *pWordsDefines2[] = {
+	  "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 4) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
+	  "(define loopCurWheel (lambda () (cond ((eq curWheel 5) (set 'curWheel 1)) (t (incf 'curWheel)))))",
+	  "(define rotDisp (lambda () (loopRotDisp)))",
+	  "(define wheelDisp (lambda () (nth curWheel words)))",
+	  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth curWheel rotCount) 1) (wheelDisp)) ","))))",
+	  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
+	  "(interrupt 2 2)",
+	  "(interrupt 4 2)",
+	  "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
+	  "(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
+	  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n words))))",
+	//  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
+	//  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
+	//  "(define ans (lambda () (led_data (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) 4) ))",
+	  ";",
+	  ";",
+	  ";"
+};
+
 
 // fail hall
 
@@ -3663,6 +3667,7 @@ void readeval(lisp* envp) {
     help(envp);
 
     int last = 0;
+    int offset = 16;
 
     while(1) {
         global_envp = envp; // allow idle to gc
@@ -3676,6 +3681,17 @@ void readeval(lisp* envp) {
        	  // default value
        	  ln = pComment;
           noFree = 1;
+
+          if (currentDefine < 16) {
+        	  pDefines = pWordsDefines;
+          }
+          else if (currentDefine == 16)
+          {
+        	  pDefines = pWordsDefines2;
+        	  offset = 16;
+
+        	  currentDefine = 0;
+          }
 
           if ((clock_ms() - last) > 200) {
 			  if (ign == 0) {
@@ -3692,7 +3708,7 @@ void readeval(lisp* envp) {
 
 			  currentDefine = currentDefine + 1;
 
-			  if (currentDefine == defineCount) {
+			  if ((currentDefine + offset) == defineCount) {
 				libLoaded = 1;
 			  }
 
