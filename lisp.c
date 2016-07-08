@@ -3428,7 +3428,7 @@ char *pWordsDefines[] = {
   "(define curWheel 1)",
   "(define rotCount '(0 0 0 0 0))",
   "(define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))",
-  "(define setRotCount (lambda (n v) (let ((xx (cond ((or (eq n 1) (eq n 2) (eq n 3)) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))"
+  "(define setRotCount (lambda (n v) (let ((xx (cond ((or (eq n 1) (eq n 2) (eq n 3)) (srcHelper n v)) (t (append (take n rotCount) (cons v nil))) ))) (set 'rotCount xx))))"
   //  "(define rotDisp (lambda () (let ((xx (rotate 1 wheelDisp))) (set 'wheelDisp xx))))",
 //    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
 //    "(define statesNumbered (zip states '(1 2 3 4)) )",
@@ -3446,7 +3446,7 @@ char *pWordsDefines[] = {
 };
 
 char *pWordsDefines2[] = {
-	  "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 4) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
+	  "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 3) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
 	  "(define loopCurWheel (lambda () (cond ((eq curWheel 5) (set 'curWheel 1)) (t (incf 'curWheel)))))",
 	  "(define rotDisp (lambda () (loopRotDisp)))",
 	  "(define wheelDisp (lambda () (nth curWheel words)))",
