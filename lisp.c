@@ -826,7 +826,9 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
-PRIM delay(list ticks) {
+void vTaskDelay(uint32_t delay);
+
+PRIM delay(lisp ticks) {
 	int delayTime = getint(ticks);
 
 	vTaskDelay(delay);
@@ -3445,7 +3447,7 @@ char *pWordsDefines[] = {
 //  "(define snd (lambda (xs) (car (cdr xs))) )",
 };
 
-char *pDefines[] = pWordsDefines;
+char **pDefines = pWheelsDefines;
 
 int noFree = 0;
 
