@@ -3450,7 +3450,7 @@ char *pWordsDefines2[] = {
 	  "(define loopCurWheel (lambda () (cond ((eq curWheel 5) (set 'curWheel 1)) (t (incf 'curWheel)))))",
 	  "(define rotDisp (lambda () (loopRotDisp)))",
 	  "(define wheelDisp (lambda () (nth curWheel words)))",
-	  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth curWheel rotCount) 1) (wheelDisp)) ","))))",
+	  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth curWheel rotCount) 1) (wheelDisp)) \",\"))))",
 	  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
 	  "(interrupt 2 2)",
 	  "(interrupt 4 2)",
