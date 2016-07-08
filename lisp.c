@@ -3667,7 +3667,7 @@ void readeval(lisp* envp) {
     help(envp);
 
     int last = 0;
-    int offset = 16;
+    int offset = 0;
 
     while(1) {
         global_envp = envp; // allow idle to gc
@@ -3682,7 +3682,7 @@ void readeval(lisp* envp) {
        	  ln = pComment;
           noFree = 1;
 
-          if (currentDefine < 16) {
+          if (currentDefine < 16 && offset == 0) {
         	  pDefines = pWordsDefines;
           }
           else if (currentDefine == 16)
