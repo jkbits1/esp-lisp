@@ -831,7 +831,7 @@ void vTaskDelay(uint32_t delay);
 PRIM delay(lisp ticks) {
 	int delayTime = getint(ticks);
 
-	vTaskDelay(delay);
+	vTaskDelay(delayTime);
 
 	return ticks;
 }
