@@ -3422,12 +3422,12 @@ char *pWordsDefines[] = {
   "(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define words 1)",
-  "(set! words '( ( \"fall\" \"fall\" \"fall\" \"fall\" ), ( \"ball\" \"fill\" \"tall\" \"fell\" ), ( \"tell\" \"toll\" \"till\" \"tail\" ), (\"told\" \"roll\" \"loll\" \"poll\"), (\"cold\" \"cold\" \"cold\" \"cold\") ))",
+  "(set! words '( ( \"fall\" \"fall\" \"fall\" \"fall\" ) ( \"ball\" \"fill\" \"tall\" \"fell\" ) ( \"tell\" \"toll\" \"till\" \"tail\" ) (\"told\" \"roll\" \"loll\" \"poll\") (\"cold\" \"cold\" \"cold\" \"cold\") ))",
   "(define curWheel 1)",
   "(define rotCount '(0 0 0 0 0))",
   "(define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))",
-  "(define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (srcHelper n v)) ((eq n 3) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
-  "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 3) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
+  "(define setRotCount (lambda (n v) (let ((xx (cond ((or (eq n 1) (eq n 2) (eq n 3)) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
+  "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 4) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
   "(define loopCurWheel (lambda () (cond ((eq curWheel 5) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
   "(define wheelDisp (lambda () (nth curWheel words)))",
@@ -3462,6 +3462,9 @@ char *pWordsDefines[] = {
 char **pDefines = pWordsDefines;
 
 int noFree = 0;
+
+//(define setRotCount (lambda (n v) (let ((xx (cond ((or (eq n 1) (eq n 2) (eq n 3)) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))
+//(define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (srcHelper n v)) ((eq n 3) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))
 
 // uses let
 // (define showDisp (lambda () (let ((rc (nth curWheel rotCount)) (wd (wheelDisp)) ) (list (led_data (rotate rc wd)) (spt)))))
