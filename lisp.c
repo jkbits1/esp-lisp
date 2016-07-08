@@ -826,12 +826,24 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
-PRIM delay(list ticks) {
+PRIM delay(lisp ticks) {
 	int delayTime = getint(ticks);
 
 	vTaskDelay(delay);
 
 	return ticks;
+}
+
+int random_basic(int low, int high) {
+	int r = rand() % (high - low + 1) + low;
+
+	return r;
+}
+
+PRIM random(lisp low, lisp high) {
+	int r = random_basic(low, high);
+
+	return mkint(r);
 }
 
 void spi_led(int, int, int, int, int);
