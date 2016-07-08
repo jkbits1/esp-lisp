@@ -3325,7 +3325,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 0; // 31;
-int defineCount = 20; //29; //30; //28; // 56; // 60; //30; // 34;
+int defineCount = 26; //29; //30; //28; // 56; // 60; //30; // 34;
 
 char *pLightsDefines[] = {
 //  "(define cols '(red amber green))",
@@ -3430,13 +3430,13 @@ char *pWordsDefines[] = {
   "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 3) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
   "(define loopCurWheel (lambda () (cond ((eq curWheel 5) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
-  "(define wheelDisp (lambda () (nth curWheel wheels)))",
+  "(define wheelDisp (lambda () (nth curWheel words)))",
   "(define showDisp (lambda () (list (led_data (nth (nth curWheel rotCount) (wheelDisp))) (ans) (sptt))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
   "(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
-  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n wheels))))",
+  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n words))))",
 //  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
 //  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
 //  "(define ans (lambda () (led_data (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) 4) ))",
