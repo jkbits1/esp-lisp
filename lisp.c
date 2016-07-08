@@ -871,6 +871,8 @@ PRIM led_data(lisp data, lisp offset) {
 	while (data && ((i + pos) < 15)) {
 		val = getint(car(data));
 
+//		printf("val %d", val);
+
 		// show nums and hex
 		if (decodeMode == 0) {
 			if (val > 9 && val < 16) {
@@ -3431,7 +3433,8 @@ char *pWordsDefines[] = {
   "(define loopCurWheel (lambda () (cond ((eq curWheel 5) (set 'curWheel 1)) (t (incf 'curWheel)))))",
   "(define rotDisp (lambda () (loopRotDisp)))",
   "(define wheelDisp (lambda () (nth curWheel words)))",
-  "(define showDisp (lambda () (list (led_data (nth ( + (nth curWheel rotCount) 1) (wheelDisp))) (sptt))))",
+  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth curWheel rotCount) 1) (wheelDisp)) ","))))",
+  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
@@ -3458,6 +3461,8 @@ char *pWordsDefines[] = {
 //  "(define fst (lambda (xs) (car xs)) )",
 //  "(define snd (lambda (xs) (car (cdr xs))) )",
 };
+
+// fail hall
 
 char **pDefines = pWordsDefines;
 
