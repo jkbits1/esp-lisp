@@ -826,10 +826,12 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
+void vTaskDelay( uint32_t xTicksToDelay )
+
 PRIM delay(lisp ticks) {
 	int delayTime = getint(ticks);
 
-	vTaskDelay(delay);
+	vTaskDelay(delayTime);
 
 	return ticks;
 }
@@ -841,7 +843,7 @@ int random_basic(int low, int high) {
 }
 
 PRIM random(lisp low, lisp high) {
-	int r = random_basic(low, high);
+	int r = random_basic(getint(low), getint(high));
 
 	return mkint(r);
 }
