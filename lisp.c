@@ -826,7 +826,7 @@ PRIM interrupt(lisp pin, lisp changeType) {
     }
 }
 
-void vTaskDelay( uint32_t xTicksToDelay )
+void vTaskDelay( uint32_t xTicksToDelay );
 
 PRIM delay(lisp ticks) {
 	int delayTime = getint(ticks);
@@ -3325,7 +3325,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 0; // 31;
-int defineCount = 29; //30; //28; // 56; // 60; //30; // 34;
+int defineCount = 20; //29; //30; //28; // 56; // 60; //30; // 34;
 
 char *pLightsDefines[] = {
   "(define cols '(red amber green))",
@@ -3358,7 +3358,7 @@ char *pLightsDefines[] = {
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (changeLights))",
-  "(define (int04 pin clicks count ms) (backLights))",
+  "(define (int04 pin clicks count ms) (backLights))"
 };
 
 char *pWheelsDefines[] = {
@@ -3459,7 +3459,7 @@ char *pWordsDefines[] = {
 //  "(define snd (lambda (xs) (car (cdr xs))) )",
 };
 
-char *pDefines[] = pWordsDefines;
+char **pDefines = pWordsDefines;
 
 int noFree = 0;
 
