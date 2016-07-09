@@ -3327,7 +3327,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 0; // 31;
-int defineCount = 27; //29; //30; //28; // 56; // 60; //30; // 34;
+int defineCount = 27; //30; //28; // 56; // 60; //30; // 34;
 
 char *pLightsDefines[] = {
 //  "(define cols '(red amber green))",
@@ -3448,17 +3448,16 @@ char *pWordsDefines[] = {
 char *pWordsDefines2[] = {
 	  "(define srcHelper (lambda (n v) (append (take n rotCount) (cons v (drop (- n 1) rotCount)))))",
 	  "(define setRotCount (lambda (n v) (let ((xx (cond ((and (< -1 n) (< n rowCount)) (srcHelper n v)) (t (append (take n rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
-	  "(define loopRotDisp (lambda () (cond ((eq (nth curRow rotCount) (- wordCount 1)) (setRotCount curRow 0)) (t (setRotCount curRow (+ (nth curRow rotCount) 1))))))",
+	  "(define rotDisp (lambda () (cond ((eq (nth (+ curRow 1) rotCount) (- wordCount 1)) (setRotCount curRow 0)) (t (setRotCount curRow (+ (nth curRow rotCount) 1))))))",
 	  "(define loopCurRow (lambda () (cond ((eq curRow rowCount) (set 'curRow 1)) (t (incf 'curRow)))))",
-	  "(define rotDisp (lambda () (loopRotDisp)))",
-	  "(define rowDisp (lambda () (nth curRow words)))",
-	  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth curRow rotCount) 1) (rowDisp)) \",\"))))",
+	  "(define rowDisp (lambda () (nth (+ curRow 1) words)))",
+	  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth (+ curRow 1) rotCount) 1) (rowDisp)) \",\"))))",
 	  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
 	  "(interrupt 2 2)",
 	  "(interrupt 4 2)",
 	  "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
 	  "(define (int04 pin clicks count ms) (list (loopCurRow) (showDisp)))",
-	  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n words))))",
+//	  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n words))))",
 	//  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
 	//  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
 	//  "(define ans (lambda () (led_data (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) 4) ))",
