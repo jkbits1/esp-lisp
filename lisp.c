@@ -3327,7 +3327,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 0; // 31;
-int defineCount = 28; //30; //28; // 56; // 60; //30; // 34;
+int defineCount = 33; //30; //28; // 56; // 60; //30; // 34;
 
 char *pLightsDefines[] = {
 //  "(define cols '(red amber green))",
@@ -3424,7 +3424,7 @@ char *pWordsDefines[] = {
   "(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define words 1)",
-  "(set! words '( ( \"f,a,l,l\" \"f,a,l,l\" \"f,a,l,l\" \"f,a,l,l\" ) ( \"b,a,l,l\" \"f,i,l,l\" \"t,a,l,l\" \"f,e,l,l\" ) ( \"t,e,l,l\" \"t,o,l,l\" \"t,i,l,l\" \"t,a,i,l\" ) (\"l,o,l,l\" \"p,o,l,l\" \"t,o,l,d\" \"r,o,l,l\") (\"c,o,l,d\" \"c,o,l,d\" \"c,o,l,d\" \"c,o,l,d\") ))",
+  "(set! words '( ( \"f,a,l,l\" \"f,a,l,l\" \"f,a,l,l\" \"f,a,l,l\" ) ( \"b,a,l,l\" \"f,i,l,l\" \"t,a,l,l\" \"f,e,l,l\" ) ( \"t,e,l,l\" \"t,o,l,l\" \"t,i,l,l\" \"t,a,i,l\" ) (\"r,o,l,l\" \"p,o,l,l\" \"s,o,l,d\" \"t,o,l,d\") (\"c,o,l,d\" \"c,o,l,d\" \"c,o,l,d\" \"c,o,l,d\") ))",
   "(define curRow 0)",
   "(define rowCount 5)",
   "(define wordCount 4)",
@@ -3458,13 +3458,18 @@ char *pWordsDefines2[] = {
 	  "(interrupt 4 2)",
 	  "(define (int02 pin clicks count ms) (list (rotRow) (showDisp)))",
 	  "(define (int04 pin clicks count ms) (list (nextRow) (showDisp)))",
+	  "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys) ))))))",
+	  "(define sum (lambda (t) (+ (car t) (nth 2 t)) ))",
+	  "(define minus (lambda (t) (- (car t) (nth 2 t)) ))",
+	  "(define reduce (lambda (xs seed) (cond ((eq (car xs) nil) seed) (t (reduce (cdr xs) (+ (car xs) seed)) ))))",
+	  "(define check (lambda () (cond ((eq (reduce (mapcar sum (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (print \"solved\")) (t print \"not yet\"))))"
 //	  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n words))))",
 	//  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
 	//  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
 	//  "(define ans (lambda () (led_data (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) 4) ))",
-	  ";",
-	  ";",
-	  ";"
+//	  ";",
+//	  ";",
+//	  ";"
 };
 
 
