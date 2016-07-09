@@ -3449,7 +3449,7 @@ char *pWordsDefines2[] = {
 	  "(define srcHelper (lambda (n v) (append (take n rotCount) (cons v (drop (+ n 1) rotCount)))))",
 	  "(define setRotCount (lambda (n v) (let ((xx (cond ((and (< -1 n) (< n rowCount)) (srcHelper n v)) (t (append (take n rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
 	  "(define rotRow (lambda () (cond ((eq (nth (+ curRow 1) rotCount) (- wordCount 1)) (setRotCount curRow 0)) (t (setRotCount curRow (+ (nth (+ curRow 1) rotCount) 1))))))",
-	  "(define nextRow (lambda () (cond ((eq curRow rowCount) (set 'curRow 1)) (t (incf 'curRow)))))",
+	  "(define nextRow (lambda () (cond ((eq curRow (- rowCount 1)) (set 'curRow 0)) (t (incf 'curRow)))))",
 	  "(define getRow (lambda () (nth (+ curRow 1) words)))",
 	  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth (+ curRow 1) rotCount) 1) (getRow)) \",\"))))",
 	  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
