@@ -3327,7 +3327,7 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 0; // 31;
-int defineCount = 33; //30; //28; // 56; // 60; //30; // 34;
+int defineCount = 32; //30; //28; // 56; // 60; //30; // 34;
 
 char *pLightsDefines[] = {
 //  "(define cols '(red amber green))",
@@ -3456,12 +3456,13 @@ char *pWordsDefines2[] = {
 	  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
 	  "(interrupt 2 2)",
 	  "(interrupt 4 2)",
-	  "(define (int02 pin clicks count ms) (list (rotRow) (showDisp)))",
+	  "(define (int02 pin clicks count ms) (list (rotRow) (check) (showDisp)))",
 	  "(define (int04 pin clicks count ms) (list (nextRow) (showDisp)))",
 	  "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys) ))))))",
 	  "(define minus (lambda (t) (- (car t) (nth 2 t)) ))",
 	  "(define reduce (lambda (xs seed) (cond ((eq (car xs) nil) seed) (t (reduce (cdr xs) (+ (car xs) seed)) ))))",
-	  "(define check (lambda () (cond ((eq (reduce (mapcar minus (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (print \"solved\")) (t (print \"not yet\")))))"
+	  "(define check (lambda () (cond ((eq (reduce (mapcar minus (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (out 5 1)) (t (out 5 0)))))"
+//	  "(define check (lambda () (cond ((eq (reduce (mapcar minus (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (print \"solved\")) (t (print \"not yet\")))))"
 //	  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n words))))",
 //	  "(define sum (lambda (t) (+ (car t) (nth 2 t)) ))",
 	//  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
