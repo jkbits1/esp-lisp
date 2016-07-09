@@ -3425,10 +3425,10 @@ char *pWordsDefines[] = {
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define words 1)",
   "(set! words '( ( \"f,a,l,l\" \"f,a,l,l\" \"f,a,l,l\" \"f,a,l,l\" ) ( \"b,a,l,l\" \"f,i,l,l\" \"t,a,l,l\" \"f,e,l,l\" ) ( \"t,e,l,l\" \"t,o,l,l\" \"t,i,l,l\" \"t,a,i,l\" ) (\"t,o,l,d\" \"r,o,l,l\" \"l,o,l,l\" \"p,o,l,l\") (\"c,o,l,d\" \"c,o,l,d\" \"c,o,l,d\" \"c,o,l,d\") ))",
-  "(define curWheel 1)",
-  "(define rotCount '(0 0 0 0 0))",
-  "(define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))",
-  "(define setRotCount (lambda (n v) (let ((xx (cond ((and (< 0 n) (< n 4)) (srcHelper n v)) (t (append (take n rotCount) (cons v nil))) ))) (set 'rotCount xx))))"
+  "(define curRow 0)",
+  "(define rowCount 5)",
+  "(define wordCount 4)",
+  "(define rotCount '(0 0 0 0 0))"
   //  "(define rotDisp (lambda () (let ((xx (rotate 1 wheelDisp))) (set 'wheelDisp xx))))",
 //    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
 //    "(define statesNumbered (zip states '(1 2 3 4)) )",
@@ -3446,16 +3446,18 @@ char *pWordsDefines[] = {
 };
 
 char *pWordsDefines2[] = {
-	  "(define loopRotDisp (lambda () (cond ((eq (nth curWheel rotCount) 3) (setRotCount curWheel 0)) (t (setRotCount curWheel (+ (nth curWheel rotCount) 1))))))",
-	  "(define loopCurWheel (lambda () (cond ((eq curWheel 5) (set 'curWheel 1)) (t (incf 'curWheel)))))",
+	  "(define srcHelper (lambda (n v) (append (take n rotCount) (cons v (drop (- n 1) rotCount)))))",
+	  "(define setRotCount (lambda (n v) (let ((xx (cond ((and (< -1 n) (< n rowCount)) (srcHelper n v)) (t (append (take n rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
+	  "(define loopRotDisp (lambda () (cond ((eq (nth curRow rotCount) (- wordCount 1)) (setRotCount curRow 0)) (t (setRotCount curRow (+ (nth curRow rotCount) 1))))))",
+	  "(define loopCurRow (lambda () (cond ((eq curRow rowCount) (set 'curRow 1)) (t (incf 'curRow)))))",
 	  "(define rotDisp (lambda () (loopRotDisp)))",
-	  "(define wheelDisp (lambda () (nth curWheel words)))",
-	  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth curWheel rotCount) 1) (wheelDisp)) \",\"))))",
+	  "(define rowDisp (lambda () (nth curRow words)))",
+	  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth curRow rotCount) 1) (rowDisp)) \",\"))))",
 	  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
 	  "(interrupt 2 2)",
 	  "(interrupt 4 2)",
 	  "(define (int02 pin clicks count ms) (list (rotDisp) (showDisp)))",
-	  "(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
+	  "(define (int04 pin clicks count ms) (list (loopCurRow) (showDisp)))",
 	  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n words))))",
 	//  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
 	//  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
