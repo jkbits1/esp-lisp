@@ -3459,11 +3459,11 @@ char *pWordsDefines2[] = {
 	  "(define (int02 pin clicks count ms) (list (rotRow) (showDisp)))",
 	  "(define (int04 pin clicks count ms) (list (nextRow) (showDisp)))",
 	  "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys) ))))))",
-	  "(define sum (lambda (t) (+ (car t) (nth 2 t)) ))",
 	  "(define minus (lambda (t) (- (car t) (nth 2 t)) ))",
 	  "(define reduce (lambda (xs seed) (cond ((eq (car xs) nil) seed) (t (reduce (cdr xs) (+ (car xs) seed)) ))))",
-	  "(define check (lambda () (cond ((eq (reduce (mapcar sum (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (print \"solved\")) (t print \"not yet\"))))"
+	  "(define check (lambda () (cond ((eq (reduce (mapcar minus (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (print \"solved\")) (t (print \"not yet\")))))"
 //	  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n words))))",
+//	  "(define sum (lambda (t) (+ (car t) (nth 2 t)) ))",
 	//  "(define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))",
 	//  "(define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))",
 	//  "(define ans (lambda () (led_data (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) 4) ))",
@@ -3479,6 +3479,8 @@ char **pDefines = pWordsDefines;
 
 int noFree = 0;
 
+
+
 //(zip '(0 2 1 0 0) '(0 2 1 3 0))
 //(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys) ))))))
 //(define sum (lambda (t) (+ (car t) (nth 2 t)) ))
@@ -3486,6 +3488,9 @@ int noFree = 0;
 //(mapcar sum (zip answer rotCount))
 // (define reduce (lambda (xs seed) (cond ((eq (car xs) nil) seed) (t (reduce (cdr xs) (+ (car xs) seed)) ))))
 // (define check (lambda () (cond ((eq (reduce (mapcar sum (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (print "solved")) (t print "not yet"))))
+
+// (define check (lambda () (cond ((eq (reduce (mapcar minus (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (print "solved")) (t (print "not yet")))))
+// (define check (lambda () (cond (t (print "not yet")))))
 
 //"(define setRotCount (lambda (n v) (let ((xx (cond ((or (eq n 1) (eq n 2) (eq n 3)) (srcHelper n v)) (t (append (take n rotCount) (cons v nil))) ))) (set 'rotCount xx))))"
 
