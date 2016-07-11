@@ -3424,7 +3424,7 @@ char *pWordsDefines[] = {
   "(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(list (define words 1) (define tries 0))",
-  "(set! words '( ( \"f,a,l,l\" \"f,a,l,l\" \"f,a,l,l\" \"f,a,l,l\" ) ( \"b,a,l,l\" \"f,i,l,l\" \"t,a,l,l\" \"f,e,l,l\" ) ( \"t,e,l,l\" \"t,o,l,l\" \"t,i,l,l\" \"t,a,i,l\" ) (\"r,o,l,l\" \"p,o,l,l\" \"s,o,l,d\" \"t,o,l,d\") (\"c,o,l,d\" \"c,o,l,d\" \"c,o,l,d\" \"c,o,l,d\") ))",
+  "(set! words '( ( \"f,a,l,l\" \"f,a,l,l\" \"f,a,l,l\" \"f,a,l,l\" ) ( \"b,a,l,l\" \"f,i,l,l\" \"t,a,l,l\" \"f,e,l,l\" ) ( \"t,e,l,l\" \"t,o,l,l\" \"t,i,l,l\" \"t,a,i,l\" ) (\"r,o,l,l\" \"p,o,l,l\" \"t,o,i,l\" \"t,o,l,d\") (\"c,o,l,d\" \"c,o,l,d\" \"c,o,l,d\" \"c,o,l,d\") ))",
   "(define curRow 0)",
   "(define rowCount 5)",
   "(define wordCount 4)",
