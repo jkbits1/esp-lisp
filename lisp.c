@@ -3444,7 +3444,7 @@ char *pWordsDefines[] = {
   "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys) ))))))",
   "(define minus (lambda (t) (- (car t) (nth 2 t)) ))",
   "(define reduce (lambda (xs seed) (cond ((eq (car xs) nil) seed) (t (reduce (cdr xs) (cond ((eq (car xs) 0) seed) (t (+ seed 1)))) ))))",
-  "(define check (lambda () (cond ((eq (reduce (mapcar minus (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (out 5 1)) (t (out 5 0)))))",
+  "(define check (lambda () (cond ((eq (reduce (mapcar minus (zip answer (take (- rowCount 2) (drop 1 rotCount)))) 0) 0) (out 5 1)) (t (out 5 0)))))",
   	  ";",
   	  ";",
   	  ";"
