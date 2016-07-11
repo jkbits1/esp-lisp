@@ -3481,6 +3481,8 @@ char *pWordsDefines2[] = {
 
 //char **pDefines = pWordsDefines;
 char **pDefines = pLightsDefines;
+char **pDefines0 = pLightsDefines;
+char **pDefines1 = pLightsDefines;
 
 int noFree = 0;
 
@@ -3696,11 +3698,11 @@ void readeval(lisp* envp) {
           noFree = 1;
 
           if (currentDefine < offsetSize && offset == 0) {
-        	  pDefines = pWordsDefines;
+              pDefines = pDefines0;
           }
           else if (currentDefine == offsetSize)
           {
-        	  pDefines = pWordsDefines2;
+              pDefines = pDefines1;
         	  offset = offsetSize;
 
         	  currentDefine = 0;
