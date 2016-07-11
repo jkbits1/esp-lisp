@@ -3436,10 +3436,10 @@ char *pWordsDefines[] = {
   "(define nextRow (lambda () (cond ((eq curRow (- rowCount 1)) (set 'curRow 0)) (t (incf 'curRow)))))",
   "(define getRow (lambda () (nth (+ curRow 1) words)))",
   "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth (+ curRow 1) rotCount) 1) (getRow)) \",\"))))",
-  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
+  "(define showDisp (lambda () (list (led_data (wordAsNums)) (led_data (list (+ curRow 1)) 4) (sptt))))",
   "(interrupt 2 2)",
   "(interrupt 4 2)",
-  "(define (int02 pin clicks count ms) (list (rotRow) (incf 'tries) (led_data (list (/ (- tries (% tries 16)) 16) (% tries 16)) 6)  (check) (showDisp)))",
+  "(define (int02 pin clicks count ms) (list (rotRow) (incf 'tries) (led_data (list (/ (- tries (% tries 10)) 10) (% tries 10)) 6)  (check) (showDisp)))",
   "(define (int04 pin clicks count ms) (list (nextRow) (showDisp)))",
   "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys) ))))))",
   "(define minus (lambda (t) (- (car t) (nth 2 t)) ))",
@@ -3483,7 +3483,7 @@ char **pDefines = pWordsDefines;
 
 int noFree = 0;
 
-
+//(define (int02 pin clicks count ms) (list (rotRow) (incf 'tries) (led_data (list (/ (- tries (% tries 16)) 16) (% tries 16)) 6)  (check) (showDisp)))
 //(define reduce (lambda (xs seed) (cond ((eq (car xs) nil) seed) (t (reduce (cdr xs) (cond ((eq (car xs) 0) seed) (t (+ seed 1)))) ))))
 
 //(zip '(0 2 1 0 0) '(0 2 1 3 0))
