@@ -3327,15 +3327,13 @@ int libLoaded = 0; //1; //0;
 
 // display
 int currentDefine = 0; // 31;
-int defineCount = 32; //30; //28; // 56; // 60; //30; // 34;
+int defineCount = 31; //30; //28; // 56; // 60; //30; // 34;
 
 char *pLightsDefines[] = {
   "(list (define initialStateNum 1) (define mult 5))",
   "(define stNum initialStateNum)",
   "(define cols '(red amber green))",
-  "(define redl   (lambda (n) (out 12 n)))",
-  "(define amberl (lambda (n) (out 0 n)))",
-  "(define greenl (lambda (n) (out 5 n)))",
+  "(list (define redl   (lambda (n) (out 12 n))) (define amberl (lambda (n) (out 0 n))) (define greenl (lambda (n) (out 5 n))))",
   "(define redld (lambda (n o) (list (redl n) (delay (* o mult)) (clearl))))",
   "(define amberld (lambda (n o) (list (amberl n) (delay (* o mult)) (clearl))))",
   "(define greenld (lambda (n o) (list (greenl n) (delay (* o mult)) (clearl))))",
@@ -3343,15 +3341,10 @@ char *pLightsDefines[] = {
   "(define amberPattern (lambda () (list (amberld 1 50) (delay (* 10 mult)) (amberld 1 20) ) ))",
   "(define greenPattern (lambda () (list (greenld 1 50) (delay (* 10 mult)) (greenld 1 20) ) ))",
   "(define lights (lambda (m n o) (list (redl m) (amberl n) (greenl o))))",
-  "(define clearl (lambda () (lights 0 0 0 )))",
-  "(define stopl  (lambda () (lights 1 0 0)))",
-  "(define readyl (lambda () (lights 1 1 0)))",
-  "(define gol    (lambda () (greenPattern)))",
-  "(define slowl  (lambda () (lights 0 0 1)))",
-  "(define stopc  '(redl))",
-  "(define readyc '(redl amberl))",
-  "(define goc    '(greenl))",
-  "(define slowc  '(amberl))",
+  "(list (define clearl (lambda () (lights 0 0 0 ))) (define stopl  (lambda () (lights 1 0 0))) )",
+  "(list (define readyl (lambda () (lights 1 1 0))) (define gol    (lambda () (greenPattern))) (define slowl  (lambda () (lights 0 0 1))))",
+  "(list (define stopc  '(redl)) (define readyc '(redl amberl)))",
+  "(list (define goc    '(greenl)) (define slowc  '(amberl)))",
   "(define states '(stopc readyc goc slowc))",
   "(define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))",
   "(define decf (lambda (m) (let ((xx (- (eval m) 1))) (set m xx))))",
@@ -3365,8 +3358,7 @@ char *pLightsDefines[] = {
   "(define backLights (lambda () (list (backStNum) (clearl) (showLights))))",
   "(define upMult   (lambda () (cond ((eq mult 10) (set 'mult 10)) (t (incf 'mult)))))",
   "(define downMult (lambda () (cond ((eq mult 1)  (set 'mult 1))  (t (decf 'mult)))))",
-  "(interrupt 2 2)",
-  "(interrupt 4 2)",
+  "(list (interrupt 2 2) (interrupt 4 2))",
   "(define (int02 pin clicks count ms) (changeLights))",
   "(define (int04 pin clicks count ms) (upMult))"
 };
