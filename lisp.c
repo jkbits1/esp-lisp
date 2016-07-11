@@ -3428,7 +3428,26 @@ char *pWordsDefines[] = {
   "(define curRow 0)",
   "(define rowCount 5)",
   "(define wordCount 4)",
-  "(define rotCount '(0 0 0 0 0))"
+  "(define rotCount '(0 0 0 0 0))",
+  "(define answer '(2 1 3))",
+  "(define srcHelper (lambda (n v) (append (take n rotCount) (cons v (drop (+ n 1) rotCount)))))",
+  "(define setRotCount (lambda (n v) (let ((xx (cond ((and (< -1 n) (< n rowCount)) (srcHelper n v)) (t (append (take n rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
+  "(define rotRow (lambda () (cond ((eq (nth (+ curRow 1) rotCount) (- wordCount 1)) (setRotCount curRow 0)) (t (setRotCount curRow (+ (nth (+ curRow 1) rotCount) 1))))))",
+  "(define nextRow (lambda () (cond ((eq curRow (- rowCount 1)) (set 'curRow 0)) (t (incf 'curRow)))))",
+  "(define getRow (lambda () (nth (+ curRow 1) words)))",
+  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth (+ curRow 1) rotCount) 1) (getRow)) \",\"))))",
+  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
+  "(interrupt 2 2)",
+  "(interrupt 4 2)",
+  "(define (int02 pin clicks count ms) (list (rotRow) (incf 'tries) (led_data (list (/ (- tries (% tries 16)) 16) (% tries 16)) 6)  (check) (showDisp)))",
+  "(define (int04 pin clicks count ms) (list (nextRow) (showDisp)))",
+  "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys) ))))))",
+  "(define minus (lambda (t) (- (car t) (nth 2 t)) ))",
+  "(define reduce (lambda (xs seed) (cond ((eq (car xs) nil) seed) (t (reduce (cdr xs) (cond ((eq (car xs) 0) seed) (t (+ seed 1)))) ))))",
+  "(define check (lambda () (cond ((eq (reduce (mapcar minus (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (out 5 1)) (t (out 5 0)))))",
+  	  ";",
+  	  ";",
+  	  ";"
   //  "(define rotDisp (lambda () (let ((xx (rotate 1 wheelDisp))) (set 'wheelDisp xx))))",
 //    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
 //    "(define statesNumbered (zip states '(1 2 3 4)) )",
@@ -3446,22 +3465,6 @@ char *pWordsDefines[] = {
 };
 
 char *pWordsDefines2[] = {
-	  "(define answer '(2 1 3))",
-	  "(define srcHelper (lambda (n v) (append (take n rotCount) (cons v (drop (+ n 1) rotCount)))))",
-	  "(define setRotCount (lambda (n v) (let ((xx (cond ((and (< -1 n) (< n rowCount)) (srcHelper n v)) (t (append (take n rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
-	  "(define rotRow (lambda () (cond ((eq (nth (+ curRow 1) rotCount) (- wordCount 1)) (setRotCount curRow 0)) (t (setRotCount curRow (+ (nth (+ curRow 1) rotCount) 1))))))",
-	  "(define nextRow (lambda () (cond ((eq curRow (- rowCount 1)) (set 'curRow 0)) (t (incf 'curRow)))))",
-	  "(define getRow (lambda () (nth (+ curRow 1) words)))",
-	  "(define wordAsNums (lambda () (mapcar char (split (nth ( + (nth (+ curRow 1) rotCount) 1) (getRow)) \",\"))))",
-	  "(define showDisp (lambda () (list (led_data (wordAsNums)) (sptt))))",
-	  "(interrupt 2 2)",
-	  "(interrupt 4 2)",
-	  "(define (int02 pin clicks count ms) (list (rotRow) (incf 'tries) (led_data (list (/ (- tries (% tries 16)) 16) (% tries 16)) 6)  (check) (showDisp)))",
-	  "(define (int04 pin clicks count ms) (list (nextRow) (showDisp)))",
-	  "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys) ))))))",
-	  "(define minus (lambda (t) (- (car t) (nth 2 t)) ))",
-	  "(define reduce (lambda (xs seed) (cond ((eq (car xs) nil) seed) (t (reduce (cdr xs) (+ (car xs) seed)) ))))",
-	  "(define check (lambda () (cond ((eq (reduce (mapcar minus (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (out 5 1)) (t (out 5 0)))))"
 //	  "(define check (lambda () (cond ((eq (reduce (mapcar minus (zip answer (take (- rowCount 2) (drop 1 rotCount))))) 0) (print \"solved\")) (t (print \"not yet\")))))"
 //	  "(define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n words))))",
 //	  "(define sum (lambda (t) (+ (car t) (nth 2 t)) ))",
@@ -3481,6 +3484,7 @@ char **pDefines = pWordsDefines;
 int noFree = 0;
 
 
+//(define reduce (lambda (xs seed) (cond ((eq (car xs) nil) seed) (t (reduce (cdr xs) (cond ((eq (car xs) 0) seed) (t (+ seed 1)))) ))))
 
 //(zip '(0 2 1 0 0) '(0 2 1 3 0))
 //(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys) ))))))
@@ -3693,6 +3697,9 @@ void readeval(lisp* envp) {
     int last = 0;
     int offset = 0;
 
+    //const
+    int offsetSize = 16;
+
     while(1) {
         global_envp = envp; // allow idle to gc
         char* ln = NULL;
@@ -3706,13 +3713,13 @@ void readeval(lisp* envp) {
        	  ln = pComment;
           noFree = 1;
 
-          if (currentDefine < 16 && offset == 0) {
+          if (currentDefine < offsetSize && offset == 0) {
         	  pDefines = pWordsDefines;
           }
-          else if (currentDefine == 16)
+          else if (currentDefine == offsetSize)
           {
         	  pDefines = pWordsDefines2;
-        	  offset = 16;
+        	  offset = offsetSize;
 
         	  currentDefine = 0;
           }
