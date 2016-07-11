@@ -3698,7 +3698,7 @@ void readeval(lisp* envp) {
     int offset = 0;
 
     //const
-    int offsetSize = 16;
+    int offsetSize = 32; //16;
 
     while(1) {
         global_envp = envp; // allow idle to gc
