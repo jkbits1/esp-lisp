@@ -3360,7 +3360,8 @@ char *pLightsDefines[] = {
   "(interrupt 2 2)",
   "(interrupt 4 2)",
   "(define (int02 pin clicks count ms) (changeLights))",
-  "(define (int04 pin clicks count ms) (backLights))"
+  "(define (int04 pin clicks count ms) (backLights))",
+  "(define greenPattern (lambda () (list (gol) (delay 100) (clearl))))"
 };
 
 char *pWheelsDefines[] = {
