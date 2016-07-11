@@ -3480,6 +3480,9 @@ char *pWordsDefines2[] = {
 // fail hall
 
 //char **pDefines = pWordsDefines;
+//char **pDefines0 = pWordsDefines;
+//char **pDefines1 = pWordsDefines;
+
 char **pDefines = pLightsDefines;
 char **pDefines0 = pLightsDefines;
 char **pDefines1 = pLightsDefines;
