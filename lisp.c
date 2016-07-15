@@ -3529,7 +3529,7 @@ int noFree = 0;
 
 // (define wheels '( ( 1 2 3 4 ) ( 5 6 7 8 ) ( 1 3 2 3 ) (7 11 12 15) ))
 // (set! wheels '( ( 6 6 5 5 ) ( 2 2 4 3 ) ( 2 3 3 5 ) (10 11 12 13) ))",
-//3132 5566 4222, 6655, 2243, 2335 10 11 12 13
+//3132 5566 4222, ans - 6655, 2243, 2335 10 11 12 13
 // 6655, 2432, 3523
 
 // (define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))
