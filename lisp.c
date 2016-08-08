@@ -871,8 +871,6 @@ PRIM led_data(lisp data, lisp offset) {
 	while (data && ((i + pos) < 15)) {
 		val = getint(car(data));
 
-//		printf("val %d", val);
-
 		// show nums and hex
 		if (decodeMode == 0) {
 			if (val > 9 && val < 16) {
@@ -3319,19 +3317,14 @@ int lispreadchar(char *chp) {
     return c < 0 ? -1 : 1;
 }
 
-int libLoaded = 0; //1; //0;
+int libLoaded = 0; 
+int currentDefine = 0; 
 
-// traffic lights
-//int currentDefine = 0;
-//int defineCount = 31; //30; // 34;
-
-// display
-int currentDefine = 0; // 31;
 // lights
-//int defineCount = 31; //30; //28; // 56; // 60; //30; // 34;
+//int defineCount = 31;
 
 // wheels
-int defineCount = 29; //30; //28; // 56; // 60; //30; // 34;
+int defineCount = 29; 
 
 char *pLightsDefines[] = {
 //  "(list (define initialStateNum 1) (define mult 5))",
@@ -3367,18 +3360,6 @@ char *pLightsDefines[] = {
 //  "(at -5000 (lambda () (changeLights)))"
 };
 
-// fn from states, e.g. stopc - stopc called with param 1, stopc 1 calls redl with param 1
-
-//"(list (define stopc  '(redl)) (define readyc '(redl amberl)))",
-
-
-//"(define gol    (lambda () (lights 0 0 1)))",
-
-//"(define (int04 pin clicks count ms) (backLights))",
-//(define (int02 pin clicks count ms) (changeLights))
-
-// (at -5000 (lambda () (changeLights)))
-
 char *pWheelsDefines[] = {
   "(define spt (lambda () (led_show 15 8 1 1 5)))",
   "(define sptt (lambda () (led_show 15 8 1 0 5)))",
@@ -3412,20 +3393,6 @@ char *pWheelsDefines[] = {
   ";",
   ";",
   ";"
-  //  "(define rotDisp (lambda () (let ((xx (rotate 1 wheelDisp))) (set 'wheelDisp xx))))",
-//    "(define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))",
-//    "(define statesNumbered (zip states '(1 2 3 4)) )",
-//    "(define tst (lambda (x) ( if (< 0 x) t nil )))",
-//    "(define tt (lambda (x) t ))",
-//    "(define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))",
-//    "(define filter2 (lambda (f xs) (filterH f xs ())))",
-//    "(define stateByNum (lambda (n) (filter2 (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))",
-
-//  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))"
-//  "(define rev (lambda (xs) (filterH tt xs ())))",
-//  "(define getNlsNum (lambda (nls) (snd nls)))",
-//  "(define fst (lambda (xs) (car xs)) )",
-//  "(define snd (lambda (xs) (car (cdr xs))) )",
 };
 
 char *pWordsDefines[] = {
@@ -3493,8 +3460,6 @@ char *pWordsDefines2[] = {
 };
 
 
-// fail hall
-
 //char **pDefines = pLightsDefines;
 //char **pDefines0 = pLightsDefines;
 //char **pDefines1 = pLightsDefines;
@@ -3509,191 +3474,7 @@ char **pDefines1 = pWheelsDefines;
 
 int noFree = 0;
 
-//(zip '(0 2 1 0 0) '(0 2 1 3 0))
-//(define sum (lambda (t) (+ (car t) (nth 2 t)) ))
-
-// (define check (lambda () (cond (t (print "not yet")))))
-
-// uses let
-// (define showDisp (lambda () (let ((rc (nth curWheel rotCount)) (wd (wheelDisp)) ) (list (led_data (rotate rc wd)) (spt)))))
-
-//sptt version
-// (define showDisp (lambda () (list (led_data (rotate (nth curWheel rotCount) (wheelDisp))) (sptt))))
-
-// (showDisp)
-// (led_show 2 0 0 1 5) (led_show 2 0 0 0 5)
-// (define (int04 pin clicks count ms) (list (loopCurWheel) ))
-//"(define (int04 pin clicks count ms) (list (loopCurWheel) (showDisp)))",
-
-//"(define wheels '( ( 6 5 5 6 5 4 5 4 ) ( 4 2 2 2 4 3 3 1 ) ( 1 3 2 3 3 2 4 3 ) (12 8 12 10 10 12 10 8) ))",
-
-// (define wheels '( ( 1 2 3 4 ) ( 5 6 7 8 ) ( 1 3 2 3 ) (7 11 12 15) ))
-// (set! wheels '( ( 6 6 5 5 ) ( 2 2 4 3 ) ( 2 3 3 5 ) (10 11 12 13) ))",
-//3132 5566 4222, ans - 6655, 2243, 2335 10 11 12 13
-// 6655, 2432, 3523
-
-// (define srcHelper (lambda (n v) (append (take (- n 1) rotCount) (cons v (drop n rotCount)))))
-// (define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (srcHelper n v)) ((eq n 3) (srcHelper n v)) (t (append (take 3 rotCount) (cons v nil))) ))) (set 'rotCount xx))))
-
-
-// (define wheelShow (lambda (n) (rotate (nth n rotCount) (nth n wheels))))
-// (define zip2 (lambda (xs ys zs) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) ((eq (car zs) nil) nil) (t (cons (list (car xs) (car ys) (car zs)) (zip2 (cdr xs) (cdr ys) (cdr zs) ) )) ) ))
-// (define sum3 (lambda (t) (+ (+ (car t) (nth 2 t)) (nth 3 t))))
-// (define ans (lambda () (mapcar sum3 (zip2 (wheelShow 1) (wheelShow 2) (wheelShow 3))) ))
-
-
-//(define initDisp '(97 98 99))
-//(define rotDisp (lambda (n) (led_data (rotate n initDisp))))
-//"(define setRotCount (lambda (n v) (let ((xx (cond ((eq n 1) (cons v (drop 1 rotCount))) ((eq n 2) (append (take 1 rotCount) (cons v (drop 2 rotCount)))) (t (append (take 2 rotCount) (cons v nil))) ))) (set 'rotCount xx))))",
-
-// (define append (lambda (xs ys) (if (= (car xs) nil) ys (cons (car xs) (append (cdr xs) ys) ))))
-//
-//(define rotate (lambda (n xs) (if (= (car xs) nil) nil (append (drop n xs) (take n xs)))))
-
-// (define rotDisp (lambda () (let ((xx (rotate 1 initDisp))) (set 'initDisp xx))))
-
-// needs to use a let clause
-//(define rotDisp (lambda () (list (set 'initDisp (rotate 1 initDisp)) (led_data initDisp))))",
-
-    //define some lists to work with
-//    DEFINE (xs, (quote(a b c)));
-//    DEFINE (ys, (quote(1 2 3)));
-//
-//    DEFINE (line1, (quote(1 2 3)));
-
-    // need a helper fn for recursion
-    // like reduce?
-//    DEFINE (append, (lambda (xs ys)
-//                      (if (= (car xs) nil)
-//                        ys
-//                        (cons (car xs) (append (cdr xs) ys) )
-//                      )
-//                    )
-//           );
-//
-//    DEFINE (rotate, (lambda (n xs)
-//                      (if (= (car xs) nil)
-//                        ()
-//                        (append (drop n xs) (take n xs))
-//                      )
-//                    )
-//    );
-
-
-
-//  "(define filter (lambda (f xs) (rev (filterH f xs ()))))",
-
-//  "(define getNlsNum (lambda (nls) (snd nls)))",
-//  "(define stateItem (lambda (n) (car (car (stateByNum n)))))",
-
-// (define setlTest (lambda (s) (func? (eval s))))
-// (define showLightsT (lambda () (mapcar setlTest (eval (stateItem stNum)))))
-
-
-//  "(define redl   (lambda (n) (out 12 n)))",
-//  "(define amberl (lambda (n) (out 0 n)))",
-//  "(define greenl (lambda (n) (out 5 n)))",
-//  "(define clearl (lambda () (list (redl 0) (amberl 0) (greenl 0) )))",
-
-
-//(define incf (lambda (m n) (set s (+ n 1))))
-//(define incf (lambda (m) (set m (+ m 1))))
-//(define showf (lambda (m) (princ m)))
-//(define showf (lambda (m) (princ (eval m))))
-
-//(define showf (lambda (m) (princ (+ (eval m) 1))))
-
-
-//(define incf (lambda (m) (+ m 1)))
-//(define incf (lambda (m) (set m (+ m 1))))
-
-
-// fails
-//(define incf (lambda (m) (set m (+ (eval m) 1))))
-
-// works - call as (inc 'a)
-// (define incf (lambda (m) (let ((xx (+ (eval m) 1))) (set m xx))))
-
-//(define (int02 pin clicks count ms) (changeLights))
-//(define showlights (lambda () (mapcar setl (stateItem stNum))))
-//(define changeLights (lambda () (list (incf stNum) (showlights))))
-
-//NOTES
-//on interrupt increment stNum
-//  "(define (int02 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
-//  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
-
-//(define (int02 pin clicks count ms) (changeLights))
-//  "(define (int04 pin clicks count ms) (printf \"b %d cl %d to %d ms %d\" pin clicks count ms))",
-
-//(define changeLights (lambda () (list (incf stNum) (showlights))))
-
-
-//get cols for stNum and set lights
-
-//(define stateByNum2 (lambda (n) (filter (lambda (nls) (eq (snd nls) n)) statesNumbered)))
-//(define stateByNum3 (lambda (n) (filter (lambda (nls) (eq (car (cdr nls)) n)) statesNumbered)))
-//(define stateByNum4 (lambda (n) (filter (lambda (nls) (eq (car (cdr nls)) 1)) statesNumbered)))
-//
-//(define stateByNum5 (lambda (n) (mapcar (lambda (nls) (eq (car (cdr nls)) 1)) statesNumbered)))
-//(define stateByNum6 (lambda (n) (mapcar (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))
-//(define stateByNum7 (lambda (n) (mapcar (lambda (nls) (eq (getNlsNum nls) stNum)) statesNumbered)))
-//(define stateByNum8 (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) stNum)) statesNumbered)))
-//
-//(define stateByNum9 (lambda (n) (filter (lambda (nls) (eq (car (cdr nls)) stNum)) statesNumbered)))
-
-
-//(define lightsByStateItem (lambda (n) (
-//  (cond
-//    ()
-//    (t red)
-//  )
-//)))
-
-  // (define redl   (lambda (n) (out 12 n)))
-  // (define amberl (lambda (n) (out 0 n)))
-  // (define greenl (lambda (n) (out 5 n)))
-
-  // (define lights (lambda (m n o) (list (red m) (amber n) (green o))))
-
-  // (define stopl  (lambda () (lights 1 0 0)))
-  // (define readyl (lambda () (lights 1 1 0)))
-  // (define gol    (lambda () (lights 0 0 1)))
-  // (define slowl  (lambda () (lights 0 0 1)))
-
-  // experiments with converting haskell/elm adts
-
-// any benefit to numbers instead of symbols?
-// ditto fn names
-// (define cols '(red amber green))
-// (car cols) // red
-// (eq (car cols) 'red) //t
-
-// stopp // (red)
-// (car stopp) // red
-// (eq (car stopp) 'red) // equal works
-
-//filter (uses if for pattern matching)
-//f xs == nil, nil
-//f (x : xs) = (cond ((f x) (cons x nil) ) )
-//(filter tst '(1 2 3) ())
-//
-// (define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))
-// (define rev (lambda (xs) (filterH tt xs ())))
-// (define filter (lambda (f xs) (rev (filterH f xs ()))))
-
-// test version of stateByNum filter, uses hard-coded value
-// (define fstate (lambda (nls) (eq (getNlsNum nls) 1)))
-
-//(eq (car (car (stateByNum 2))) 'ready)
-
-// (eq ( stateItem (stateByNum 2)) 'ready)
-
-// stNum = initialStateNum
-// buttonClick (fwd), increment stNum
-//   show lights for state
-
-int ign = 0; //1; //0;
+int ign = 0; //1;
 int checkAfterIgn = 0;
 
 char *pComment = ";";
@@ -3705,7 +3486,7 @@ void readeval(lisp* envp) {
     int offset = 0;
 
     //const
-    int offsetSize = 32; //16;
+    int offsetSize = 32; 
 
     while(1) {
         global_envp = envp; // allow idle to gc
@@ -3855,393 +3636,9 @@ PRIM fibb(lisp n) { return mkint(fib(getint(n))); }
 
 // lisp implemented library functions hardcoded
 void init_library(lisp* envp) {
-  //DEFINE(fibo, (lambda (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
   DE((fibo (n) (if (< n 2) 1 (+ (fibo (- n 1)) (fibo (- n 2))))));
 
-  // (define red   (lambda (n) (out 12 n)))
-  // (define amber (lambda (n) (out 0 n)))
-  // (define green (lambda (n) (out 5 n)))
-
-  // (define lights (lambda (m n o) (list (red m) (amber n) (green o))))
-
-  // (define stopp (lambda () (lights 1 0 0)))
-  // (define ready (lambda () (lights 1 1 0)))
-  // (define go    (lambda () (lights 0 0 1)))
-
-  // experiments with converting haskell/elm adts
-
-// any benefit to numbers instead of symbols?
-// ditto fn names
-// (define cols '(red amber green))
-// (car cols) // red
-// (eq (car cols) 'red) //t
-
-
-// (define stopp '(red))
-// (define ready '(red amber))
-// (define go    '(green))
-// (define slow  '(amber))
-
-// stopp // (red)
-// (car stopp) // red
-// (eq (car stopp) 'red) // equal works
-
-// (define states '(stopp ready go slow))
-
-// test code
-// (define zip (lambda (xs)
-// (cond ((eq (car xs) nil) nil)
-//       (t (cons (car xs) (zip (cdr xs)) )))
-// ))
-
-// zip - (define zip (lambda (xs ys) (cond ((eq (car xs) nil) nil) ((eq (car ys) nil) nil) (t (cons (list (car xs) (car ys)) (zip (cdr xs) (cdr ys)) )) ) ))
-// fst - (define fst (lambda (xs) (car xs)) )
-// snd - (define snd (lambda (xs) (car (cdr xs))) )
-
-// (define statesNumbered (zip states '(1 2 3 4)) )
-
-// tst - (define tst (lambda (x) ( if (< 0 x) t nil )))
-// (define tt (lambda (x) t ))
-
-//filter (uses if for pattern matching)
-//f xs == nil, nil
-//f (x : xs) = (cond ((f x) (cons x nil) ) )
-//(filter tst '(1 2 3) ())
-//
-// (define filterH (lambda (f xs ys) (if (eq xs nil) ys (if (f (car xs)) (filterH f (cdr xs) (cons (car xs) ys)) (filterH f (cdr xs) ys)))))
-// (define rev (lambda (xs) (filterH tt xs ())))
-// (define filter (lambda (f xs) (rev (filterH f xs ()))))
-
-// test version of stateByNum filter, uses hard-coded value
-// (define fstate (lambda (nls) (eq (getNlsNum nls) 1)))
-
-// (define getNlsNum (lambda (nls) (snd nls)))
-
-// (define stateByNum (lambda (n) (filter (lambda (nls) (eq (getNlsNum nls) n)) statesNumbered)))
-
-//(eq (car (car (stateByNum 2))) 'ready)
-
-// (define stateItem (lambda (s) (car (car (stateByNum 2)))))
-
-// (eq ( stateItem (stateByNum 2)) 'ready)
-
-// initialStateNum = 1
-// stNum = initialStateNum
-// buttonClick (fwd), increment stNum
-//   show lights for state
-
-
-
-
-// code below from int-on-idle branch
-
-
-
-  //  NOTE refactor defs to be in a larger init def,
-  //       as with setupInterrupts def below - makes syntax more
-  //  	 like that actually used in interpreter
-//    DEFINE (drop, (lambda (x xs)
-//                    (if (= x 0)
-//                      xs
-//                      (drop (- x 1) (cdr xs))
-//                    )
-//    ));
-//
-//    DEFINE (take, (lambda (x xs)
-//                    (if (= x 0)
-//                      ()
-//                      (cons (car xs) (take (- x 1) (cdr xs)))
-//                    )
-//                  )
-//           );
-
-
-    //define some lists to work with
-//    DEFINE (xs, (quote(a b c)));
-//    DEFINE (ys, (quote(1 2 3)));
-//
-//    DEFINE (line1, (quote(1 2 3)));
-
-    // need a helper fn for recursion
-    // like reduce?
-//    DEFINE (append, (lambda (xs ys)
-//                      (if (= (car xs) nil)
-//                        ys
-//                        (cons (car xs) (append (cdr xs) ys) )
-//                      )
-//                    )
-//           );
-//
-//    DEFINE (rotate, (lambda (n xs)
-//                      (if (= (car xs) nil)
-//                        ()
-//                        (append (drop n xs) (take n xs))
-//                      )
-//                    )
-//    );
-
-
-  //  check if pin4 is 1 - if so put light on
-  //        if pin4 is 0   put light off
-
-//    DEFINE (flkr, (lambda ()
-//                       (cond
-//                         ((eq (in 2) 0) (quote(1 2 3)))
-//                         ((eq (in 2) 1) (quote(a b c)))
-//                         (t             (quote(x)))
-//                       )
-//                     )
-//           );
-
-    // (interrupt 0 2)
-  // (at -5000 (lambda () (princ (flkr))))
-  // (at -5000 (lambda () (updateClicks)))
-
-  //  (at -7000 (lambda () (princ buttonClickCount)))
-
-    DEFINE (zs, (quote(0 1 2 3 4 5 6 7 8 9)));
-    //(at -10000 (lambda () (princ (take buttonClickCount zs))))
-
-    //(at -5000 (lambda () (princ (rotate buttonClickCount zs))))
-
-    // (at 5000 (lambda () (pp (rotate buttonClickCount zs))))
-  //  DEFINE (rot1,
-  //
-  //	  (at -5000 (lambda () ((
-  //			  	  	  	  	  // princ
-  //							  pp (rotate buttonClickCount zs)
-  //							)
-  //			  //(terpri)
-  //			  	  	  	   )
-  //				)
-  //	  )
-  //  );
-
-  //  DEFINE (rots,
-  //		  	  (lambda ()
-  //		  	    (at -5000 (lambda ()
-  //		  	    			(
-  //		  	    			  (princ (rotate buttonClickCount zs))
-  //							  //(terpri)
-  //							)
-  //		  	    		  )
-  //		  	    )
-  //		  	  )
-  //	     );
-
-
-    // prints multiple items (or not!)
-    // (mapcar eval '((princ "2") (terpri)))
-
-    //(at 5000 (lambda () (pp (rotate buttonClickCount zs))))
-
-  // take head of xs, cons to append of tail xs and ys, recurse ...
-
-  //  DEFINE("*buttonClickCount00*", 0);
-  //  DEFINE("*buttonClickCount02*", 0);
-  //  DEFINE("*buttonClickCount04*", 0);
-  //
-  //  DEFINE("*intEvent00*", 0);
-  //  DEFINE("*intEvent02*", 0);
-  //  DEFINE("*intEvent04*", 0);
-
-  //check for button click value and
-  //  display line1 using button click value as rotate
-
-  //  DEFINE(setupInterrupts,
-  //		  (lambda ()
-  //			(cond ((eq *buttonClickCount00* nil)
-  //				   (list (set! *buttonClickCount00* 0)
-  //						 (set! *buttonClickCount02* 0)
-  //						 (set! *buttonClickCount04* 0)
-  //						 (set! *intEvent00* 0)
-  //						 (set! *intEvent02* 0)
-  //						 (set! *intEvent04* 0)
-  //						 (interrupt 4 3)
-  //				   )
-  //				  )
-  //			)
-  //	      )
-  //	    );
-
-  //  DEFINE(setupInterrupts,
-  //		  (lambda (n)
-  //			(cond ((eq *buttonClickCount00* nil)
-  //				   (list (set! *buttonClickCount00* 0)
-  //						 (set! *buttonClickCount02* 0)
-  //						 (set! *buttonClickCount04* 0)
-  //						 (set! *intEvent00* 0)
-  //						 (set! *intEvent02* 0)
-  //						 (set! *intEvent04* 0)
-  //						 (interrupt 4 n)
-  //				   )
-  //				  )
-  //			)
-  //	      )
-  //	    );
-
-    // revised to use define
-//    DEFINE(setupInterrupts,
-//  		  (lambda ()
-//  			(cond ((eq *buttonClickCount00* nil)
-//  				   (list (define *buttonClickCount00* 0)
-//  						 (define *buttonClickCount02* 0)
-//  						 (define *buttonClickCount04* 0)
-//  						 (define *intEvent00* 0)
-//  						 (define *intEvent02* 0)
-//  						 (define *intEvent04* 0)
-//  						 (interrupt 4 3)
-//  				   )
-//  				  )
-//  			)
-//  	      )
-//  	    );
-
-    // (progn (define *buttonClickCount00* 0) (define *buttonClickCount02* 0) (define *buttonClickCount04* 0) (define *intEvent00* 0) (define *intEvent02* 0) (define *intEvent04* 0) (interrupt 4 3))
-
-    // initialises int vars
-    // (list (set! *buttonClickCount00* 0) (set! *buttonClickCount02* 0) (set! *buttonClickCount04* 0) (set! *intEvent00* 0) (set! *intEvent02* 0) (set! *intEvent04* 0))
-
-    // errors - can paste them in one by one without error, though
-//    DEFINE(setupIntFns,
-//  		  (lambda ()
-//  		    (
-//  		      (list
-//  		    	(define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*)))
-//  				(define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
-//  				(define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*))))
-//  				(define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*))))
-//  			  )
-//  			)));
-
-    //  set up fns in lisp env
-    //  (list (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
-    //  (progn (define ies  (lambda ()  (list *intEvent00* *intEvent02* *intEvent04*))) (define bcs  (lambda ()  (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*))) (define ie   (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*)))) (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))))
-
-
-    // COPIES for convenience
-    // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (intChange n 0))))))
-
-    // works
-    // (define rotaF (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (intChangeFix n 0))))))
-
-    // test
-    // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs)) (princ n) (intChange n 0))))))
-    // (define rota1 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (pp (rotate (clks n) zs)) (intChange n 0))))))
-    // (define rota2 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (intChange n 0) (pp (rotate (clks n) zs)) )))))
-
-    //
-    //
-    // alternative version of PRIM intChange
-     // (define intChg (lambda (n v) (cond ((eq n 0) (set! *intEvent00* v)) ((eq n 2) (set! *intEvent02* v)) ((eq n 4) (set! *intEvent04* v)))))
-
-    // (define rota3 (lambda (n) (cond ((not(eq (ie n) 0)) (progn (intChg n 0) (pp (rotate (clks n) zs)) )))))
-
-    // progn version
-    // (define rota (lambda (n) (cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))(intChange n 0))))))
-
-    // (at -10000 (lambda () (rota 4)))
-    // (at -10000 (lambda () (rota1 4)))
-    // (at -10000 (lambda () (rota2 4)))
-    // (at -10000 (lambda () (rota3 4)))
-
-    // works
-    // (at -10000 (lambda () (rotaF 4)))
-
-
-    //  DEFINE (ies, (lambda () (list *intEvent00* *intEvent02* *intEvent04*)));
-    //  DEFINE (bcs, (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)));
-
-        //(define ies (lambda () (list *intEvent00* *intEvent02* *intEvent04*)))
-        //(define bcs (lambda () (list *buttonClickCount00* *buttonClickCount02* *buttonClickCount04*)))
-
-    //(define ies (lambda () (mapcar princ (list *intEvent00* *intEvent02* *intEvent04*))))
-
-
-
-    // works - changes result as var changes
-  //  DEFINE (ie, (lambda (n)
-  //                     (cond
-   //                      ((eq n 0) *intEvent00*)
-    //                     ((eq n 2) *intEvent02*)
-     //                    (t        *intEvent04*)
-      //                 )
-       //              )
-        //   );
-    // (define ie (lambda (n) (cond ((eq n 0) *intEvent00*) ((eq n 2) *intEvent02*) (t *intEvent04*))))
-
-  //  (define cks (lambda (n) (cond ((eq n 0) (eval *buttonClickCount00*)))))
-  //  (define cks (lambda (n) (cond ((eq n 0) (eval 1)))))
-  //  (define cks2 (lambda (n) (cond ((eq n 0) (eval 1)))))
-
-    // works
-  //  DEFINE (clks, (lambda (n)
-   //                     (cond
-      //                    ((eq n 0) *buttonClickCount00*)
-         //                 ((eq n 2) *buttonClickCount02*)
-            //              (t        *buttonClickCount04*)
-               //         )
-                  //    )
-   //         );
-
-  // (define clks (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*))))
-
-    // (lambda (n) (cond ((eq n 0) *buttonClickCount00*) ((eq n 2) *buttonClickCount02*) (t *buttonClickCount04*)))
-
-    // short test version
-  //   (define ck4 (lambda (n) (cond (eq n 0) (eval *buttonClickCount00*))))
-
-    //(define cks (lambda (n) (cond ((eq n 0) *buttonClickCount00*))))
-
-
-    //(cond ((not(eq intEvent00 0)) (rotate buttonClickCount zs)))
-
-    // NOTE need to merge two fns below
-    // on timer, show rotate if button clicked
-  //  (at -10000 (lambda () (cond ((not(eq intEvent00 0)) (pp (rotate buttonClickCount zs))))))
-
-    // show rotate then turn off change flag
-    //(cond ((not (eq (pp (rotate buttonClick00Count zs)) 0)) (intChange 0 0)))
-
-  // NOTE revised as intEvent00 starts at nil, not zero
-    // works
-      //(at -10000 (lambda () (cond ((not(eq intEvent00 0)) (cond ((not (eq (pp (rotate buttonClickCount zs)) 0)) (intChange 0 0)))))))
-
-    // works, uses list to initiate multiple events sequentially
-    // (rather than always true conditional above
-  //  DEFINE(rotateOnClick,
-  //		  (lambda ()
-  //			(cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs))
-  //					                            (intChange 0 0)
-  //					                      )
-  //				  )
-  //			)
-  //	      )
-  //	    );
-
-    // (at -1000 rotateOnClick)
-    // (at -10000 (lambda () (cond ((not(eq *intEvent00* 0)) (list (pp (rotate *buttonClickCount00* zs)) (intChange 0 0))))))
-
-    // currently causes a reset (run out of conses) if no clicks
-    //	resolved, caused by guard clause succeeding if
-    //	relevant var is not initialised
-//    DEFINE(rota,
-//  		  (lambda (n)
-//  			(cond ((not(eq (ie n) 0)) (list (pp (rotate (clks n) zs))
-//  					                            (intChange n 0)
-//  					                      )
-//  				  )
-//  				  (t nil)
-//  			)
-//  	      )
-//  	    );
-
-
-
-
-
-
-
+  DEFINE (zs, (quote(0 1 2 3 4 5 6 7 8 9)));
 
 // POSSIBLE encodings to save memory:
     // symbol: fibo
@@ -4491,21 +3888,10 @@ void lisp_run(lisp* envp) {
     return;
 }
 
-// spi test (bookmarks around 7/6)
-// useful? , in esp_spi
-//spi_init
-
-//int cs_pin = 14 ;
-//int clk_pin = 4; // 2; // 14;
-//int data_pin = 2; // 4;
-
 // hardware spi pins
-int cs_pin = 12 ; // 15?
+int cs_pin = 12 ;
 int clk_pin = 14;
 int data_pin = 13;
-
-
-//#define byte unsigned char
 
 #define MAXREG_DECODEMODE 0x09
 #define MAXREG_INTENSITY  0x0A
@@ -4513,7 +3899,6 @@ int data_pin = 13;
 #define MAXREG_SHUTDOWN   0x0C
 #define MAXREG_DISPTEST   0x0F
 
-//void shiftOutFast(byte[] data);
 void shiftOutFast(unsigned char* data, int delay);
 void sendByte(unsigned char data);
 unsigned char sendChar(const char data, const bool dp);
@@ -4523,16 +3908,6 @@ void spi_led(int init, int digit, int val, int decode, int delay)
 	gpio_enable(cs_pin, GPIO_OUTPUT);
 	gpio_enable(clk_pin, GPIO_OUTPUT);
 	gpio_enable(data_pin, GPIO_OUTPUT);
-
-//	(spi_data '( 1 3 5 7 9 2 4 6 8))
-//	(spi_data '( 3 5 7 9 2 4 6 8 1))
-//	(spi_data '( 5 7 9 2 4 6 8 1 3))
-//
-//	(spi_data '(1 2 3 4 5 6 7 8 9))
-//	(spi_data '(2 3 4 5 6 7 8 9 10))
-//
-//
-//	(define spt (lambda () (spi_test 15 8 1 1 5)))
 
 //	bool bSpi = spi_init(0, 2, 4, true, SPI_BIG_ENDIAN, true);
 //	bool bSpi = spi_init(1, 0, 4, true, SPI_BIG_ENDIAN, true);
@@ -4573,39 +3948,10 @@ void spi_led(int init, int digit, int val, int decode, int delay)
 //	D3 D2 D1 D0
 //	MSB DATA LSB
 
-//	(spi_data '( 12 11 13 13 0 15 10 6 8))
-
-	// (define spt (lambda () (spi_test 15 8 1 1 5)))
-	// (define ledd (lambda () (list (spi_data '( 1 3 5 7 9 2 4 6 8)) (spi_test 4 0 0 0 5) (spi_test 1 0 0 0 5) (spi_test 2 0 0 1 5) (spt) )))
-
-	// font page
-	// http://www.gammon.com.au/forum/?id=11516
-
-//	ln lisp> (spi_data '( 1 3 5 7 9 2 4 6 8))
-//	ln (spi_data '( 1 3 5 7 9 2 4 6 8))nil
-//	lisp>  (spi_test 4 0 0 0 10)
-//	ln  (spi_test 4 0 0 0 10)1
-//	lisp>  (spi_test 1 0 0 0 10)
-//	ln  (spi_test 1 0 0 0 10)1
-//	lisp>
-//	nil
-//	lisp>  (spi_test 2 0 0 1 10)
-//	ln  (spi_test 2 0 0 1 10)1
-//	lisp> (define spt (lambda () (spi_test 15 8 1 1 5)))
-//	ln (define spt (lambda () (spi_test 15 8 1 1 5)))#spt
-//	lisp> (spt)
-//	ln (spt)1
-//	lisp>
 
 	unsigned char bytes[2];
 
 	unsigned char initC = (unsigned char)init;
-
-//	bytes[0] = 15;
-//	bytes[1] = 0; //1;
-//
-//	shiftOutFast(bytes);
-//	shiftOutFast(12);
 
 	if (init > 0) {
 
@@ -4671,12 +4017,10 @@ void spi_led(int init, int digit, int val, int decode, int delay)
 	}
 
 	for (unsigned char i = 0; i < digit; i++) {
-//	for (int i =0; i < 8; i++) {
 		bytes[0] = 8-i; // i+ 1;
-//		bytes[1] = i; // val; //0x01;
 
 		if (decodeMode == 1) {
-			bytes[1] = spiData[i]; // val; //0x01;
+			bytes[1] = spiData[i]; 
 		}
 		else {
 			bytes[1] = sendChar(spiData[i], false);
@@ -4712,22 +4056,16 @@ void shiftOutFast(unsigned char* data, int delay)
 
     send2Byte(data[0], data[1]);
 
-//    sendByte(data[0]);
-//
-//	 vTaskDelay(delay);
-//
-//    sendByte(data[1]);
-//
-//    gpio_write(cs_pin, 0);
-   gpio_write(cs_pin, 1);
+    gpio_write(cs_pin, 1);
 
 	vTaskDelay(delay);
+    
     return;
 }
 
 void send2Byte(unsigned char reg, unsigned char data) {
 
-	 uint16_t info = reg*256+data;
+    uint16_t info = reg*256+data;
 
 //	    uint16_t retVal = spi_transfer_16(1, info);
 //
@@ -4735,64 +4073,41 @@ void send2Byte(unsigned char reg, unsigned char data) {
 //
 //	    return;
 
+    char i = 16;
 
-    	    char i = 16;
-
-    	    do{
-    	// printf("\n");
-    	        gpio_write(clk_pin, 0);
-    	                //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
-//    	      if(data & 0x80) {
-        	      if(info & 0x8000) {
-    	// printf("1 %d", i);
-    	        //GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << DATA);
-    	    //  	  gpio_write(data_pin, 1 << data);
-    	  	  	  gpio_write(data_pin, 1);
-    	}
-    	      else {
-    	// printf("0 %d", i);
-    	        //GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << DATA);
-    	    	// ??
-    	//    	 gpio_write(data_pin, 1 << data);
-    	    	gpio_write(data_pin, 0);
+    do {
+        gpio_write(clk_pin, 0);
+        
+        if(info & 0x8000) {
+    	    gpio_write(data_pin, 1);
+      	} 
+    	else {
+    	    gpio_write(data_pin, 0);
     	}
 
-    	//      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << CLOCK);
+        gpio_write(clk_pin, 1);
 
-    	      gpio_write(clk_pin, 1);
-
-    	      info <<= 1;
-    	    }while(--i);
+    	info <<= 1;
+    } while(--i);
 }
 
 void sendByte(unsigned char data) {
     char i = 8;
 
     do{
-// printf("\n");
         gpio_write(clk_pin, 0);
-                //gpio_write(GPIO_OUT_W1TC_ADDRESS, 1 << CLOCK);
-      if(data & 0x80) {
-// printf("1 %d", i);
-        //GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << DATA);
-    //  	  gpio_write(data_pin, 1 << data);
-  	  	  gpio_write(data_pin, 1);
-}
-      else {
-// printf("0 %d", i);
-        //GPIO_REG_WRITE(GPIO_OUT_W1TC_ADDRESS, 1 << DATA);
-    	// ??
-//    	 gpio_write(data_pin, 1 << data);
-    	gpio_write(data_pin, 0);
-}
 
-//      GPIO_REG_WRITE(GPIO_OUT_W1TS_ADDRESS, 1 << CLOCK);
+        if (data & 0x80) {
+  	  	    gpio_write(data_pin, 1);
+        }
+        else {
+        	gpio_write(data_pin, 0);
+        }
 
-      gpio_write(clk_pin, 1);
+        gpio_write(clk_pin, 1);
 
-      data <<= 1;
-    }while(--i);
-// printf("\n");
+        data <<= 1;
+    } while(--i);
 }
 
 unsigned char sendChar(const char data, const bool dp)
